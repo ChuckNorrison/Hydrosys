@@ -341,15 +341,16 @@ def heartbeat():
 	HASScompMatrix.HASSIOintegr.check_loop_and_connect()
 	
 	
-	#check the static IP address
-	currentipaddr=networkmod.get_local_ip_raw()
-	logger.info('Target IP address= %s. Current access point IP addresses= %s', networkmod.IPADDRESS,currentipaddr)		
-	if networkmod.IPADDRESS not in currentipaddr:
-		#set IP address
-		logger.warning('Local Static IP address not in the list, Set Target IP address')
-		networkmod.addIP("wlan0")
-	else:
-		logger.info('Local Statip IP address OK')
+	if not networkmod.WIFIENDIS=="Disabled":
+		#check the static IP address
+		currentipaddr=networkmod.get_local_ip_raw()
+		logger.info('Target IP address= %s. Current access point IP addresses= %s', networkmod.IPADDRESS,currentipaddr)		
+		if networkmod.IPADDRESS not in currentipaddr:
+			#set IP address
+			logger.warning('Local Static IP address not in the list, Set Target IP address')
+			networkmod.addIP("wlan0")
+		else:
+			logger.info('Local Statip IP address OK')
 	
 	
 	# check master job has a next run"

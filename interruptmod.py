@@ -11,6 +11,7 @@ import subprocess
 import emailmod
 import interruptdbmod
 import sensordbmod
+import messageboxmod
 import actuatordbmod
 import autofertilizermod
 import statusdataDBmod
@@ -260,6 +261,8 @@ def interruptcheck(refsensor,mode, PIN):
 			#print "mode ", mode , "sensormode ", 	sensormode
 			if (mode in sensormode) or ("both" in sensormode):
 				interruptexecute(refsensor,element)
+				dictitem={'title': "Interrupt Message (Info)", 'content': sensor }
+				messageboxmod.SaveMessage(dictitem)
 				
 	
 	return	

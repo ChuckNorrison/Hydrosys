@@ -178,12 +178,18 @@ selectedplanmod.start_scheduler()
 isconnecting=False
 networkmod.stopNTP()
 networkmod.disableNTP()
-networkmod.CheckandUnlockWlan()
-try:
-	print("start networking")
-	isconnecting=networkmod.init_network() # this includes also the clock check and scheduler setup
-except:
-	print("No WiFi available")
+
+if not networkmod.WIFIENDIS=="Disabled":
+	networkmod.CheckandUnlockWlan()
+
+	try:
+		print("start networking")
+		isconnecting=networkmod.init_network() # this includes also the clock check and scheduler setup
+	except:
+		print("No WiFi available")
+
+else:
+	isconnecting=True
 	
 #scheduler setup---------------------
 if not isconnecting:
