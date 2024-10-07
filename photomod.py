@@ -5,9 +5,12 @@ import datetime
 import os
 import sys
 import subprocess
+import logging
 from PIL import Image # to make thumbnail
 from subprocess import call
 from shutil import copyfile
+
+logger = logging.getLogger("hydrosys4."+__name__)
 
 def videodevlist():
 	folderpath="/dev"
@@ -46,8 +49,8 @@ def checkvideoformatexist(videonumberstr):
 	try:
 		scanoutput = subprocess.check_output(cmd).decode('utf-8')
 	except:
-		print("error to execute the command" , cmd)
-		logger.error("error to execute the command %s",cmd)
+		print("error execute the command ", cmd)
+		logger.error("error execute the command %s",cmd)
 		return False
 
 	if 	not DeviceType in scanoutput:
