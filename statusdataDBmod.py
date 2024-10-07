@@ -70,7 +70,7 @@ def write_status_data(data,element,variable,value,permanent=False, storeid=""):
 			data[element]=data["default"].copy()
 			data[element][variable]=value
 		else:
-			logger.error('ERROR: There is no default data for element %s ', element )
+			logger.error('ERROR: There is no default data for element %s/%s', element, variable )
 			return
 			
 	# in case of permanent option
