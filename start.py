@@ -43,6 +43,7 @@ import sys
 import string
 import random
 import json
+import hashlib
 import hardwaremod
 import videomod
 import sensordbmod
@@ -2690,34 +2691,59 @@ def login():
 	change=False
 	username=logindbmod.getusername().lower() #always transform to lowercase
 	password=logindbmod.getpassword()
+
+	# check if password needs to be secured (hashed)
+	if len(password) != 64:
+		logindbmod.restoredefault()
+		password=logindbmod.getpassword()
+		message = "Insecure password, reset to 'default'!"
+		change = True
 	
-	if request.method == 'POST':
+	elif request.method == 'POST':
 		print(" LOGIN " , username)
 		reqtype = request.form['button']
-		if reqtype=="login":
-			usernameform=request.form['username'].lower()
-			passwordform=request.form['password']
-			if (usernameform != username) or (passwordform != password):
+		if reqtype == "login":
+			usernameform = request.form['username'].lower()
+			passwordform = request.form['password']
+
+			# hash the pw and compare
+			m = hashlib.sha256()
+			m.update(passwordform.encode("UTF-8"))
+			hashedpw = m.hexdigest()
+
+			if (usernameform != username) or (hashedpw != password):
 				error = 'Invalid Credentials'
+				logger.warning("Invalid Credentials for %s", username)
 			else:
 				session['logged_in'] = True
-				#flash('You were logged in')   
+				#flash('You were logged in')
 				return redirect(url_for('show_entries'))
 
-		elif reqtype=="change":
+		elif reqtype == "change":
 			print("Display change password interface")
-			change=True
+			change = True
 						
-		elif reqtype=="save":
+		elif reqtype == "save":
 			print("saving new login password")
-			usernameform=request.form['username'].lower()
-			passwordform=request.form['password']
-			newpassword=request.form['newpassword']
-			if (usernameform != username) or (passwordform != password):
+			usernameform = request.form['username'].lower()
+			passwordform = request.form['password']
+			newpassword = request.form['newpassword']
+
+			# hash the old pw entered
+			m = hashlib.sha256()
+			m.update(passwordform.encode("UTF-8"))
+			password_hashed=m.hexdigest()
+
+			if (usernameform != username) or (password_hashed != password):
 				error = 'Invalid Credentials'
-				change=True
+				change = True
 			else:
-				isok1=logindbmod.changesavesetting('password',newpassword)
+				# hash the new pw
+				m = hashlib.sha256()
+				m.update(newpassword.encode("UTF-8"))
+				newpassword_hashed=m.hexdigest()
+
+				isok1 = logindbmod.changesavesetting('password',newpassword_hashed)
 				if isok1:
 					session['logged_in'] = True
 					flash('New Password Saved')   

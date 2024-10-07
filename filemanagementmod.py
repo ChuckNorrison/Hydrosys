@@ -117,16 +117,28 @@ def configfilezip():
 	basefolder=get_path()
 	relativedstfolder=os.path.join("static", CONFIGDOWNLOADPATH)
 	relativezipfolder=os.path.join("static", ZIPCONFIGDOWNLOADPATH)	
+
 	#delete files in download folder, or create it if not existing
 	deletefilesinfolder(basefolder, relativedstfolder)
+
 	#get config files list
 	relativeconfigfolder=DATABASEPATH
 	filedatalist=folderfilelist(basefolder, relativeconfigfolder , ".txt")
+
 	#copy config files in the folder
 	copyfiles(basefolder, filedatalist, relativedstfolder)
+
+	# remove logincred
+	logincredpath = os.path.join(basefolder, relativedstfolder, "logincred.txt")
+	os.unlink(logincredpath)
+
 	# make zip file and get link
 	zipfilename="allconfigfiles"
 	zipfilenamepath=zipfolder(basefolder, relativedstfolder, zipfilename , relativezipfolder)
+
+	#cleanup
+	deletefilesinfolder(basefolder, relativedstfolder)
+
 	# check file exist
 	if os.path.isfile(zipfilenamepath):
 		filelink=ZIPCONFIGDOWNLOADPATH+"/"+zipfilename+".zip" # relative path vithout static
