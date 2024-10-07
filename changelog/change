@@ -1045,3 +1045,11 @@ This means that after the MQTT discovery configuration has been push to home ass
 2022-10-05 -> release 343d
 
 - Modify the Notification function to properly delete messages
+
+2024-10-07 -> release 344
+
+- Security fix with hashed passwords and removed logincred.txt from webserver
+- Improved LAN mode
+- Fix video stream resolutions
+- Fix photo quality
+- Add Create Image and modal dialogues in images

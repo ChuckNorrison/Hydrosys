@@ -2050,7 +2050,7 @@ def takephoto(Activateanyway=False):
 			positionlist=position.split(",")
 			if (positionlist)and(servo!="none"):
 				for positionvalue in positionlist:
-				# move servo
+					# move servo first
 					servoangle(servo,positionvalue,2)
 					isok , ret_data=shotit(video,False,resolution,positionvalue,vdirection)
 

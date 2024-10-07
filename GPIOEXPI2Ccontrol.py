@@ -249,9 +249,10 @@ def GPIO_output(address , PINstr, level ):
 		logger.info("Set PIN=%s to State=%s", PINstr, str(level))
 		return True
 	else:
-		msg= "PIN=" + PINstr + " not Valid for this Hardware (" + address + ")"
-		logger.error(msg)
-		print(msg)
+		if PINstr != "N/A":
+			msg= "PIN=" + PINstr + " not Valid for this Hardware (" + address + ")"
+			logger.error(msg)
+			print(msg)
 
 	return False
 
