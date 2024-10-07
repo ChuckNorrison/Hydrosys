@@ -1972,7 +1972,6 @@ def HWpresetlist(apprunningpath):
 
 
 def removephotodataperiod(removebeforedays, maxphototoremove=20):
-
 	todaydate=datetime.now()
 	num = removebeforedays
 	tdelta=timedelta(days=num)
@@ -1981,7 +1980,7 @@ def removephotodataperiod(removebeforedays, maxphototoremove=20):
 	num = pastdays
 	tdelta=timedelta(days=num)
 	startdate=enddate-tdelta
-	print(" stratdate " ,startdate)
+	print(" startdate " ,startdate)
 	print(" enddate ", enddate)
 	
 	photodata=photolist(get_path())
@@ -2003,17 +2002,12 @@ def removephotodataperiod(removebeforedays, maxphototoremove=20):
 		else:
 			print("datetime format incorrect")
 	thumbconsistency(get_path())
-
-			
-	
-
 	
 def videodevlist():
 	return photomod.videodevlist()
 	
 def  thumbconsistency(apprunningpath):
 	return photomod.thumbconsistency(apprunningpath)
-			
 
 def shotit(video,istest,resolution,positionvalue,vdirection):
 	shottaken=False

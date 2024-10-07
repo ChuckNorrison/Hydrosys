@@ -595,6 +595,7 @@ def wificonfig():
 def imageshow():
 	if not session.get('logged_in'):
 		return render_template('login.html',error=None, change=False)
+
 	monthdict= {1: "jan", 10: "oct", 11: "nov", 12: "dec", 2: "feb", 3: "mar", 4: "apr", 5: "may", 6: "jun", 7: "jul", 8: "aug", 9: "sep"}
 	monthlist=[]
 	for i in range(12):
@@ -608,9 +609,13 @@ def imageshow():
 		actiontype=request.form['actionbtn']
 		if actiontype=="DeleteAll":
 			# delete all files in the folder
-			deletedfilenumber=hardwaremod.deleteallpictures(MYPATH)
 			print(" picture files deleted " , deletedfilenumber)
-			logger.info(' all image files deleted ')
+			logger.info(' all image files deleted ')			
+			deletedfilenumber=hardwaremod.deleteallpictures(MYPATH)
+		elif actiontype=="CreateImage":
+			print("Create image manually")
+			logger.info('Create image manually')
+			hardwaremod.takephoto()
 		else:
 			monthtoshow=monthlist.index(actiontype)+1
 
@@ -632,9 +637,7 @@ def imageshow():
 			hlist.append(h)
 			thumbfilenamelist.append(files[3])
 
-	#print filenamelist
 	selectedmothname=monthdict[monthtoshow]
-	#print selectedmothname
 
 	return render_template('showimages.html',filenamelist=filenamelist,titlelist=titlelist,wlist=wlist,hlist=hlist,monthlist=monthlist,selectedmothname=selectedmothname, thumbfilenamelist=thumbfilenamelist)
 
