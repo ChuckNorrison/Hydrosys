@@ -1315,7 +1315,7 @@ def downloadit():
 		# create the file using the tail command
 		isok=debuggingmod.createfiletailsyslog(dst)
 		if not isok:
-			answer="problem cretating file"
+			answer="problem creating file"
 		else:
 			answer="ready"
 		dstfilenamelist=[]
@@ -1324,7 +1324,7 @@ def downloadit():
 	elif name=="configzip":
 		dstfilename=filemanagementmod.configfilezip()
 		if dstfilename=="":
-			answer="problem cretating file"
+			answer="problem creating file"
 		else:
 			answer="ready"
 
