@@ -835,7 +835,7 @@ def echowifi():
 		return jsonify(ret_data)
 	ret_data={}
 	element=request.args['element']
-	if element=="all":
+	if element=="all" and not networkmod.WIFIENDIS=="Disabled":
 		# get wifi list
 		wifilist=[]
 		wifilist=networkmod.wifilist_ssid(2)
