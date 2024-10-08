@@ -15,7 +15,11 @@
 				{% for panelinfo in posts|reverse  %}
 
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="panel panel-green">
+                    {% if panelinfo.color %} 
+                    <div class="panel panel-{{panelinfo.color}}">
+                    {% else %} 
+                    <div class="panel panel-green"> 
+                    {% endif %}
                         <div class="panel-heading ">
 								<div class="row dontwantgap">
 

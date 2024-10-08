@@ -261,10 +261,10 @@ def interruptcheck(refsensor,mode, PIN):
 			#print "mode ", mode , "sensormode ", 	sensormode
 			if (mode in sensormode) or ("both" in sensormode):
 				interruptexecute(refsensor,element)
-				dictitem={'title': "Interrupt Message (Info)", 'content': sensor }
+				dictitem={'title': "Interrupt Message (Info)", 'content': sensor, 'color': "yellow" }
 				messageboxmod.SaveMessage(dictitem)
-				
-	
+				logger.info("Save Interrupt notification: %s", sensor)
+		
 	return	
 		
 

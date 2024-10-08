@@ -64,9 +64,15 @@ class _DataBase:
 			questionmarks=', '.join('?' * len(rowvalue))
 			var_string = ', '.join(listfield)
 			query_string = "INSERT INTO '{}' ({}) VALUES ({});" .format(self.databasetable, var_string, questionmarks)
-			conn.execute(query_string, rowvalue)
-			#conn.execute('INSERT INTO posts (title, content) VALUES (?, ?)',
-            #             (dictlist['title'], dictlist['content']))
+			try:
+				conn.execute(query_string, rowvalue)
+				#conn.execute('INSERT INTO posts (title, content) VALUES (?, ?)',
+				#             (dictlist['title'], dictlist['content']))
+			except:
+				# this db is outdated, fix and retry
+				conn.execute('ALTER TABLE "' + self.databasetable + '" ADD COLUMN color TEXT;')
+				conn.execute(query_string, rowvalue)
+
 			conn.commit()
 			conn.close()
 

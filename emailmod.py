@@ -274,7 +274,7 @@ def sendallmail(mailtype,intromessage,bodytextlist=[],localmessage=True):
 	# archive the message in messagebox
 	if mailtype=="alert":
 		if localmessage:
-			dictitem={'title': "System Message (Alert)", 'content': intromessage }
+			dictitem={'title': "System Message (Alert)", 'content': intromessage, 'color': "olive" }
 			messageboxmod.SaveMessage(dictitem)
 	usedfor="mailcontrol"
 	hwnamelist=hardwaremod.searchdatalist(hardwaremod.HW_FUNC_USEDFOR,usedfor,hardwaremod.HW_INFO_NAME)
