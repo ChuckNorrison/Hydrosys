@@ -177,9 +177,6 @@ if not networkmod.WIFIENDIS=="Disabled":
 	except:
 		print("No WiFi available")
 
-else:
-	isconnecting=True
-
 #scheduler setup---------------------
 if not isconnecting:
 	logger.info('No connection condition available. Reset mastercallback')
