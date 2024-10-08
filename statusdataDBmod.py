@@ -14,8 +14,8 @@ DATAFILENAME="statusdata.txt"
 def read_status_data(data,element,variable,permanent=False, storeid=""):
 	output=""
 	if element in data:
-		#print " element present"
 		elementdata=data[element]
+
 		if variable in elementdata:
 			output=elementdata[variable]
 
@@ -24,24 +24,24 @@ def read_status_data(data,element,variable,permanent=False, storeid=""):
 		# element not present in the data use the default
 		data[element]=data["default"].copy()
 		elementdata=data[element]
-		#print data
+
 		if variable in elementdata:
 			output=elementdata[variable]
 
 	# check with persistent element
 	isok=False
 	if permanent:
-		if not storeid=="":
-			isok, persistenooutput=readstoredvariable(storeid,element,variable)
-			
-	if isok:
-		if not (persistenooutput==output):
-			print("status variable output mismatch between current value and stored value")
-			logger.error('status variable output mismatch between current value =%s and stored value =%s', str(output) , str(persistenooutput))
-			output=persistenooutput
-						
-	return output
+		if not storeid == "":
+			isok, persistenooutput=readstoredvariable(storeid, element, variable)
 
+	if isok:
+		if not (persistenooutput == output):
+			print("status variable output mismatch between current value and stored value")
+			logger.warning("status '%s' variable '%s' output mismatch between current value '%s' and stored value '%s'",
+				str(element), str(variable), str(output) , str(persistenooutput))
+			output=persistenooutput
+
+	return output
 
 def read_status_levels(data,element="",from_file=False, storeid=""):
 	output=""
@@ -55,7 +55,7 @@ def read_status_levels(data,element="",from_file=False, storeid=""):
 		# check with persistent element
 		if not storeid=="":
 			isok, persistenooutput=readstoredvariable(storeid,element)
-				
+
 		if isok:
 			output=persistenooutput
 						

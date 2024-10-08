@@ -103,11 +103,6 @@ MYPATH=""
 
 print("starting new log session", datetime.now().strftime("%Y-%m-%d %H:%M:%S")) 
 logger.info('Start logging -------------------------------------------- %s Version Release: %s' , datetime.now().strftime("%Y-%m-%d %H:%M:%S"),Release)
-logger.debug('This is a sample DEBUG message')
-logger.info('This is a sample INFO message')
-logger.warning('This is a sample WARNING message')
-logger.error('This is a sample ERROR message')
-
 
 # finish logging init
 
@@ -201,8 +196,6 @@ if not isconnecting:
 
 
 # ///////////////// --- END init
-
-
 
 @application.teardown_appcontext
 def close_db_connection(exception):
