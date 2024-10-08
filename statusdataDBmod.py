@@ -18,6 +18,7 @@ def read_status_data(data,element,variable,permanent=False, storeid=""):
 
 		if variable in elementdata:
 			output=elementdata[variable]
+			#logger.debug("Element found. Set output for %s/%s to %s", str(element), str(variable), str(output))
 
 	else:
 		print(" element NOT present")
@@ -27,6 +28,8 @@ def read_status_data(data,element,variable,permanent=False, storeid=""):
 
 		if variable in elementdata:
 			output=elementdata[variable]
+			#logger.debug("Element not found. Set output for %s/%s to %s", str(element), str(variable), str(output))
+			write_status_data(data,element,variable,output,True,storeid) #TEST
 
 	# check with persistent element
 	isok=False
