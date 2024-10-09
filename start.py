@@ -2317,7 +2317,7 @@ def fertilizerplan():
 	linkemelementlist=hardwaremod.searchdatalist(hardwaremod.HW_FUNC_USEDFOR,"watercontrol",hardwaremod.HW_INFO_NAME)
 	#print "linkemelementlist ",linkemelementlist
 
-	modelist=["SceduledTime","BeforeWatering"]
+	modelist=["None","ScheduledTime","BeforeWatering"]
 	formlist=["workmode","waterZone","minactivationsec","time"]
 	#alertlist=["infoandwarning", "warningonly"]
 

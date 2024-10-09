@@ -71,13 +71,14 @@ def activateandregister(target,activationseconds): # function to activate the ac
 
 def pulsenutrient(target,activationseconds): #scheduled doser activity for fertilizer
 	duration=hardwaremod.toint(activationseconds,0)
-	if autofertilizermod.isschedulermode(target):
+	workmode = autofertilizermod.getworkmode(target)
+	if workmode == "ScheduledTime":
 		autofertilizermod.activatedoser(target, duration)
-	else:
-		logger.info('Book the %s activation', target)		
+	elif workmode == "BeforeWatering":
+		logger.info('Book the %s activation', target)
 		autofertilizermod.setActivationDurationDate(target,True,duration,datetime.now())
-	return True
 
+	return True
 
 def dictionarydataforactuator(actuatorname,data1,data2, description):
 	listdict=[]
@@ -85,7 +86,7 @@ def dictionarydataforactuator(actuatorname,data1,data2, description):
 	dicttemp["date"]=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 	dicttemp["actuator"]=actuatorname
 	dicttemp["data1"]= data1
-	dicttemp["data2"]= data2	
+	dicttemp["data2"]= data2
 	dicttemp["info"]= description
 	listdict.append(dicttemp)
 	return listdict

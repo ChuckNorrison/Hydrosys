@@ -195,8 +195,8 @@
 										<option {% if name==settingparam[1] %}selected="selected"{% endif %} value="{{name}}">{{name}}</option>
 									{% endfor %}											
 									</select>
-								<div class="small">ScheduledTime: Activate doser according to the Scheduled time.</div>
-								<div class="small">BeforeWatering: Activate the doser N times per month according to schedule, activation time just before the reference watering activation</div>
+								<div class="small"><b>ScheduledTime:</b> Activate doser according to the scheduled time.</div>
+								<div class="small"><b>BeforeWatering:</b> Activate the doser N times per month according to schedule, activation time just before the reference watering activation</div>
 
 
 								</div>
@@ -225,23 +225,10 @@
 								<label>Min watering (seconds):
 								</label>
 
-								
 								</div>
 								<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-								
-								{% set arr=["10","20","30","40","50","60","70","80","90","100"] %}	 			
-								  <select class="form-control input-sm dontwantgap" name="{{elem}}_param3">
-									{% for item in arr %}
-									<option {% if item==settingparam[3] %}selected="selected"{% endif %} >{{item}}</option>
-									{% endfor %}
-								  </select>
-								
-								
-								
-								
-								
-								<div class="small">Activation will be done only if the watering period is longer then this value </div>
-
+									<input value="30" class="form-control input-sm" name="{{elem}}_param3" type="text">
+									<div class="small">Activation will be done only if the watering period is longer then this value </div>
 								</div>
 							</div>				
 							</div>
