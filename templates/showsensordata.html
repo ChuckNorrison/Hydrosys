@@ -910,14 +910,30 @@ $(function() {
 			</div>
 			<div class="row">							
 					<div class="col-xs-12">
-					<button class="thebutton btn btn-default" idref="actionbtn"  type="submit" name="delete">Delete all data</button>
+						<a href="#DeleteAllDataModal" role="button" class="btn btn-primary" data-toggle="modal">Delete All Data</a>
 					</div>
 					
 
 			</div>
+    <!-- Modal HTML -->
+    <div id="DeleteAllDataModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Proceed to delete all sensor data?!</p>
 
-
-				
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
+                    <button name="delete" type="submit" idref="actionbtn" class="thebutton btn btn-primary">Proceed</button>
+                </div>
+            </div>
+        </div>
+    </div>			
 		</form>	
 		
 		
