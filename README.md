@@ -12,6 +12,8 @@ The software platform is based on a web interface where the webserver is running
 
 More details can be found on the webpage https://hydrosysblog.wordpress.com/
 
+![image](https://github.com/user-attachments/assets/1969b63b-e09e-4c15-816c-51376d276448)
+
 # Installation
 
 For installation please follow the installation guide from here:
