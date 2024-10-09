@@ -73,7 +73,6 @@
 			('/network/', 	'network', 		'Network'),
 			('/HardwareSetting/', 	'HardwareSetting', 		'HardwareSetting'),
 			('/videostream/', 	'Video', 		'Video'),
-			('/notification/', 	'notification', 		'Notification'),
 			('/About/',		'about',		'About')
 		] -%}
 		{% set active_page = active_page|default('index') -%}
@@ -110,8 +109,9 @@
 			  {% if not session.logged_in %}
 				<li><a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-user"></span> log in</a></li>
 				
-			  {% else %}
-				<li><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-user"></span> log out</a></li>
+				{% else %}
+			  <li><a href="{{ url_for('messagebox') }}"><span class="glyphicon glyphicon-bell"></span></a></li>
+				<li><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-user"></span> logout</a></li>
 
 			  {% endif %}
 				
