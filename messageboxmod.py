@@ -9,22 +9,22 @@ import basicSetting  # for the database path
 
 
 class _DataBase:
-	
+
 	def __init__(self,databasetable):
 		databasepath=basicSetting.data["DATABASEPATH"]
 		databaseschemapath=basicSetting.data["SCHEMAFILEPATH"]
 		dbfilename="msgdb.db"
 		descfilename="msgschema.sql"
-		self.dbpathfile=os.path.join(databasepath, dbfilename)	
+		self.dbpathfile=os.path.join(databasepath, dbfilename)
 		self.dbscpathfile=os.path.join(databasepath,databaseschemapath, descfilename)
 		self.init_db(self.dbpathfile, self.dbscpathfile) # initialize db in case the file does not exist
 		self.databasetable=databasetable
-		
+
 
 	def init_db(self, dbpathfile, dbscpathfile):
 
 		if not os.path.isfile(dbpathfile): #file is there
-			print("create empty database")			
+			print("create empty database")
 			conn = sqlite3.connect(dbpathfile)
 			print('Creating schema from file ' ,dbscpathfile)
 			if os.path.isfile(dbscpathfile):
@@ -47,14 +47,14 @@ class _DataBase:
 		dictitem = conn.execute('SELECT * FROM "' + self.databasetable + '" WHERE id = ?',(post_id,)).fetchone()
 		conn.close()
 		return dictitem
-		
+
 	def get_allrows(self):
 		conn = self.get_db_connection()
 		dictlist = conn.execute('SELECT * FROM "' + self.databasetable + '"').fetchall()
 		conn.close()
 		return dictlist
-		
-	def add_row(self,dictlist):			
+
+	def add_row(self,dictlist):
 		conn = self.get_db_connection()
 		if conn:
 			rowvalue=list(dictlist.values())
@@ -76,14 +76,14 @@ class _DataBase:
 			conn.commit()
 			conn.close()
 
-	def delete_row(self,index):			
+	def delete_row(self,index):
 		conn = self.get_db_connection()
 		if conn:
 			conn.execute('DELETE FROM "' + self.databasetable + '" WHERE id = ?', (index,))
 			conn.commit()
 			conn.close()
 
-	def delete_last_Nrows(self,number):			
+	def delete_last_Nrows(self,number):
 		conn = self.get_db_connection()
 		if conn:
 			# example --> delete from tb_news where newsid IN (SELECT newsid from tb_news order by newsid desc limit 10)
@@ -92,6 +92,12 @@ class _DataBase:
 			conn.commit()
 			conn.close()
 
+	def delete_all_messages(self):
+		conn = self.get_db_connection()
+		if conn:
+			conn.execute('DELETE FROM "' + self.databasetable + '"')
+			conn.commit()
+			conn.close()
 
 
 class _MessageBox:
@@ -115,13 +121,16 @@ class _MessageBox:
 	def SaveMessage(self,dictitem):
 		self.database.add_row(dictitem)
 		self.RemoveExceeding()
-		return	
+		return
 
 	def DeleteMessage(self,index):
-		return self.database.delete_row(index)	
+		return self.database.delete_row(index)
 
 	def DeleteLastNMessage(self,number):
-		return self.database.delete_last_Nrows(number)	
+		return self.database.delete_last_Nrows(number)
+
+	def DeleteAllMessages(self):
+		return self.database.delete_all_messages()
 
 
 
@@ -138,12 +147,15 @@ def SaveMessage(dictitem):
 	DATEFORMAT="%d/%m/%Y - %H:%M:%S"
 	dictitem['created']=datetime.now().strftime(DATEFORMAT)
 	return _MessageBoxIst.SaveMessage(dictitem)
-	
+
 def DeleteMessage(index):
 	return _MessageBoxIst.DeleteMessage(index)
 
 def DeleteLastNMessage(number):
 	return _MessageBoxIst.DeleteLastNMessage(number)
+
+def DeleteAllMessages():
+        return _MessageBoxIst.DeleteAllMessages()
 
 def PrintMessages():
 	messages = _MessageBoxIst.GetMessages()
@@ -160,7 +172,7 @@ def PrintMessages():
 
 
 if __name__ == '__main__':
-	
+
 	print(" Add two rows and delete them")
 	PrintMessages()
 	dictitem=[]

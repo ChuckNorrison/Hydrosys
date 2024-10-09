@@ -9,8 +9,29 @@
    	{% if posts|length > 0 %}
 
 	<form novalidate="true" action="{{ url_for('messagebox') }}" id="messagebox" method="post" > 
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
+			 <span class="pull-right"><a href="#DeleteAllMessagesModal" role="button" class="btn btn-primary" data-toggle="modal">Delete All Messages</a></span>
+		</div>
 
 
+    <!-- Modal HTML -->
+    <div id="DeleteAllMessagesModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Proceed to delete all messages?!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
+                    <button name="DeleteAllMessages" type="submit" class="thebutton btn btn-primary">Proceed</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 				{% for panelinfo in posts|reverse  %}
 

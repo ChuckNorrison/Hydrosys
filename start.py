@@ -3195,7 +3195,10 @@ def messagebox():
 	if request.method == 'POST':
 		actiontype=request.form['actionbtn']
 		print(actiontype)
-		messageboxmod.DeleteMessage(int(actiontype))
+		if actiontype == "DeleteAllMessages":
+			messageboxmod.DeleteAllMessages()
+		else:
+			messageboxmod.DeleteMessage(int(actiontype))
 
 
 	posts=messageboxmod.GetMessages()
