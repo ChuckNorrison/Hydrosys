@@ -29,20 +29,21 @@ def read_status_data(data,element,variable,permanent=False, storeid=""):
 		if variable in elementdata:
 			output=elementdata[variable]
 			#logger.debug("Element not found. Set output for %s/%s to %s", str(element), str(variable), str(output))
-			write_status_data(data,element,variable,output,True,storeid) #TEST
 
 	# check with persistent element
 	isok=False
 	if permanent:
 		if not storeid == "":
-			isok, persistenooutput=readstoredvariable(storeid, element, variable)
+			isok, persistentoutput=readstoredvariable(storeid, element, variable)
 
 	if isok:
-		if not (persistenooutput == output):
-			print("status variable output mismatch between current value and stored value")
-			logger.warning("status '%s' variable '%s' output mismatch between current value '%s' and stored value '%s'",
-				str(element), str(variable), str(output) , str(persistenooutput))
-			output=persistenooutput
+		if not (persistentoutput == output):
+			print("status",str(element),"variable",str(variable),
+				"output mismatch between current value",str(output),
+				"and stored value",str(persistentoutput))
+			#logger.warning("status '%s' variable '%s' output mismatch between current value '%s' and stored value '%s'",
+			#	str(element), str(variable), str(output) , str(persistentoutput))
+			output=persistentoutput
 
 	return output
 
@@ -61,10 +62,10 @@ def read_status_levels(data,element="",from_file=False, storeid=""):
 
 		if isok:
 			output=persistenooutput
-						
+
 	return output
 
-		
+
 def write_status_data(data,element,variable,value,permanent=False, storeid=""):
 	if element in data:
 		data[element][variable]=value
@@ -73,10 +74,11 @@ def write_status_data(data,element,variable,value,permanent=False, storeid=""):
 			data[element]=data["default"].copy()
 			data[element][variable]=value
 		else:
-			logger.error('ERROR: There is no default data for element %s/%s', element, variable)
+			print("ERROR: There is no default data for element", element,"/",variable)
+			#logger.error('ERROR: There is no default data for element %s/%s', element, variable)
 
 			return
-			
+
 	# in case of permanent option
 	if permanent:
 		if not storeid=="":
