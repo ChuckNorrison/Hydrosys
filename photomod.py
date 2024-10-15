@@ -375,7 +375,7 @@ def ExistandThumb(filepath,filenamenopath,shottaken):
 			os.makedirs(paththumb)
 		try:
 			image = Image.open(filename)
-			image.thumbnail((300, 300))
+			image.thumbnail((450, 450))
 			thumbname=os.path.join(paththumb,filenamenopath)
 			image.save(thumbname)
 		except:
@@ -415,7 +415,7 @@ def thumbconsistency(apprunningpath):
 				#create thumbnail
 				try:
 					image = Image.open(os.path.join(filepath,fileimage))
-					image.thumbnail((300, 300))
+					image.thumbnail((450, 450))
 					thumbname=os.path.join(paththumb,os.path.basename(fileimage))
 					image.save(thumbname)
 				except:

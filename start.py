@@ -121,6 +121,7 @@ def runallconsistencycheck():
 	hardwaremod.initHC12()
 	hardwaremod.UpdateCMDcontrol()
 	HASScompMatrix.HASSIOintegr.remove_and_update_config()
+	hardwaremod.thumbconsistency(hardwaremod.get_path())
 	return True
 
 def runallreadfile():
