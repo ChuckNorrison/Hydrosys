@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layout2024.html" %}
 {% block body %}
   {% if session.logged_in %}
 
@@ -68,7 +68,7 @@
 								<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 								
 								{% set arr=["0","60","120","180","240","300"] %}	 			
-								  <select class="form-control dontwantgap" name="AP_TIME">
+								  <select class="form-select" name="AP_TIME">
 									{% for item in arr %}
 									<option {% if item==AP_TIME %}selected="selected"{% endif %} >{{item}}</option>
 									{% endfor %}
@@ -90,7 +90,7 @@
 								<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 								
 								{% set arr=["Enabled","Disabled"] %}	 			
-								  <select class="form-control dontwantgap" name="WIFIENDIS">
+								  <select class="form-select" name="WIFIENDIS">
 									{% for item in arr %}
 									<option {% if item==WIFIENDIS %}selected="selected"{% endif %} >{{item}}</option>
 									{% endfor %}
@@ -125,7 +125,7 @@
 								<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 								
 									{% set arr=["True","False"] %}	 			
-									  <select class="form-control dontwantgap" name="forceStaticIP">
+									  <select class="form-select" name="forceStaticIP">
 										{% for item in arr %}
 										<option {% if item==forceStaticIP %}selected="selected"{% endif %} >{{item}}</option>
 										{% endfor %}
@@ -136,22 +136,20 @@
 									</div>			
 							</div>
 			
-                  <div class="form-group">
-					  	<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                      <!--<button type="reset" class="btn btn-default">Cancel</button> -->
-                      <button name="button" type="submit" class="btn btn-primary" value="save">Submit</button>
-					  <button name="button" type="submit" class="btn btn-default" value="cancel">Cancel</button>
-
-					 </div>
-                  </div>
+		<div class="form-group">
+			<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+				<button name="button" type="submit" class="btn btn-secondary" value="cancel">Cancel</button>
+				<button name="button" type="submit" class="btn btn-primary" value="save">Submit</button>
+			</div>
+		</div>
 
 
-			</div>	
+	</div>	
               
 
 
       </form>
-      </div>	
+</div>	
  <!-- end form --> 
   
   {% endif %}

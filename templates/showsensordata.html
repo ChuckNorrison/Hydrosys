@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layout2024.html" %}
 {% set active_page = "sensordata" %}
 {% block body %}
   {% if session.logged_in %}
@@ -714,228 +714,215 @@ $(function() {
 
   });
 
-
-
-
-
 		
 		</script>
 		<!-- The contents of myscript.js will be loaded inside the script tag -->
 
-		<div class="page-header">
-
-					  <h4>Data Trend</h4>
-       
-       </div>
-       
-       
-       
-		
+		<div class="pb-2 mt-4 mb-2 border-bottom">
+			<h3>Data Trend</h3>
+		</div>
+       	
 		<form novalidate="true" action="{{ url_for('show_sensordata') }}" id="menuForm" method="post" name="theForm">
-	
 			<div class="page-header">
-
 				<input value={{actiontype}} id="actionbtn" name="actionbtn" type="hidden">
-				
-							<div class="row">
-								<div class="col-xs-12">
+				<div class="row">
+					<div class="col-xs-12 pb-2">
+			
+				    {% for period in periodlist %}
+						<div class="form-check">
+							<input class="form-check-input" onclick="this.form.submit()" type="radio" name="period" id="radio{{period}}" value="{{period}}" {% if period == periodtype %}checked{% endif %}>
+							<label class="form-check-label" for="radio{{period}}">
+								{{period}}
+							</label>
+						</div>
+					{% endfor %}
 
-								<div class="form-group">
-									<label></label>									
-							    {% for period in periodlist %}									
-									<label class="radio-inline">
-										<input onclick="this.form.submit()" type="radio" name="period" id="radio{{period}}" value="{{period}}" {% if period == periodtype %}checked{% endif %}>{{period}}
-									</label>
-								{% endfor %}
-								
-								</div>
-								</div>
+					</div>
+				</div>
 
-							</div>
-					<div class="row">		
-						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 ">
-							<div class="form-group smallgap">
-								<div class='input-group date datetimepicker'>
-									<input id="startdate" name="startdate" type='text' class="setclock form-control" value="{{startdatestr}}" >
-									<span class="input-group-addon">
-										<span class="glyphicon glyphicon-calendar"></span>
+				<!-- Select custom dates -->
+				<div class="row">		
+					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-3">
+						<div class="form-group smallgap">
+							<div class="input-group date" id="datepicker">
+								<input id="startdate" name="startdate" type='text' class="form-control" value="{{startdatestr}}" >
+								<span class="input-group-append">
+									<span class="input-group-text bg-light d-block">
+										<i class="fa fa-calendar"></i>
 									</span>
-								</div>
+								</span>
 							</div>
-						</div>	
-						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 ">
-							<div class="form-group smallgap">
-								<div class='input-group date datetimepicker'>
-									<input id="enddate" name="enddate" type='text' class="setclock form-control" value="{{enddatestr}}" >
-									<span class="input-group-addon">
-										<span class="glyphicon glyphicon-calendar"></span>
-									</span>
-								</div>
-							</div>
-						</div>	
-						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 ">	
-							<div class="form-group smallgap">
-							<button id="setPeriod" class="clockbutton btn btn-default"  type="button" name="setPeriod" element="setHWClock">Selected Dates</button>
-							</div>	
-						</div>	
-					</div>					
-					<script type="text/javascript">
-						$(function () {
-							$('.datetimepicker').datetimepicker({
-								locale: 'en-gb',
-								useCurrent:false,
-								format: 'DD/MM/YYYY'
+						</div>
+					</div>
 
-							});
-							
-							$(function() {
-								$("#setPeriod").click(function() {
-									//var selvalue=$(this).attr('name');
-									//alert("Custom");
-									//var idref=$(this).attr('idref');
-									$('#radioCustom').prop('checked',true);
-									document.theForm.submit();
-								});  
-							}); 
-							
-							
+					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-3">
+						<div class="form-group smallgap">
+							<div class="input-group date" id="datepicker">
+								<input id="enddate" name="enddate" type='text' class="form-control" value="{{enddatestr}}" >
+								<span class="input-group-append">
+									<span class="input-group-text bg-light d-block">
+										<i class="fa fa-calendar"></i>
+									</span>
+								</span>
+							</div>
+						</div>
+					</div>	
+					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-3">	
+						<div class="form-group smallgap">
+							<button id="setPeriod" class="btn btn-primary" type="button" name="setPeriod">Selected Dates</button>
+						</div>
+					</div>	
+				</div>					
+				<script type="text/javascript">
+					$(function () {
+						startdate = document.getElementById('startdate')
+						const datepicker1 = new Datepicker(startdate, {
+							// Datepicker options
+							format: 'mm/dd/yyyy',
+						}); 
+
+						enddate = document.getElementById('enddate')
+						const datepicker2 = new Datepicker(enddate, {
+							// Datepicker options
+							format: 'mm/dd/yyyy',
 						});
-					</script>					
+					});
+
+					$(function() {
+						$("#setPeriod").click(function() {
+							$('#radioCustom').prop('checked',true);
+							document.theForm.submit();
+						});  
+					}); 						
+				</script>
 			</div>
 
-
-
-
 			<div class="well bs-component">
-							<!-- graph here-->
-							{% if (usedsensorlist|length)>0 %}
-							<div  class="row">
-								<div style="font-size:20px;font-weight: bold;opacity: 0.5;">Sensor Chart</div>
-							</div>
-							
-							<div  class="row">
-								<div id="chart1" style="height:450px; width:100%;"></div>
-							</div>
-							
-							{% else %}
+				<!-- graph here-->
+				{% if (usedsensorlist|length)>0 %}
 
-							<div class="row">
-									<div style="height:100px"><h4>Sensor data not available</h4></div>
-							</div>
+				<div class="row">
+					<div style="font-size:20px;font-weight: bold;opacity: 0.5;">Sensor Chart</div>
+				</div>
+				
+				<div class="row" style="display:inline;">
+					<div id="chart1" style="height:450px; width:100%;"></div>
+				</div>
+				
+				{% else %}
 
-							{% endif %}
+				<div class="row">
+						<div style="height:100px"><h4>Sensor data not available</h4></div>
+				</div>
 
+				{% endif %}
 
                 </div>
 
 			<div class="well bs-component">					
-							
-							{% if (usedsensorlist|length+usedactuatorlist|length)>0 %}
-							<div  class="row">
-								<div style="font-size:20px;font-weight: bold;opacity: 0.5;">Combined Chart</div>
-							</div>						
-							<div  class="row">
-								<div id="chart3" style="height:450px; width:100%;"></div>
-							</div>
 
-							{% else %}
+				{% if (usedsensorlist|length+usedactuatorlist|length)>0 %}
 
-							<div class="row">
-								<div class="col-xs-12">
-									<div style="height:100px"><h4>Data not available</h4></div>
-								
-								</div>
-							</div>
+				<div  class="row">
+					<div style="font-size:20px;font-weight: bold;opacity: 0.5;">Combined Chart</div>
+				</div>						
+				<div  class="row" style="display:inline;">
+					<div id="chart3" style="height:450px; width:100%;"></div>
+				</div>
 
-							{% endif %}
+				{% else %}
 
+				<div class="row">
+					<div class="col-xs-12">
+						<div style="height:100px"><h4>Data not available</h4></div>
+					
+					</div>
+				</div>
 
-
-
+				{% endif %}
 
 			</div>
 
-
 			<div class="well bs-component">
+				<!-- graph here-->
+				{% if (usedactuatorlist|length)>0 %}
 
-							<!-- graph here-->
+				<div  class="row">
+					<div style="font-size:20px;font-weight: bold;opacity: 0.5;">Actuator Chart</div>
+				</div>						
+				<div  class="row" style="display:inline;">
+					<div id="chart2" style="height:100%; width:100%;"></div>
+				</div>
 
-							{% if (usedactuatorlist|length)>0 %}	
-							<div  class="row">
-								<div style="font-size:20px;font-weight: bold;opacity: 0.5;">Actuator Chart</div>
-							</div>						
-							<div  class="row">
-								<div id="chart2" style="height:100%; width:100%;"></div>
-							</div>
-							{% else %}
+				{% else %}
 
-							<div class="row">
-									<div style="height:100px"><h4>Actuator data not available</h4></div>
-							</div>
+				<div class="row">
+						<div style="height:100px"><h4>Actuator data not available</h4></div>
+				</div>
 
-							{% endif %}		
-							
+				{% endif %}		
+
 			</div>
 
 			<div class="well bs-component">
+				<!-- graph here-->
+				{% if (hygrosensornumlist|length + hygroactuatornumlist|length + hygrosensornumlistwithout|length + hygrosensornumlistwithoutactive|length + actuatornumlistwithout|length)>0 %}
 
-							<!-- graph here-->
+				<div  class="row">
+					<div style="font-size:20px;font-weight: bold;opacity: 0.5;">Auto water Control Chart</div>
+				</div>						
+				<div  class="row" style="display:inline;">
+					<div id="chart4" style="height:450px; width:100%;"></div>
+				</div>
 
-							{% if (hygrosensornumlist|length + hygroactuatornumlist|length + hygrosensornumlistwithout|length + hygrosensornumlistwithoutactive|length + actuatornumlistwithout|length)>0 %}	
-							<div  class="row">
-								<div style="font-size:20px;font-weight: bold;opacity: 0.5;">Auto water Control Chart</div>
-							</div>						
-							<div  class="row">
-								<div id="chart4" style="height:450px; width:100%;"></div>
-							</div>
-							{% else %}
+				{% else %}
 
-							<div class="row">
-									<div style="height:100px"><h4>Hygrometer data not available</h4></div>
-							</div>
+				<div class="row">
+						<div style="height:100px"><h4>Hygrometer data not available</h4></div>
+				</div>
 
-							{% endif %}		
+				{% endif %}		
 							
 			</div>
 			
-			<!-- Download data button here-->
-			<button class="downloadbutton btn-sm btn btn-default" type="button" name="downloaddata">DownloadSensorData</button>
-
-
-
-			<div class="page-header">
-
-						<h4>Delete Data Record</h4>
-
+			<div class="pb-2 mt-4 mb-2 border-bottom">
+				<h3>Options</h3>
 			</div>
+
+			<!-- Download data button -->
 			<div class="row">							
-					<div class="col-xs-12">
-						<a href="#DeleteAllDataModal" role="button" class="btn btn-primary" data-toggle="modal">Delete All Data</a>
-					</div>
-					
-
+				<div class="d-grid col-2 pb-4">
+					<button class="downloadbutton btn btn-secondary" type="button" name="downloaddata"><i class="fa-solid fa-download"></i> Download Sensor Data</button>
+				</div>
 			</div>
-    <!-- Modal HTML -->
-    <div id="DeleteAllDataModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Confirmation</h4>
-                </div>
-                <div class="modal-body">
-                    <p>Proceed to delete all sensor data?!</p>
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
-                    <button name="delete" type="submit" idref="actionbtn" class="thebutton btn btn-primary">Proceed</button>
-                </div>
-            </div>
-        </div>
-    </div>			
+			<!-- Delete all data button -->
+			<div class="row">							
+					<div class="d-grid col-2 pb-4">
+						<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#DeleteAllDataModal"><i class="fa-solid fa-trash"></i> Delete All Sensor Data</button>
+					</div>
+			</div>
+
+		    <!-- Modal HTML -->
+		    <div id="DeleteAllDataModal" class="modal fade" aria-hidden="true" aria-labelledby="ModalLabel">
+		        <div class="modal-dialog">
+		            <div class="modal-content">
+		                <div class="modal-header">
+		                	<h1 id="ModalLabel" class="modal-title fs-5">Confirmation</h1>
+		                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+		                </div>
+		                <div class="modal-body">
+		                    <p>Proceed to delete all sensor data?!</p>
+		                </div>
+		                <div class="modal-footer">
+		                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+		                    <button name="delete" type="submit" idref="actionbtn" class="thebutton btn btn-primary">Proceed</button>
+		                </div>
+		            </div>
+		        </div>
+		    </div>	
+
 		</form>	
-		
 		
 		<script type="text/javascript">
 			
@@ -945,45 +932,26 @@ $(function() {
 						//alert(selvalue);
 						var idref=$(this).attr('idref');
 						$('#' + idref).attr("value", selvalue);
-					});  
-				}); 
-				
-		
-				
-		
-		</script>  
+					});
+				});
+		</script>
 
-	<form novalidate="true" action="{{ url_for('DATAsetup') }}" id="DATAsetup" method="post" >
- 			<div class="page-header">
-
-						<h4>Setting</h4>
-
-			</div>
- 
+		<form novalidate="true" action="{{ url_for('DATAsetup') }}" id="DATAsetup" method="post" > 
 			<div class="row">
-				<div class="col-xs-4">
-				
-					<!-- advanced setting button -->
-			
-					<button name="buttonsub" value="show" type="submit" class="thebutton btn btn-danger btn-sm btn-warp">
-						Advanced Setting
-					<span class="glyphicon glyphicon-cog"></span>
+				<div class="d-grid col-2 pb-4">
+					<button name="buttonsub" value="show" type="submit" class="thebutton btn btn-primary">
+					<i class="fas fa-cog"></i> Filter Data
 					</button>
-		
 				</div>
 			</div>
-
 		</form> 
 		
-		
-		
-  </div>
-  {% else %}
+  	</div>
 
-		<h1>Please log in</h1>
+  	{% else %}
+
+		<h1>Please login</h1>
   
-  {% endif %}
-  <ul class=entries>
+  	{% endif %}
 
-  </ul>
 {% endblock %}

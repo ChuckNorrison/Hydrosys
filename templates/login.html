@@ -1,5 +1,5 @@
-{% extends "layout.html" %}
-{% set active_page = "" %}
+{% extends "layout2024.html" %}
+{% set active_page = "login" %}
 {% block body %}
 
   {% if error %}
@@ -44,7 +44,7 @@
                     </div>
                   </div>
                   
-                  {% if not change %}
+          {% if not change %}
                   <div class="form-group">
                     <label for="inputPassword" class="col-lg-2 control-label">Password</label>
                     <div class="col-lg-10">
@@ -70,27 +70,23 @@
 				  
 				  {% endif %}
 
-
-                  
                   <div class="form-group">
                     <div class="col-lg-10">
                       <!--<button type="reset" class="btn btn-default">Cancel</button> -->
                       
-                      {% if not change %}
+          {% if not change %}
                       <button name="button" type="submit" class="btn btn-primary" value="login">Login</button>
-					  {% endif %}                      
-                      {% if not change %}
-						<button name="button" type="submit" class="btn btn-primary" value="change">Change Password</button>
-                      {% else %}
-						<button name="button" type="submit" class="btn btn-primary" value="save">Save</button>
-					  {% endif %}
-					  <button name="button" type="submit" class="btn btn-default" value="cancel">Cancel</button>
+					{% endif %}                      
+          
+          {% if not change %}
+						          <button name="button" type="submit" class="btn btn-primary" value="change">Change Password</button>
+          {% else %}
+						          <button name="button" type="submit" class="btn btn-primary" value="save">Save</button>
+					{% endif %}
+
+					             <button name="button" type="submit" class="btn btn-secondary" value="cancel">Cancel</button>
                       
                     </div>
-                  
-                  
-                  
-                  
                 </fieldset>
               </form>
             </div>

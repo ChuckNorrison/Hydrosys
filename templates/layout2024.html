@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+    <head>
+		<title>HydroSystem</title>
+	
+		<!-- Jquery -->
+		<script type=text/javascript src="{{url_for('static', filename='jquery/js/jquery-3.7.1.min.js') }}"></script>
+
+		<!--  Bootstrap -->
+		<link rel="stylesheet" media="screen" href = "{{ url_for('static', filename='bootstrap533/css/bootstrap.min.css') }}">
+		<link rel="stylesheet" media="screen" href = "{{ url_for('static', filename='bootstrap533/css/bootstrap-utilities.min.css') }}">		
+		<script type=text/javascript src="{{url_for('static', filename='bootstrap533/js/bootstrap.bundle.min.js') }}"></script>
+
+		<!-- datepicker -->
+		<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap533/vanillajs-datepicker-1.3.4/css/datepicker-bs5.min.css') }}">
+		<script src="{{url_for('static', filename='bootstrap533/vanillajs-datepicker-1.3.4/js/datepicker-full.min.js') }}"></script>
+
+		<!-- font awesome-->
+		<link rel="stylesheet" type="text/css" href = "{{ url_for('static', filename='font-awesome/css/fontawesome.min.css') }}">
+		<link rel="stylesheet" type="text/css" href = "{{ url_for('static', filename='font-awesome/css/solid.min.css') }}">
+		<link rel="stylesheet" type="text/css" href = "{{ url_for('static', filename='font-awesome/css/brands.min.css') }}">
+
+		<!-- custom css -->
+		<link rel="stylesheet" media="screen" href = "{{ url_for('static', filename='css/custom.css') }}">
+
+	{% if session.logged_in %} 		<!-- This is used to reduce the time to load the login page -->	
+	
+		<!-- Jquery UI -->		
+		<script type=text/javascript src="{{url_for('static', filename='jqueryui/jquery-ui-1.14.0/jquery-ui.min.js') }}"></script>	
+
+		<!--  moment (for datetime picker, should be loaded before datetimepicker) -->
+		<script type=text/javascript src="{{url_for('static', filename='moment/min/moment-with-locales.min.js') }}"></script>
+
+		<!--  Bootstrap Select -->
+		<script type=text/javascript src="{{url_for('static', filename='bootstrap-select/js/bootstrap-select.js') }}"></script>
+		<link rel="stylesheet" media="screen" href = "{{ url_for('static', filename='bootstrap-select/css/bootstrap-select.min.css') }}">
+
+		<!--  Bootstrap Clockpicker -->
+		<script type=text/javascript src="{{url_for('static', filename='clockpicker/js/bootstrap-clockpicker.min.js') }}"></script>
+		<link rel="stylesheet" media="screen" href = "{{ url_for('static', filename='clockpicker/css/bootstrap-clockpicker.min.css') }}">
+
+
+	{% endif %}
+
+		<!--  Set webpage to the screen size -->
+		<meta name="viewport" content="width = device-width, initial-scale = 1.0"> 
+    
+    </head>
+  <body>
+		<script type="text/javascript">
+		var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+		</script>
+
+	{% set navigation_bar = [
+		('/', 	'home', 		'Home'),
+		('/Sensordata/', 	'sensordata', 		'Data'),
+		('/Imageshow/', 	'imageshow', 		'Images'),
+		('/wateringplan/', 'wateringplan', 		'WateringPlan'),
+		('/autowatering/', 'autowatering', 		'AutoWatering'),
+		('/weatherAPI/', 'weatherAPI', 		'WeatherAPI'),
+		('/fertilizerplan/', 'fertilizerplan', 		'FertilizerPlan'),
+		('/automation/', 'automation', 		'Automation'),
+		('/interrupt/', 'interrupt', 		'Interrupt'),
+		('/ShowCalibration/', 	'showcalibration', 		'Settings'),
+		('/network/', 	'network', 		'Network'),
+		('/HardwareSetting/', 	'HardwareSetting', 		'HardwareSetting'),
+		('/videostream/', 	'Video', 		'Video'),
+		('/About/',		'about',		'About')
+	] -%}
+	{% set active_page = active_page|default('index') -%}		
+
+	{% if active_page != "" %} <!-- if activepage = "" the menu will not be shown in the page -->
+
+      <!-- Static navbar -->
+      <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">HS4</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+             </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav d-flex flex-wrap">
+                	{% if session.logged_in %}
+
+                        {% for href, id, caption in navigation_bar %}
+
+                        <a {% if id == active_page %} class="nav-link active" aria-current="page" {% else%} class="nav-link" {% endif%} href="{{ href|e }}">{{ caption|e }}</a>
+                       
+                        {% endfor %}
+
+						<a class="nav-link" href="{{ url_for('messagebox') }}"><i class="fa fa-bell"></i></a>
+	                	<a class="nav-link" href="{{ url_for('logout') }}"><i class="fa fa-user"></i> logout</a>
+
+                    {% else %}
+
+                    	<a class="nav-link ms-auto" href="{{ url_for('login') }}"><i class="fa fa-user" style="font-size:18px;color:white"></i> login</a>
+
+                    {% endif %}
+                </div>
+	    </div>
+        </div>
+      </nav>
+
+	<div class="row top-buffer">
+	</div>
+	
+		{% with messages = get_flashed_messages(with_categories=true) %}
+		  {% if messages %}
+			{% for category, message in messages %}
+				{% if category=="message" %}			
+					<div class="alert alert-success alert-dismissable" role="alert">
+					   	<button type="button" class="btn-close align-top" data-bs-dismiss="alert" aria-label="Close"></button>
+					   	{{ message }}
+					</div> 
+				{% else %}
+					<div class="alert alert-{{category}} alert-dismissable" role="alert">
+					   	<button type="button" class="btn-close align-top" data-bs-dismiss="alert" aria-label="Close"></button>
+					   	{{ message }}
+					</div> 				
+				{% endif %}			
+			{% endfor %}
+		  {% endif %}
+		{% endwith %}
+		  
+{% endif %}
+
+
+		  {% block body %}{% endblock %}
+
+	</body>
+</html>
+
+

@@ -1,0 +1,119 @@
+{% extends "layout.html" %}
+{% set active_page = "message" %}
+{% block body %}
+  {% if session.logged_in %}
+
+   
+<div class="container-fluid" style="max-width: 640px;">
+
+   	{% if posts|length > 0 %}
+
+	<form novalidate="true" action="{{ url_for('messagebox') }}" id="messagebox" method="post" > 
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
+			 <span class="pull-right"><a href="#DeleteAllMessagesModal" role="button" class="btn btn-primary" data-toggle="modal">Delete All Messages</a></span>
+		</div>
+
+
+    <!-- Modal HTML -->
+    <div id="DeleteAllMessagesModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Proceed to delete all messages?!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Back</button>
+                    <button name="DeleteAllMessages" type="submit" class="thebutton btn btn-primary">Proceed</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+				{% for panelinfo in posts|reverse  %}
+
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    {% if panelinfo.color %} 
+                    <div class="panel panel-{{panelinfo.color}}">
+                    {% else %} 
+                    <div class="panel panel-green"> 
+                    {% endif %}
+                        <div class="panel-heading ">
+								<div class="row dontwantgap">
+
+									<!-- Title-->
+
+									<div class="col-lg-6 col-xs-6 text-left dontwantgapright dontwantgapleft big">{{panelinfo.title}}
+									</div>
+
+									
+								</div>	
+								
+									<!-- data list here -->
+								<hr class="dontwantgaptop"></hr>
+
+								<div class="row dontwantgap">
+
+									<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-left dontwantgap">{{panelinfo.content}}:
+									</div>
+
+								</div>
+								
+
+									
+									
+
+                        </div>
+                        <div class="panel-footer ">
+							
+                                <span class="pull-left " >{{panelinfo.created}}</span>
+                                <span class="pull-right"><button class="thebutton btn dontwantgap" type="submit" name="{{panelinfo.id}}"><i class="fa fa-close" style="font-size:18px;color:red"></i> Delete</button></span>
+
+
+                           
+                                <div class="clearfix"></div>
+                              
+                        </div>
+
+                    </div>
+                </div>
+
+                {% endfor %}
+                <input value="" id="actionbtn" name="actionbtn" type="hidden">
+
+	</form> 
+
+
+
+	{% else %}
+	   <h3>No Messages</h3>   
+	
+	{% endif %}
+	
+	
+	
+			<script type="text/javascript" charset="utf-8">
+                
+			$(function() {
+					$(".thebutton").click(function() {
+						var selvalue=$(this).attr('name');
+						//alert(selvalue);
+						$('#actionbtn').attr("value", selvalue);
+					});  
+				});  
+			</script>		
+		
+ </div>
+
+  {% else %}
+
+		<h1>Please log in</h1>
+
+
+  
+  {% endif %}
+		
+{% endblock %}
