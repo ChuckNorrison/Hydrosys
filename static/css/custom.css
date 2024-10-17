@@ -82,14 +82,29 @@ font-size:      1.2em;
 }
 
 .nav-pills {
-    border-color: #3D9970;
     --bs-nav-pills-link-active-bg: #3D9970;
-    background-color: #8CD9B7 !important;
+}
+
+.nav-pills .nav-item {
+    background-color: #7BB39B;
+    border-radius: 10px 10px 0 0;
 }
 
 .nav-pills .nav-item .nav-link {
-  color: #fff;
-  border: 1px solid #ccc;
+    color: #fff;
+    border-radius: 10px 10px 0 0 !important;
+}
+
+.nav-pills .nav-item .nav-link:first-child {
+    border-radius: var(--bs-card-inner-border-radius) var(--bs-card-inner-border-radius) 0 0;
+}
+
+.tab-content .card {
+    border-radius: 0 10px 0 0;
+}
+
+.tab-content .card-header:first-child {
+    border-radius: 0 var(--bs-card-inner-border-radius) 0 0;
 }
 
 
@@ -354,3 +369,6 @@ font-size:      1.2em;
 .clockpicker-popover {
     position: absolute;
 }
+
+/* Fertilizer */
+

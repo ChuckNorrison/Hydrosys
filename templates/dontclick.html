@@ -11,7 +11,7 @@
     <form action="{{ url_for('dontclick') }}" method="post">
 
 
-        <div class="well bs-component">
+        <div class="card card-body bg-light">
 				
 			<div class="form-group">			
 			<div class="row">
@@ -27,7 +27,7 @@
 					<label>Reboot the Raspberry PI</label>
 				</div>		
 				<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ResetModal">Restart the Raspberry Pi</button>
+					<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ResetModal"><i class="fa-solid fa-rotate-right"></i> Restart the Raspberry Pi</button>
 				</div>
 			</div>
 			</div>	
@@ -37,10 +37,10 @@
 			<div class="form-group">
 			<div class="row pb-2">
 				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-					<label>Shut Down Raspberry PI</label>
+					<label>Shutdown Raspberry PI</label>
 				</div>		
 				<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ShutdownModal">Shutdown</button>
+					<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ShutdownModal"><i class="fa-solid fa-power-off"></i> Shutdown</button>
 				</div>
 			</div>
 			</div>	

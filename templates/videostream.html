@@ -11,12 +11,12 @@
 		<h3>Video</h3>
 	</div>
 
-	<div class="bs-card">
+	<div class="card card-body bg-light">
  
 <!-- Image and Video -->
 
-	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-		<img class="img-fluid" id="videoimg" src="/static/waiting.jpg" isok="false" />    
+	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+		<img class="img-fluid" id="videoimg" src="/static/cameratest/testimage1.jpg" isok="false" />    
 	</div>
 
 	<div class="d-none">
@@ -28,7 +28,7 @@
 		{% if servolist|length > 0 %}
 			
 		<!--  Servo table   -->
-			<table class="table" margin: 20px;>
+			<table class="table table-light">
 				<thead>
 					<tr>
 						<th class="col-xs-5"></th>
@@ -136,7 +136,7 @@
 			
 		<!--  video camera table   -->
 		<div class="table-responsive">
-			<table class="table table-striped" margin: 20px;>
+			<table class="table table-light">
 			<thead>
 				<tr>
 					<th scope="col">Device</th>
@@ -186,7 +186,7 @@
 							
 				<td class="video-button">
 					<!-- start/stop button-->										
-					<button id="button-{{item}}" class="thebutton btn-sm btn btn-primary" type="button" name="start" element="{{item}}">Start</button>
+					<button id="button-{{item}}" class="thebutton btn-sm btn btn-success" type="button" name="start" element="{{item}}"><i class="fa-solid fa-play"></i> Start</button>
 				</td>
 
 
@@ -202,7 +202,7 @@
 	</div>
 
 	<div class="table-responsive">	
-	<table class="table" margin: 20px;>
+	<table class="table table-light">
 		<tbody>
 		<tr>
 			<td>
@@ -268,10 +268,13 @@
 								success: function(data) {
 									if (data.answer == "login") {document.location.href="/";}
 									$('#actuatorstatus').text(data.answer);
-									$('button[name=stop]').text('Start');
-									$('button[name=stop]').removeClass('btn-danger');
-									$('button[name=stop]').addClass('btn-primary');
-									$('button[name=stop]').attr("name", "start"); // this should b the last of the commands series																	
+
+									// setup start button
+									$('#'+butid).removeClass('btn-danger');
+									$('#'+butid).addClass('btn-primary');
+									$('#'+butid).attr("name", "start");
+									$('#'+butid).html('<i class="fa-solid fa-play"></i> Start');
+
 									if (prid != "stop") {
 										var d = new Date();
 										var rotate = 'rotate(' + {{rotdeg}} + 'deg)';
@@ -293,11 +296,11 @@
 											 if ((attempts<1) || (isok=="true")) {
 												  console.log(isok);	
 												  clearInterval(checkExist);
-												  // move on and do what has to be done												  
-													$('#'+butid).text('Stop');										
+												  // switch to stop button			
 													$('#'+butid).attr("name", "stop");
 													$('#'+butid).removeClass('btn-primary');
-													$('#'+butid).addClass('btn-danger');												  
+													$('#'+butid).addClass('btn-danger');
+													$('#'+butid).html('<i class="fa-solid fa-stop"></i> Stop');								  
 												  
 											   };
 											 console.log(attempts);											 

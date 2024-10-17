@@ -13,7 +13,7 @@
 		        	<h3>WiFi Setting</h3>
 			</div>
 			
-		<div class="well bs-component well-sm ">
+		<div class="card card-body bg-light">
 			<div class="form-group">			
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<legend>Available WiFi networks</legend>  
@@ -45,7 +45,7 @@
 			<div class="pb-2 mt-4 mb-2 border-bottom">
 				<h3>Connection parameters</h3>
 			</div>	
-			<div class="well bs-component well-sm ">	
+			<div class="card card-body bg-light mb-2">
 				<div class="row">
 					<div class="col-xs-12">
 						<p>AccessPoint IP address: <a><strong>{{iplocalwifi}}</strong></a></p>						
@@ -64,27 +64,16 @@
 			<div class="pb-2 mt-4 mb-2 border-bottom">
 				<h3>Warning Message</h3>
 			</div>	
-			<div class="well bs-component well-sm ">	
+			<div class="card card-body bg-light">	
 				<div class="row">
 					<div class="col-xs-12">
-						<p>{{message}}</p>						
-
-						
+						<p>{{message}}</p>
 					</div>						
 				</div>						
 			</div>							
 			{% endif %}			
-						
-
-
 			
-			
-			
-			
-			
-		</form>
-  
-  
+		</form>  
 		
 		<form novalidate="true" action="{{ url_for('networksetting') }}" id="networksetting" method="post" >
             <div class="page-header">
@@ -102,14 +91,6 @@
 			</div>
 			</div>
 		</form>  
-		
-			
-
-  
-  
-  
-
-
 	
   </div>
   
