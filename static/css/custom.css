@@ -1,3 +1,7 @@
+button {
+    min-width: 150px;
+}
+
 .dontwantgapright {
     margin-right: 0 !important;
    padding-right: 0 !important;

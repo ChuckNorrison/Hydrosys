@@ -3,18 +3,10 @@
 {% block body %}
   {% if session.logged_in %}
   
-  
-  
-  
-  <div class="container-fluid">
-	  
-	  
-
-	  
+<div class="container-fluid">
+ 
 		<script type=text/javascript>
 
-			
-			
 			$(document).ready(function()
 			{
 				$(".seltimeclass").each(function() {
@@ -41,18 +33,11 @@
 				});	
 			});
 			
-			
-			
-			
-			
-			</script>
-
-
-    
+		</script>
+ 
    <!-- new Table for sensor data using ajax -->
    
    		<script type=text/javascript>
-
 
 			  (function worker() {
 
@@ -350,12 +335,7 @@
 			<div class="pb-2 mt-4 mb-2 border-bottom">
 				<h3>Show Devices Addresses</h3>   
 			</div>
-		
-			
-		<!-- Button for device addresses show-->
-		
 			<div class="row pb-2">
-
 				<div class="col-xs-12">					
 					<a href="{{ url_for('showdeviceaddresseslist') }}">
 						<button id="showdeviceaddresseslistbtn" name="buttonsub" value="showdeviceaddresseslistbtn" class="btn btn-success btn-sm btn-warp">
@@ -367,52 +347,52 @@
 
 	
 
-<!-- HS12 setting              -->
+<!-- HS12 setting -->
 	{% if HC12ok %}	
-		<div class="pb-2 mt-4 mb-2 border-bottom">
-			<h3>Show HC12 Devices Addresses</h3>   
-		</div>
-	
-				
-		<!-- Button for HC12 setting-->
-		
-		<div class="row pb-2">
-
-			<div class="col-xs-12">
-		
-				<a href="{{ url_for('HC12setting') }}">
-					<button id="HC12settingbtn" name="buttonsub" value="HC12settingbtn" class="btn btn-success btn-sm btn-warp">
-						<i class="fas fa-cog"></i> HC-12 Wireless Settings
-					</button>
-				</a>
-
-
-			</div>
-		</div>			
+			<div class="pb-2 mt-4 mb-2 border-bottom">
+				<h3>Show HC12 Devices Addresses</h3>   
+			</div>		
+			<div class="row pb-2">
+				<div class="col-xs-12">
+					<a href="{{ url_for('HC12setting') }}">
+						<button id="HC12settingbtn" name="buttonsub" value="HC12settingbtn" class="btn btn-success btn-sm btn-warp">
+							<i class="fas fa-cog"></i> HC-12 Wireless Settings
+						</button>
+					</a>
+				</div>
+			</div>			
 	{% endif %}
 
 
-<!-- HASSIO setting              -->
+<!-- HASSIO setting -->
 
-<div class="pb-2 mt-4 mb-2 border-bottom">
-	<h3>Show Devices Addresses</h3>   
-</div>
+			<div class="pb-2 mt-4 mb-2 border-bottom">
+				<h3>Home Assistant</h3>   
+			</div>
+			<div class="row pb-2">
+				<div class="col-xs-12">
+					<a href="{{ url_for('HASSIOsetting') }}">
+						<button id="HASSIOsettingbtn" name="buttonsub" value="HASSIOsettingbtn" class="btn btn-success btn-sm btn-warp">
+							<i class="fas fa-cog"></i> Home Assistant Integration
+						</button>
+					</a>
+				</div>
+			</div>			
 
-		
-<!-- Button for Home Assistant setting-->
+<!-- Weather API setting -->
 
-<div class="row pb-2">
-
-	<div class="col-xs-12">
-		<a href="{{ url_for('HASSIOsetting') }}">
-			<button id="HASSIOsettingbtn" name="buttonsub" value="HASSIOsettingbtn" class="btn btn-success btn-sm btn-warp">
-				<i class="fas fa-cog"></i> Home Assistant Integration
-			</button>
-		</a>
-	</div>
-</div>			
-
-
+			<div class="pb-2 mt-4 mb-2 border-bottom">
+				<h3>Weather API</h3>   
+			</div>
+			<div class="row pb-2">
+				<div class="col-xs-12">
+					<a href="{{ url_for('weatherAPI') }}">
+						<button id="WeatherAPIbtn" name="buttonsub" value="WeatherAPIbtn" class="btn btn-success btn-sm btn-warp">
+							<i class="fas fa-cog"></i> Weather API
+						</button>
+					</a>
+				</div>
+			</div>	
 
 <!-- MQTT devices Addressed listing (MQTT topic, IP, status) -->
  		{% if MQTTclientexist %}		 
@@ -1666,20 +1646,6 @@
 			
 		</form>
 
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
   		<form  action="{{ url_for('show_Calibration') }}" id="menuForm3" class="jotform-form" method="post" >
 
 			<div class="pb-2 mt-4 mb-2 border-bottom">
@@ -1807,7 +1773,18 @@
 
 		</form>
 
-
+		<div class="pb-2 mt-4 mb-2 border-bottom">
+			<h3>Show About Page</h3>   
+		</div>
+		<div class="row pb-2">
+			<div class="col-xs-12">
+				<a href="{{ url_for('show_about') }}">
+					<button id="Aboutbtn" name="buttonsub" value="Aboutbtn" class="btn btn-success">
+					About
+					</button>
+				</a>
+			</div>
+		</div>	
  
    </div> 
   {% else %}
