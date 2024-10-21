@@ -59,24 +59,26 @@ HW_INFO_MEASURE="measure"  # info group , mandatory, measurement type of info pa
 
 # HW_CTRL group includes info hardware to speak with HWcontrol module
 HW_CTRL_CMD="controllercmd" # HW control group , mandatory, command sent to the HWControl section to specify the function to select -> HW
-HW_CTRL_PIN="pin" # HW control  group ,optional, specify the PIN board for the HWControl if needed -> gpiopin
-HW_CTRL_PIN2="pin2" # HW control  group ,optional, specify the PIN board for the HWControl if needed -> gpiopin (new item in rel 1.08)
-HW_CTRL_ADCCH="ADCchannel" # HW control  group , optional, specify the arg1 board for the HWControl if needed -> "ADCchannel"
-HW_CTRL_PWRPIN="powerpin"  # HW control  group , optional, specify PIN that is set ON before starting tasks relevant to ADC convert, Actuator pulse, then is set OFF when the task is finished -> "ADCpowerpin"
-HW_CTRL_LOGIC="logic"  # HW control  group , optional, in case the relay works in negative logic
-#"settingaction", # HW control  group , use the controllercmd instead -> to be removed
-HW_CTRL_ADDR="address" # HW control  group , optional, specify this info for the HWControl if needed -> mailaddress, I2C address
-HW_CTRL_TITLE="title" # HW control  group , optional, specify this info for the HWControl if needed (mail title) -> "mailtitle"
+HW_CTRL_PIN="pin" # HW control group,optional, specify the PIN board for the HWControl if needed -> gpiopin
+HW_CTRL_PIN2="pin2" # HW control group,optional, specify the PIN board for the HWControl if needed -> gpiopin (new item in rel 1.08)
+HW_CTRL_ADCCH="ADCchannel" # HW control group, optional, specify the arg1 board for the HWControl if needed -> "ADCchannel"
+HW_CTRL_PWRPIN="powerpin"  # HW control group, optional, specify PIN that is set ON before starting tasks relevant to ADC convert, Actuator pulse, then is set OFF when the task is finished -> "ADCpowerpin"
+HW_CTRL_LOGIC="logic"  # HW control group, optional, in case the relay works in negative logic
+#"settingaction", # HW control group, use the controllercmd instead -> to be removed
+HW_CTRL_ADDR="address" # HW control group, optional, specify this info for the HWControl if needed -> mailaddress, I2C address
+HW_CTRL_TITLE="title" # HW control group, optional, specify this info for the HWControl if needed (mail title) -> "mailtitle"
 
 #servo/stepper/sensors
-HW_CTRL_FREQ="frequency" # HW control  group , optional, working frequency of the servo
-HW_CTRL_MIN="min"  # HW control  group , optional, minimum of the duty cycle, for sensor this is the min corresponding to zero
-HW_CTRL_MAX="max"  # HW control  group , optional, maximum of the duty cycle, for sensor this is the max corresponding to scale
+HW_CTRL_FREQ="frequency" # HW control group , optional, working frequency of the servo
+HW_CTRL_MIN="min"  # HW control group, optional, minimum of the duty cycle, for sensor this is the min corresponding to zero
+HW_CTRL_MAX="max"  # HW control group, optional, maximum of the duty cycle, for sensor this is the max corresponding to scale
 
-HW_CTRL_SCALE="scale"  # HW control  group , optional, for sensor this is the scale (new item in rel 1.08)
-HW_CTRL_OFFSET="offset"  # HW control  group , optional, for sensor not clear how to use TBD (new item in rel 1.08)
-HW_CTRL_DIR="direction"  # HW control  group , optional, invert the data min/max (new item in rel 1.08)
+HW_CTRL_SCALE="scale"  # HW control group, optional, for sensor this is the scale (new item in rel 1.08)
+HW_CTRL_OFFSET="offset"  # HW control group, optional, for sensor not clear how to use TBD (new item in rel 1.08)
+HW_CTRL_DIR="direction"  # HW control group, optional, invert the data min/max (new item in rel 1.08)
 
+HW_CTRL_DIVIDE="divide" # HW control group, optional, divide the data after scaling
+HW_CTRL_SUBTRACT="subtract" # HW control group, optional, subtract from data prior scaling
 
 HW_FUNC_USEDFOR="usefor" # function group , optional, description of main usage of the item and the actions associated with the plan "selectedplanmod"
 HW_FUNC_SCHEDTYPE="schedulingtype" # function group , optional, between "oneshot" and "periodic" 
@@ -112,6 +114,8 @@ HWdataKEYWORDS[HW_CTRL_SCALE]=[]
 HWdataKEYWORDS[HW_CTRL_OFFSET]=[]
 HWdataKEYWORDS[HW_CTRL_DIR]=["dir","inv"]
 
+HWdataKEYWORDS[HW_CTRL_DIVIDE]=[]
+HWdataKEYWORDS[HW_CTRL_SUBTRACT]=[]
 
 # ///////////////// -- Hawrware data structure Setting --  ///////////////////////////////
 
@@ -328,26 +332,25 @@ def sendcommand(cmd,sendstring,recdata,target="", priority=0):
 		elif cmd in GPIOEXPI2Ccontrol.HWCONTROLLIST:
 			return GPIOEXPI2Ccontrol.sendcommand(cmd,sendstring,recdata)
 
-def normalizesensordata(reading_str,sensorname):
-	scaledefault=1
-	offsetdefault=0
-	Thereading=reading_str
-	#print " Sensor " , sensorname  , "reading ",Thereading
-	#print " Sensor value post elaboration"
-	
+def normalizesensordata(reading_str,sensorname):	
 	# get the normalization data
 	Minimum=str(searchdata(HW_INFO_NAME,sensorname,HW_CTRL_MIN)) # if not found searchdata return ""
 	Maximum=str(searchdata(HW_INFO_NAME,sensorname,HW_CTRL_MAX))
 	Direction=str(searchdata(HW_INFO_NAME,sensorname,HW_CTRL_DIR)) # can be two values "inv" , "dir"
 	Scale=str(searchdata(HW_INFO_NAME,sensorname,HW_CTRL_SCALE))
 	Offset=str(searchdata(HW_INFO_NAME,sensorname,HW_CTRL_OFFSET))					
+	Divide=str(searchdata(HW_INFO_NAME,sensorname,HW_CTRL_DIVIDE))					
+	Subtract=str(searchdata(HW_INFO_NAME,sensorname,HW_CTRL_SUBTRACT))					
 	
-	# transform all valuse in numbers
+	# transform all values to numbers
 	Minvalue=tonumber(Minimum, 0)
 	Maxvalue=tonumber(Maximum, 0)
-	Scalevalue=tonumber(Scale, scaledefault)
-	Offsetvalue=tonumber(Offset, offsetdefault)					
-	readingvalue=tonumber(Thereading, 0)
+	Scalevalue=tonumber(Scale, 1)
+	Offsetvalue=tonumber(Offset, 0)
+	Dividevalue=tonumber(Divide, 1)
+	Subtractvalue=tonumber(Subtract, 0)
+	readingvalue=tonumber(reading_str, 0)
+
 	if abs(Minvalue-Maxvalue)>0.01: # in case values are zero or not consistent, stops here
 		if Direction!="inv":
 			den=Maxvalue-Minvalue
@@ -355,13 +358,26 @@ def normalizesensordata(reading_str,sensorname):
 		else:
 			den=Maxvalue-Minvalue
 			readingvalue=1-old_div((readingvalue-Minvalue),den)
+
+	# apply subtraction
+	if Subtractvalue>0:
+		readingvalue=readingvalue-Subtractvalue
+
+	# apply scale
 	if Scalevalue>0:
-		readingvalue=readingvalue*Scalevalue		
+		readingvalue=readingvalue*Scalevalue
+
+	# apply division
+	if Dividevalue != 1:
+		readingvalue=readingvalue/Dividevalue
+
+	# apply offset
 	readingvalue=readingvalue+Offsetvalue
-	
+
 	# transform to string and adjust the format
-	Thereading=str('%.2f' % readingvalue)
-	return Thereading
+	reading_str=str('%.2f' % readingvalue)
+
+	return reading_str
 
 def getsensordata(sensorname,attemptnumber): #needed
 	# this procedure was initially built to communicate using the serial interface with a module in charge of HW control (e.g. Arduino)

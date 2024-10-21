@@ -1700,7 +1700,16 @@ def setinputcalibration():  # set the hbridge zero point
 			return redirect(url_for('show_Calibration'))
 
 	# Sensors data
-	sensorparameters=[hardwaremod.HW_CTRL_MIN,hardwaremod.HW_CTRL_MAX,hardwaremod.HW_CTRL_SCALE,hardwaremod.HW_CTRL_OFFSET,hardwaremod.HW_CTRL_DIR]
+	sensorparameters=[
+		hardwaremod.HW_CTRL_MIN,
+		hardwaremod.HW_CTRL_MAX,
+		hardwaremod.HW_CTRL_SUBTRACT,		
+		hardwaremod.HW_CTRL_SCALE,
+		hardwaremod.HW_CTRL_DIVIDE,		
+		hardwaremod.HW_CTRL_OFFSET,
+		hardwaremod.HW_CTRL_DIR,
+	]
+	
 	sensorlist = []
 	sensorlist=sensordbmod.gettablelist()
 	sensorstatuslist=[]
