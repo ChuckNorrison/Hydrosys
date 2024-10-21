@@ -6,6 +6,10 @@
 
 <div class="container-fluid">
 
+  <div class="pb-2 mt-4 mb-2 border-bottom">
+    <h3>Hydrosys4</h3>
+  </div>
+
   {% if error %}
 
   <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -29,10 +33,6 @@
   {% endif %}
 
   <div class="card card-body bg-light">
-
-    <div class="pb-2 mt-4 mb-2 border-bottom">
-      <h3>Hydrosys4</h3>
-    </div>
 
     <form class="form-horizontal" action="{{ url_for('login') }}" method=post>
       <fieldset>
@@ -74,19 +74,23 @@
         <div class="row mt-2">
             
 {% if not change %}
-            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 pb-2">
-        			<button name="button" type="submit" class="btn btn-success defaultbutton w-100" value="login"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
-            </div>
+          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 pb-2">
+      			<button name="button" type="submit" class="btn btn-success defaultbutton w-100" value="login"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
+          </div>
 {% endif %}                      
 
 {% if not change %}
-            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 pb-2 text-end">
-        			<button name="button" type="submit" class="btn btn-warning defaultbutton w-100" value="change"><i class="fa-solid fa-wrench"></i> Change Password</button>
-            </div>
+          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 pb-2 text-end">
+      			<button name="button" type="submit" class="btn btn-warning defaultbutton w-100" value="change"><i class="fa-solid fa-wrench"></i> Change Password</button>
+          </div>
 {% else %}
-            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 pb-2">
-        			<button name="button" type="submit" class="btn btn-success defaultbutton w-100" value="save"><i class="fa-solid fa-floppy-disk"></i> Save</button>
-            </div>
+          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 pb-2">
+      			<button name="button" type="submit" class="btn btn-success defaultbutton w-100" value="save"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+          </div>
+
+          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 pb-2 text-end">
+            <a href="{{ url_for('login') }}"><input name="buttonsub" type="button" class="btn btn-secondary defaultbutton w-100" formnovalidate="formnovalidate" value="Back"></a>
+          </div>            
 {% endif %}
             
           </div>
