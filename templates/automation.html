@@ -47,7 +47,7 @@
 
 			<ul class="nav nav-pills">
 				{% for settingparam in watersettinglist %}
-				<li class="nav-item nav-primary">
+				<li class="nav-item nav-purple">
 					<a class="nav-link {% if settingparam[0] == selectedelement %} active {% endif%}" href="#{{ settingparam[0] }}" data-bs-toggle="pill">{{ settingparam[0] }}</a>
         </li>
 				{% endfor %}
@@ -67,7 +67,7 @@
 				 		 
 				<input value="none" id="actionbtn{{elem}}" name="actionbtn" type="hidden" />
 				 
-				<div class="card card-primary">
+				<div class="card card-purple">
 					<div class="card-header">
 						<div class="row">
 							<div class="col-9">

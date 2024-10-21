@@ -102,6 +102,34 @@ font-size:      1.2em;
     background-color: #3D9970;
 }
 
+.nav-yellow {
+    background-color: #ffcb81;
+}
+
+.nav-yellow .nav-link {
+    color: #939393;
+}
+
+.nav-yellow .nav-link.active {
+    background-color: #f0ad4e;
+}
+
+.nav-purple {
+    background-color: #928fc8;
+}
+
+.nav-purple .nav-link.active {
+    background-color: #605ca8;
+}
+
+.nav-red {
+    background-color: #fd7773;
+}
+
+.nav-red .nav-link.active {
+    background-color: #d9534f;
+}
+
 .nav-primary {
     background-color: #46a4db;
 }

@@ -44,7 +44,7 @@
 
 			<ul class="nav nav-pills">
 				{% for settingparam in watersettinglist %}
-	                        <li class="nav-item nav-primary">
+	                        <li class="nav-item nav-red">
         	                        <a class="nav-link {% if settingparam[0] == selectedelement %} active {% endif%}" href="#{{ settingparam[0] }}" data-bs-toggle="pill">{{ settingparam[0] }}</a>
                 	        </li>
 				{% endfor %}
@@ -65,15 +65,15 @@
 			 		 
 			<input value="none" id="actionbtn{{elem}}" name="actionbtn" type="hidden" />
 			 
-			<div class="card card-primary">
+			<div class="card card-red">
 				<div class="card-header">
 					<div class="row">
 						<div class="col-9">
 							<span style="font-size:1.2em;">{{ elem }}</span>
 						</div>
 
-						<div class="col-3 text-end">		
-							<button id="savebtn" name="save" type="submit" idref="actionbtn{{elem}}" class="thebutton btn-sm btn btn-danger btn-md btn-block dontwantgap w-100"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+						<div class="col-3 text-end">
+							<button id="savebtn" name="save" type="submit" idref="actionbtn{{elem}}" class="thebutton btn-sm btn btn-danger btn-md btn-block dontwantgap w-100 border"><i class="fa-solid fa-floppy-disk"></i> Save</button>
 						</div>
 					</div>
 			 	</div>
