@@ -67,7 +67,7 @@
 	] -%}
 	{% set active_page = active_page|default('index') -%}		
 
-	{% if active_page != "" %} <!-- if activepage = "" the menu will not be shown in the page -->
+	{% if active_page != "" %}
 
       <!-- Static navbar -->
       <nav class="navbar navbar-expand-md navbar-dark bg-dark">
@@ -98,9 +98,6 @@
 	    </div>
         </div>
       </nav>
-
-	<div class="row top-buffer">
-	</div>
 	
 		{% with messages = get_flashed_messages(with_categories=true) %}
 		  {% if messages %}

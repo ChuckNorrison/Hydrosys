@@ -12,7 +12,7 @@
 	</div>
 
 	<form novalidate="true" action="{{ url_for('hardwaresetting') }}" method="post" >
-		<div class="form-group pb-2 col-8">
+		<div class="form-group pb-2 col-lg-4 col-md-4 col-sm-4 col-xs-12">
 			<div class="alert alert-warning small d-flex align-items-center" role="alert">
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
 					<path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
@@ -132,19 +132,19 @@
 			</div>
 			<!--  file 1 -->
 			<div class="row">
-				<div class="col-xs-6 pb-2">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pb-2">
 					<button class="downloadbutton btn-sm btn btn-secondary"  type="button" name="downloadlog">Current Log file</button>
 				</div>
-				<div class="col-xs-6 pb-2">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pb-2">
 					<a id="downloadlinkdownloadlog0" href="" ></a>
 				</div>
 			</div>	
 			<!--  file 1b -->
 			<div class="row">
-				<div class="col-xs-6 pb-2">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pb-2">
 					<button class="downloadbutton btn-sm btn btn-secondary"  type="button" name="downloadprevlog">Previous Log files</button>
 				</div>
-				<div class="col-xs-6 pb-2">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pb-2">
 					<a id="downloadlinkdownloadprevlog0" href="" ></a>
 					<p></p>
 					<a id="downloadlinkdownloadprevlog1" href="" ></a>
@@ -159,10 +159,10 @@
 			<!--  file 1c -->
 			{% if debugmode %}
 			<div class="row">
-				<div class="col-xs-6 pb-2">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pb-2">
 					<button class="downloadbutton btn-sm btn btn-secondary"  type="button" name="downloadlogSCHED">Scheduler Logs</button>
 				</div>
-				<div class="col-xs-6 pb-2">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pb-2">
 					<a id="downloadlinkdownloadlogSCHED0" href="" ></a>
 				</div>
 			</div>	
@@ -170,10 +170,10 @@
 
 			<!--  file 2 -->
 			<div class="row">
-				<div class="col-xs-6 pb-2">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pb-2">
 					<button class="downloadbutton btn-sm btn btn-secondary"  type="button" name="downloadHW">Hardware Config</button>
 				</div>
-				<div class="col-xs-6 pb-2">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pb-2">
 					<a id="downloadlinkdownloadHW0" href="" ></a>
 				</div>
 			</div>		
@@ -181,20 +181,20 @@
 			<!--  file 3 -->
 			{% if debugmode %}
 			<div class="row">
-				<div class="col-xs-6 pb-2">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pb-2">
 					<button class="downloadbutton btn-sm btn btn-secondary"  type="button" name="downloadsyslog">SysLog file</button>
 				</div>
-				<div class="col-xs-6 pb-2">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pb-2">
 					<a id="downloadlinkdownloadsyslog0" href="" ></a>
 				</div>
 			</div>	
 			{% endif %}
 
 			<div class="row">
-				<div class="col-xs-4">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 					<label>Status:</label>
 				</div>
-				<div class="col-xs-4">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 					<label id="downloadstatus" for="input_3">Status</label>
 				</div>
 			</div>	
@@ -264,53 +264,53 @@
 			</div>
 			<!--  button 1 -->
 			<div class="row">
-				<div class="col-xs-4">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 					<label >Testing</label>
 				</div>
-				<div class="col-xs-4">
-					<button class="testingbutton btn-sm btn btn-default"  type="button" name="testing1">Automation Hat testing</button>
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+					<button class="testingbutton btn-sm btn btn-secondary"  type="button" name="testing1">Automation Hat testing</button>
 				</div>
 
 			</div>	
 			<!--  button 2 -->
 			<div class="row">
-				<div class="col-xs-4">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 					<label >Testing</label>
 				</div>
-				<div class="col-xs-4">
-					<button class="testingbutton btn-sm btn btn-default"  type="button" name="testing2">Irrigation Hat testing</button>
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+					<button class="testingbutton btn-sm btn btn-secondary"  type="button" name="testing2">Irrigation Hat testing</button>
 				</div>
 
 			</div>	
 
 			<!--  button 3 -->
 			<div class="row">
-				<div class="col-xs-4">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 					<label >Testing</label>
 				</div>
-				<div class="col-xs-4">
-					<button class="testingbutton btn-sm btn btn-default"  type="button" name="testing3">Super Hat testing</button>
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+					<button class="testingbutton btn-sm btn btn-secondary"  type="button" name="testing3">Super Hat testing</button>
 				</div>
 
 			</div>	
 
 			<!--  button 4 -->
 			<div class="row">
-				<div class="col-xs-4">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 					<label >Testing</label>
 				</div>
-				<div class="col-xs-4">
-					<button class="testingbutton btn-sm btn btn-default"  type="button" name="testing">Generic testing</button>
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+					<button class="testingbutton btn-sm btn btn-secondary"  type="button" name="testing">Generic testing</button>
 				</div>
 
 			</div>
 
 			<!--  button 4 -->
 			<div class="row">
-				<div class="col-xs-4">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 					<label >Testing</label>
 				</div>
-				<div class="col-xs-4">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 					<a href="{{ url_for('embedpage', url='192.168.1.179') }}">Test Embed Page</a>
 
 				</div>
@@ -320,10 +320,10 @@
 
 
 			<div class="row">
-				<div class="col-xs-4">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 					<label>Status:</label>
 				</div>
-				<div class="col-xs-4">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 					<label id="testingstatus" for="input_3">Status</label>
 				</div>
 			</div>	
@@ -367,7 +367,7 @@
 				<h3>Refresh Hardware Setting</h3>   
 			</div>
 			<div class="row">
-				<div class="col-xs-4">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 					<button class="btn-sm btn btn-success" type="submit" name="buttonsub" value="refresh">
 						<i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
 				</div>
@@ -380,7 +380,7 @@
 			<h3>Don't Click the button below</h3>   
 		</div>
 		<div class="row">
-			<div class="col-xs-12">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
 				<a href="{{ url_for('dontclick') }}">
 				<button id="dontclickbtn" name="buttonsub" value="dontclickbtn" class="btn-sm btn btn-danger">
@@ -394,10 +394,10 @@
 			<h3>Running Status</h3>   
 		</div>
 		<div class="row">
-			<div class="col-xs-4">
+			<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 				<label>DebugStatus:</label>
 			</div>
-			<div class="col-xs-4">
+			<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 				<label id="testingstatus" for="input_3">{{debugmode}}</label>
 			</div>
 		</div>	
@@ -405,7 +405,7 @@
    </div> 
   {% else %}
 
-		<h1>Please log in</h1>
+		<h1>Please login</h1>
 
   
   {% endif %}

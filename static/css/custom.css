@@ -1,4 +1,8 @@
-button {
+.card .table input {
+    min-width: 74px;
+}
+
+.defaultbutton{
     min-width: 150px;
 }
 
@@ -85,13 +89,25 @@ font-family:    Arial;
 font-size:      1.2em;
 }
 
-.nav-pills {
-    --bs-nav-pills-link-active-bg: #3D9970;
+/* Cards and nav pills */
+.nav-pills .nav-item {
+    border-radius: 10px 10px 0 0;
 }
 
-.nav-pills .nav-item {
+.nav-olive {
     background-color: #7BB39B;
-    border-radius: 10px 10px 0 0;
+}
+
+.nav-olive .nav-link.active {
+    background-color: #3D9970;
+}
+
+.nav-primary {
+    background-color: #46a4db;
+}
+
+.nav-primary .nav-link.active {
+    background-color: #0073b7;
 }
 
 .nav-pills .nav-item .nav-link {
@@ -111,28 +127,26 @@ font-size:      1.2em;
     border-radius: 0 var(--bs-card-inner-border-radius) 0 0;
 }
 
-
 /* home page panels styles */
 
 .huge {
-    font-size: 2em;
-
+    font-size: 24px;
 }
 
 .verybig {
-    font-size: 1.4em;
+    font-size: 22px;
 }
 
 .big {
-    font-size: 1.2em;
+    font-size: 18px;
 }
 
 .small {
-    font-size: 0.8em;
+    font-size: 12px;
 }
 
 .verysmall {
-    font-size: 0.6em;
+    font-size: 10px;
 }
 
 
@@ -345,7 +359,7 @@ font-size:      1.2em;
 
 .card-gray .card-header {
     border-color: #d2d6de;
-    color: #fff;
+    color: #000;
     background-color: #d2d6de;
 }
 

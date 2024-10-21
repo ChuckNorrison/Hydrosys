@@ -2,58 +2,34 @@
 {% block body %}
   {% if session.logged_in %}
 
+<div class="row top-buffer"></div>
 
-  <div class="container-fluid">
-
-
-
+<div class="container-fluid">
 
     <form action="{{ url_for('dontclick') }}" method="post">
 
-
         <div class="card card-body bg-light">
-				
-			<div class="form-group">			
-			<div class="row">
-				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-				<legend>Boot commands</legend>  
-				</div>	
-			</div>	
-			</div>	
 
-			<div class="form-group">
+			<div class="pb-2 mt-4 mb-2 border-bottom">
+				<h3>Boot commands</h3>
+			</div>
+
 			<div class="row pb-2">
-				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-					<label>Reboot the Raspberry PI</label>
-				</div>		
-				<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-					<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ResetModal"><i class="fa-solid fa-rotate-right"></i> Restart the Raspberry Pi</button>
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 pb-2">
+					<button type="button" class="btn btn-warning defaultbutton w-100" data-bs-toggle="modal" data-bs-target="#ResetModal"><i class="fa-solid fa-rotate-right"></i> Restart</button>
 				</div>
 			</div>
-			</div>	
 
-
-			
-			<div class="form-group">
 			<div class="row pb-2">
-				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-					<label>Shutdown Raspberry PI</label>
-				</div>		
-				<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-					<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#ShutdownModal"><i class="fa-solid fa-power-off"></i> Shutdown</button>
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 pb-2">
+					<button type="button" class="btn btn-danger defaultbutton w-100" data-bs-toggle="modal" data-bs-target="#PowerOffModal"><i class="fa-solid fa-power-off"></i> Shutdown</button>
 				</div>
-			</div>
 			</div>	
             
-            <div class="form-group">
 			<div class="row">
-				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-		
-                      <button name="buttonsub" type="submit" class="btn btn-secondary" value="cancel">Cancel</button>
-        
-				</div>		
-
-			</div>
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 pb-2">
+                      <button name="buttonsub" type="submit" class="btn btn-secondary defaultbutton w-100" value="cancel"><i class="fa-solid fa-circle-left"></i> Back</button>
+				</div>
 			</div>	
             
         </div>	        
@@ -63,7 +39,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-			<h1 id="ModalLabelRestart" class="modal-title fs-5">Confirmation</h1>
+						<h1 id="ModalLabelRestart" class="modal-title fs-5">Confirmation</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
@@ -72,34 +48,30 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button name="buttonsub" type="submit" class="thebutton btn btn-primary" value="reset">Proceed</button>
+                        <button name="buttonsub" type="submit" class="thebutton btn btn-warning" value="reset">Proceed</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Modal HTML -->
-        <div id="ShutDownModal" class="modal fade" aria-labelledby="ModalLabelShutdown">
+        <div id="PowerOffModal" class="modal fade" aria-labelledby="ModalLabelPowerOff">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-			<h1 id="ModalLabelShutdown" class="modal-title fs-5">Confirmation</h1>
+						<h1 id="ModalLabelPowerOff" class="modal-title fs-5">Confirmation</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
                         <p>Proceed to shutdown the system</p>
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button name="buttonsub" type="submit" class="thebutton btn btn-primary" value="shutdown">Proceed</button>
+                        <button name="buttonsub" type="submit" class="thebutton btn btn-danger" value="shutdown">Proceed</button>
                     </div>
                 </div>
             </div>
         </div>
-
-
-
 
     </form>
     

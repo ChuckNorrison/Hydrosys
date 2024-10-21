@@ -891,15 +891,15 @@ $(function() {
 
 			<!-- Download data button -->
 			<div class="row">							
-				<div class="d-grid col-2 pb-4">
-					<button class="downloadbutton btn btn-secondary" type="button" name="downloaddata"><i class="fa-solid fa-download"></i> Download Sensor Data</button>
+				<div class="d-grid col-lg-4 col-md-4 col-sm-4 col-xs-4 pb-4">
+					<button class="downloadbutton btn btn-secondary defaultbutton w-100" type="button" name="downloaddata"><i class="fa-solid fa-download"></i> Download Sensor Data</button>
 				</div>
 			</div>
 
 			<!-- Delete all data button -->
 			<div class="row">							
-					<div class="d-grid col-2 pb-4">
-						<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#DeleteAllDataModal"><i class="fa-solid fa-trash"></i> Delete All Sensor Data</button>
+					<div class="d-grid col-lg-4 col-md-4 col-sm-4 col-xs-4 pb-4">
+						<button type="button" class="btn btn-warning defaultbutton w-100" data-bs-toggle="modal" data-bs-target="#DeleteAllDataModal"><i class="fa-solid fa-trash"></i> Delete All Sensor Data</button>
 					</div>
 			</div>
 
@@ -938,8 +938,8 @@ $(function() {
 
 		<form novalidate="true" action="{{ url_for('DATAsetup') }}" id="DATAsetup" method="post" > 
 			<div class="row">
-				<div class="d-grid col-2 pb-4">
-					<button name="buttonsub" value="show" type="submit" class="thebutton btn btn-primary">
+				<div class="d-grid col-lg-4 col-md-4 col-sm-4 col-xs-4 pb-4">
+					<button name="buttonsub" value="show" type="submit" class="thebutton btn btn-primary defaultbutton w-100">
 					<i class="fas fa-cog"></i> Filter Data
 					</button>
 				</div>

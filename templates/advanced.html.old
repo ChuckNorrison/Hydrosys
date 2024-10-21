@@ -1,0 +1,423 @@
+{% extends "layout.html" %}
+{% set active_page = "advanced" %}
+{% block body %}
+ 	
+
+
+		<ul class="nav nav-pills">
+			{% for name in elementlist %}
+			{% set row_i = loop %}
+				<li {% if name == selectedelement %} class="active"{% endif%}  style="font-size:1.4em;">
+					<a href="#{{ row_i.index0  }}" data-toggle="tab">{{ name }}</a>
+				</li>
+			{% endfor %}
+		</ul>
+			
+
+
+
+          	
+        <div id="complete" class="tab-content">
+			
+		{% for elem in elementlist %}
+		{% set row_i = loop %}	
+         <div class="tab-pane {% if elem == selectedelement %}active{% endif%}" id="{{ row_i.index0 }}">
+			 
+			 <!---- start panel  -->
+			 
+		<form id="theForm" novalidate="true" action="{{ url_for('advanced') }}" method="post" name="theform">
+			 
+			 <input name="element" value="{{row_i.index0}}" type="hidden" />
+			 
+			 <input value="none" id="actionbtn{{row_i.index0}}" name="actionbtn" type="hidden" />
+			 
+			 <div class="panel panel-primary">
+			  <div class="panel-heading">
+
+
+				<!---- panel  header -->
+
+				<div class="row">
+					<div class="panel-title col-xs-4"><span style="font-size:1.4em;">{{ elem }}
+
+					</span></div>
+						<div class=" col-xs-4">				
+								<button name="goback" idref="actionbtn{{row_i.index0}}" value="back" type="submit" class="thebutton btn btn-primary btn-md btn-block btn-warp dontwantgap">
+									Back
+
+								</button>
+						</div>
+
+					<div class=" col-xs-4">
+					<button name="save" idref="actionbtn{{row_i.index0}}" value="save" type="submit" class="thebutton btn btn-danger btn-md btn-block btn-warp dontwantgap">Save
+					<span class="glyphicon glyphicon-saved"></span>
+					</button>
+					</div>
+				</div>
+
+
+				<!---- Second row of the  header -->
+				<div class="row">
+					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+					</div>	
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+					
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" >
+							<label >Cycle Setting</label>
+						</div>		
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+							<select id="{{ row_i.index0 }}cycleOption" refid="{{ row_i.index0 }}" class="form-control input-sm " name="{{ row_i.index0 }}cycleOption" onchange="toggleCycleUI(this)">
+							{% for name in cycleOptionList %}	
+								<option {% if name==selCycleOption[elem] %}selected="selected"{% endif %} value="{{name}}">{{name}}</option>
+							{% endfor %}											
+							</select>
+						<!--<div class="small">Duration of the interval to calcualte the average of the sensor values. This average will be then compared with the threshold</div>
+						-->
+						</div>	
+					</div>
+				</div>
+
+
+
+				<!---- Third row of the  header -->
+				<div id="dayselect" class="row" >
+					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+					</div>	
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8" style="display: none;" id="{{ row_i.index0 }}dayCycleDisp">
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+							<label>Cycle period (days)</label>
+						</div>		
+						<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+							<select id="{{ row_i.index0 }}dayCycle" class="form-control input-sm " name="{{ row_i.index0 }}dayCycle">
+							{% for name in dayCycleList %}	
+								<option {% if name==selDayCycle[elem]  %}selected="selected"{% endif %} value="{{name}}">{{name}}</option>
+							{% endfor %}											
+							</select>
+
+						</div>
+					</div>
+				</div>
+
+			  </div>
+			  <div class="panel-body dontwantgapleft dontwantgapright">
+
+				
+				<!---- panel  body -->
+
+				<h2 id="{{row_i.index0}}waitPanels"><b style="color:red">Loading <span id="wait">...</span></b> </h2>
+	
+				
+
+
+
+					{% set col = 2 %}
+					{% set col_size = 12//col %}				
+					{% for name in paramlist %}  <!--- List of the days -->
+					{% set col_i = loop %}
+
+
+
+									<div class="col-lg-6 col-md-6 col-sm-12 {{row_i.index0}}daypanels" id="day"{{col_i.index0}} style="display: none;">
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<strong id="{{row_i.index0}}refDay" class="lead">{{ name }}</strong>
+											</div>
+											<div class="panel-body">
+						 
+												
+													<div class="row" id="{{ row_i.index0 }}{{ name }}">
+
+
+
+														<div class="table-responsive">
+															<table class="table table-striped">
+																<thead>
+																	<tr>
+																		<!--{% for th in tablehead %}
+																		<th><h6>{{ th }}</h6></th>
+																		
+																		{% endfor %}-->
+																		<th>
+																		<img src="/static/calendar BW.png" style="width:55px;height:40px" class="center-block" />
+																		<div align="center">Time</div>
+																		</th>																		
+																		<th>
+																		<img src="/static/time BW.png" style="width:45px;height:40px" class="center-block"/>
+																		<div align="center">(min:sec)</div>
+																		</th>
+																		<th>
+																		<img src="/static/ONOFF_BW.png" style="width:55px;height:55px" class="center-block"/>
+																		<div align="center">Active Above</div>
+																		</th>																		
+																		<th>
+																		<img src="/static/OFFON_BW.png" style="width:55px;height:55px" class="center-block"/>
+																		<div align="center">Active Below</div>
+																		</th>																			
+																		
+																		
+																	</tr>
+																</thead>
+																<tbody>
+																	{% for rowp in table[row_i.index0][col_i.index0] %}
+																	{% set rowp_i = loop %}
+																	<tr>
+
+
+																			<td class="col-xs-3 ">
+																			
+
+																				<!-- new -->
+
+																						<div style="width: 100%" class="input-group clockpicker" data-autoclose="true">
+																							<input readonly="readonly" type="text" class="form-control input-sm dontwantgap " value="{{ rowp[0] }}" name="{{row_i.index0}}{{ name }}_{{rowp_i.index0}}0">
+																							<script type="text/javascript">
+																							$('.clockpicker').clockpicker({ placement: 'top'});
+																							</script>								
+																						</div>
+
+																				<!-- new -->
+																					
+																			</td>																			
+																	
+																			<td class="col-xs-3 ">
+																				<div class="form-group">
+																					<div class="controls">
+																					<table class="dontwantgap" style="width: 100%">
+																					<tr class="dontwantgap">
+																					<td>	
+																					<input style="text-align:left" type="number" class="form-control  dontwantgap input-sm" min="0" max="599"  step="1" value="0" id="{{row_i.index0}}{{ name }}_{{rowp_i.index0}}1minutes" />
+																					</td>
+																					<td>	
+																					<b>:<b/>
+																					</td>
+																					<td>
+																					<input type="number" class="form-control  dontwantgap input-sm" min="0" step="1" max="59" value="0" id="{{row_i.index0}}{{ name }}_{{rowp_i.index0}}1seconds" />
+																					</td>
+																					</tr>
+																					</table>
+																					</div>
+																					
+																					<!-- real value sent to the system -->
+																					<input type="hidden" class="calculatetime " min="0" step="1" value="{{  rowp[1]  }}" name="{{row_i.index0}}{{ name }}_{{rowp_i.index0}}1" />
+
+																				</div>																	
+																					<script type="text/javascript">
+																						var timeinsecstr={{rowp[1]}};
+																						var timeinsec = parseInt(timeinsecstr, 10);
+																						if (isNaN(timeinsec)) { timeinsec=0; }
+																						var minutes = Math.trunc(timeinsec / 60);
+																						var seconds = timeinsec - minutes * 60;
+																						$("#{{row_i.index0}}{{ name }}_{{rowp_i.index0}}1seconds").val(seconds)
+																						$("#{{row_i.index0}}{{ name }}_{{rowp_i.index0}}1minutes").val(minutes)
+																					</script>  
+																			</td>
+
+																			<td class="col-xs-3 ">
+																				<div class="form-group">
+																					<div class="controls">
+																					<input type="number" class="form-control dontwantgap input-sm" min="0" step="1" value="{{  rowp[2]  }}" name="{{row_i.index0}}{{ name }}_{{rowp_i.index0}}2" />
+																					</div>
+																					<div class="help-block with-errors"></div>
+																				</div>																	
+
+																		
+																			</td>
+
+																			<td class="col-xs-3 ">
+																				<div class="form-group">
+																					<div class="controls">
+																					<input type="number" class="form-control dontwantgap input-sm" min="0" step="1" value="{{  rowp[3]  }}" name="{{row_i.index0}}{{ name }}_{{rowp_i.index0}}3" />
+																					</div>
+																					<div class="help-block with-errors"></div>
+																				</div>																	
+
+																		
+																			</td>
+
+
+																	</tr>
+																	{% endfor %}
+
+																</tbody>
+															</table>
+														</div>
+														<!-- /.table-responsive -->
+
+
+
+																																											
+													</div>
+
+
+											</div>
+											<!--<div class="panel-footer">
+												<input value="{% if (table|length)>0 %}{{ table[row_i.index0][col_i.index0]}}{% endif %}" id="{{ row_i }}{{ name }}_input" name="{{row_i}}_{{col_i.index0}}" class="form-control" />						
+
+											</div>-->
+										</div>
+									</div>
+
+
+
+
+					
+			
+				
+				
+				<!-- -- end panel content --->
+				{% endfor %}				
+			  </div>
+			  <div class="panel-footer">
+				  <div class="row">
+						<div class="panel-title col-xs-3">
+							<span style="font-size:1.4em;">{{ elem }}
+							</span>
+						</div>
+						<div class=" col-xs-3">				
+								<button name="goback" idref="actionbtn{{row_i.index0}}" value="back" type="submit" class="thebutton btn btn-primary btn-md btn-block btn-warp dontwantgap">
+									Back
+
+								</button>
+						</div>
+						<div class=" col-xs-3">				
+								<button name="setdefault" idref="actionbtn{{row_i.index0}}" value="setdefault" type="submit" class="thebutton small btn btn-danger btn-md btn-block btn-warp dontwantgap">
+									Restore Default
+								<span class="glyphicon glyphicon-cog"></span>
+								</button>
+						</div>
+						<div class=" col-xs-3">
+						<button name="save" idref="actionbtn{{row_i.index0}}" value="save" type="submit" class="thebutton btn btn-danger btn-md btn-block btn-warp dontwantgap">Save
+						<span class="glyphicon glyphicon-saved"></span>
+						</button>
+						</div>
+				  </div> 
+ 
+				  
+				  
+				  
+				  
+				  
+				  
+			   </div>
+			
+			
+			</div>
+         
+			</form>
+         
+         </div>
+         {% endfor %}
+          
+         
+         
+         
+         
+        </div>
+        
+
+		<script type="text/javascript">
+
+
+		function initUI()
+		{
+			//alert("start init")
+			var elementlist={{elementlist| safe }};
+			var selCycleOption={{selCycleOption| safe }};
+			for (var i = 0; i < elementlist.length; i++) {
+				var refid=i;
+				if (elementlist[i] in selCycleOption) {
+					var elementVal=selCycleOption[elementlist[i]];
+					//alert(elementVal)
+					changeUI(elementVal,refid);		
+					removeWaiting(refid);	
+				}			
+				
+			}
+		}
+		window.onload = initUI;
+
+
+		function toggleCycleUI(element)
+		{
+			var refid=element.getAttribute("refid")
+			var elementVal=element.value;
+			//alert(refid)
+			changeUI(elementVal,refid);
+		
+		}
+
+		function removeWaiting(refid)
+		{
+
+			var waitID=refid+"waitPanels";
+			document.getElementById(waitID).remove()
+		
+		}
+
+
+
+
+		function changeUI(elementVal,refid)
+		{
+			var cycleOptionList={{cycleOptionList| safe }};
+			var param0={{paramlist | safe }}[0];
+			var divId=refid+"dayCycleDisp";	
+
+			document.getElementById(divId).style.display = (elementVal != cycleOptionList[0]) ? 'block' : 'none';
+
+			var targetClass=refid+"daypanels";
+			var daypanels = document.getElementsByClassName(targetClass);
+			daypanels.item(0).style.display= 'block';
+			for (var i = 1; i < daypanels.length; i++) {
+				daypanels.item(i).style.display=(elementVal == cycleOptionList[0]) ? 'block' : 'none';
+			}
+
+			var daytitle=refid+"refDay";
+			document.getElementById(daytitle).textContent = (elementVal == cycleOptionList[0]) ? 'Monday' : 'Reference Day';
+
+		
+		}
+
+		</script>  
+
+
+
+
+		<script type="text/javascript">
+	
+			$(function() {
+				$(".thebutton").click(function() {
+					var selvalue=$(this).attr('name');
+					//alert(selvalue);
+					var idref=$(this).attr('idref');
+							
+					$('#' + idref).attr("value", selvalue);
+					timetoseconds();
+				});  
+			}); 
+			
+			function timetoseconds() {
+				
+			   $(".calculatetime").each(function() {
+				   var namevalue=$(this).attr('name');
+				   var sec_num = parseInt($("#"+namevalue+"seconds").val(), 10);
+				   var min_num = parseInt($("#"+namevalue+"minutes").val(), 10);
+				   if (isNaN(sec_num)) { sec_num=0; }
+				   if (isNaN(min_num)) { min_num=0; }
+				   var totseconds=sec_num + min_num * 60;																
+					
+				$(this).val(totseconds);
+
+
+				});	
+				
+			}
+	
+		
+		</script>  
+
+
+
+
+
+{% endblock %}

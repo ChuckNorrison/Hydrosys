@@ -1,17 +1,20 @@
-{% extends "layout2024.html" %}
+{% extends "layout.html" %}
 {% set active_page = "showcalibration" %}
 {% block body %}
-	{% if session.logged_in %}
+  {% if session.logged_in %}
+  <div class="container-fluid">
+	  
+	  
 
-<div class="container-fluid">
+  
+  		<form novalidate="true" action="{{ url_for('showdeviceaddresseslist') }}" id="menuForm" method="post" >
+			<div class="page-header">
+					  <h3>Device addresses</h3>   
+			</div>
 
-	<form novalidate="true" action="{{ url_for('showdeviceaddresseslist') }}" id="menuForm" method="post" >
-        
-		<div class="pb-2 mt-4 mb-2 border-bottom">
-			<h3>Device addresses</h3>
-		</div>
 
-		<div class="card card-body bg-light">
+			
+			<div class="well bs-component smallgap">
 
 		{% if deviceaddresseslist|length > 0 %}			
 
@@ -64,29 +67,29 @@
         </tbody>
     </table>
     
-	{% else %}
-	<div class="pb-2 mt-4 mb-2 border-bottom">
-		<h3>There are no device with address</h3>
-	</div>
-
+    {% else %}
+    		<div class="page-header">
+					  <h4>There are no device with address</h4>   
+			</div>
+    
 	
 	{% endif %}
 
-		<div class="row">
-			<div class="d-grid col-lg-4 col-md-4 col-sm-4 col-xs-4 pb-4">
-				<button class="btn btn-secondary defaultbutton w-100" type="submit" name="buttonsub" value="cancel"><i class="fa-solid fa-circle-left"></i> Back</button>
-			</div>
-		</div>
 
+	<button class="btn btn-default" type="submit" name="buttonsub" value="cancel">Cancel</button>
 
 		</div>
+
 			
-	</form>			
+			
+		</form>			
+			
+
  
-</div> 
+   </div> 
   {% else %}
 
-		<h1>Please login</h1>
+		<h1>Please log in</h1>
 
   
   {% endif %}

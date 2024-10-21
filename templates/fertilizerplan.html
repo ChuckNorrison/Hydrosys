@@ -39,13 +39,15 @@
 			
 			</script>
 
+<div class="row top-buffer"></div>
+
 <div class="container-fluid">
  
 
 
 		<ul class="nav nav-pills">
 			{% for name in elementlist %}
-			<li class="nav-item">
+			<li class="nav-item nav-olive">
 				<a class="nav-link {% if name == selectedelement %} active {% endif%}" href="#{{ name }}" data-bs-toggle="pill">{{ name }}</a>
 			</li>
 			{% endfor %}
@@ -78,12 +80,12 @@
 			 <div class="card card-olive">
 			  <div class="card-header">
 				  <div class="row">
-					    <div class="col-6">
+					    <div class="col-9">
 							<span style="font-size:1.2em;">{{ elem }}</span>
 						</div>
 
-						<div class="col-6 text-end">				
-							<button id="savebtn" name="save" type="submit" idref="actionbtn{{elem}}" class="thebutton btn-sm btn btn-danger btn-md btn-block btn-warp"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+						<div class="col-3 text-end">				
+							<button id="savebtn" name="save" type="submit" idref="actionbtn{{elem}}" class="thebutton btn-sm btn btn-danger btn-md btn-block dontwantgap w-100"><i class="fa-solid fa-floppy-disk"></i> Save</button>
 						</div>
 					</div>
 			  </div>
@@ -91,7 +93,7 @@
 
 				
 				<!---- panel  body -->
-				<table class="table table-condensed">
+				<table class="table table-condensed table-light table-sm">
 				<thead>
 				  <tr>
 					<th class="col-xs-2">month</th>
@@ -140,12 +142,12 @@
 							</td>
 							<td>
 								<!--Time multiplier column (table)-->
-									<div class="col-xs-12">
-									<div class="drop" id="{{ elem }}{{ name }}">
-										<!--{% for n in range(table[row_i.index0][col_i.index0]) %}
-										<img src="/static/goccia-xs.png" style="height:35px"/>
-										{% endfor %}-->
-									</div>
+									<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+										<div class="drop" id="{{ elem }}{{ name }}">
+											<!--{% for n in range(table[row_i.index0][col_i.index0]) %}
+											<img src="/static/goccia-xs.png" style="height:35px"/>
+											{% endfor %}-->
+										</div>
 									</div>
 
 								<input type="hidden" value="{% if (table|length)>0 %}{{ table[row_i.index0][col_i.index0]}}{% endif %}" id="{{ elem }}{{ name }}_input" name="{{elem}}_{{col_i.index0}}" class="form-control" />

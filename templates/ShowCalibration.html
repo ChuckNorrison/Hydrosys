@@ -139,14 +139,14 @@
 		<!-- Pulse Actuators test -->
   
   		<form novalidate="true" action="{{ url_for('show_Calibration') }}" id="menuForm" class="jotform-form" method="post" >
-			<div class="page-header">
-					  <h3>Actuators Test</h3>   
+			<div class="pb-2 mt-4 mb-2 border-bottom">
+				<h3>Actuators Test</h3>   
 			</div>
 			
 			<div class="card card-body bg-light">
 			
-						<!--  Actuator table   -->
-			<table class="table table-striped">
+			<!--  Actuator table   -->
+			<table class="table table-striped table-sm">
 			<thead>
 				<tr>
 					<th>Name</th>
@@ -211,7 +211,7 @@
         </tbody>
     </table>
 			<div class="row pb-2">
-				<div class="col-xs-4">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 					<label>Status:</label>
 				</div>
 				<div class="col-xs-8">
@@ -306,8 +306,8 @@
 <!-- Sensors inputs calibration -->
  		{% if sensorlist|length > 0 %}		 
 
-			<div class="page-header">
-					  <h3>Sensor input Calibration</h3>   
+			<div class="pb-2 mt-4 mb-2 border-bottom">
+				<h3>Sensor input Calibration</h3>   
 			</div>
 
 			
@@ -634,7 +634,7 @@
 
 				  <td>
 		  					  				
-				  <select class="form-select input-sm" id="selsteps_{{ item }}">
+				  <select class="form-select" id="selsteps_{{ item }}">
 					<option>1</option>
 					<option>2</option>
 					<option>3</option>
@@ -772,7 +772,7 @@
 			
 			{% if servolist|length > 0 %}	
 						<!--  Actuator table   -->
-			<table class="table" margin: 20px;>
+			<table class="table table-condensed table-light table-sm">
 			<thead>
 				<tr>
 					<th>Name</th>
@@ -892,7 +892,8 @@
   
 		<!-- Photocam test -->
 		
-		<form novalidate="true" action="{{ url_for('show_Calibration') }}" id="abcd" method="post" >
+		<form novalidate="true" action="{{ url_for('show_Calibration') }}" id="abcd" method="post">
+
 			<div class="pb-2 mt-4 mb-2 border-bottom">	
 				<h3>WebCam Setting</h3>   
 			</div>
@@ -904,111 +905,102 @@
 
 			<div class="form-group">	
 
-			
-			<!--  list of cameras  -->
+				<!--  list of cameras  -->
 
-			
-
-
-			
-			
-			
-
-			{% for dict_item in camerasettinglist %}	
-				{% set item = dict_item['camname'] %}
-				{% set resolution = dict_item['resolution'] %}
-				{% set position = dict_item['position'] %}
-				{% set servo = dict_item['servo'] %}
-				{% set active = dict_item['active'] %}
-				{% set vflip = dict_item['vflip'] %}
-				
-			<!--  title of camera  -->
-
-			<div class="form-group">			
-			<div class="row pb-2">
-				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-				<legend>Camera: {{item}}</legend>  
+				{% for dict_item in camerasettinglist %}	
+					{% set item = dict_item['camname'] %}
+					{% set resolution = dict_item['resolution'] %}
+					{% set position = dict_item['position'] %}
+					{% set servo = dict_item['servo'] %}
+					{% set active = dict_item['active'] %}
+					{% set vflip = dict_item['vflip'] %}
+					
+				<!--  title of camera  -->
+	
+				<div class="row pb-2">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<legend>Camera: {{item}}</legend>  
+					</div>	
 				</div>	
-			</div>	
-			</div>	
 				
-			<div class="row mb-3">
- 				<label for="selsettingres_{{ item }}" class="col-sm-2 col-form-label">Resolution</label>
-				<div class="col-sm-10">
-                                  <select class="form-select" id="selsettingres_{{ item }}">
-                                        <option {% if resolution=="320x240" %} selected="selected"{% endif %}>320x240</option>
-                                        <option {% if resolution=="640x480" %} selected="selected"{% endif %}>640x480</option>
-                                        <option {% if resolution=="1024x768" %} selected="selected"{% endif %}>1024x768</option>
-                                        <option {% if resolution=="1920x1080" %} selected="selected"{% endif %}>1920x1080</option>
-                                        <option {% if resolution=="1920x1440" %} selected="selected"{% endif %}>1920x1440</option>
-                                        <option {% if resolution=="2592x1944" %} selected="selected"{% endif %}>2592x1944</option>
-                                        <option {% if resolution=="3280x2464" %} selected="selected"{% endif %}>3280x2464</option>                             $
-                                  </select>				
+				<div class="row mb-3">
+	 				<label for="selsettingres_{{ item }}" class="col-sm-2 col-form-label">Resolution</label>
+					<div class="col-sm-10">
+						<select class="form-select" id="selsettingres_{{ item }}">
+						    <option {% if resolution=="320x240" %} selected="selected"{% endif %}>320x240</option>
+						    <option {% if resolution=="640x480" %} selected="selected"{% endif %}>640x480</option>
+						    <option {% if resolution=="1024x768" %} selected="selected"{% endif %}>1024x768</option>
+						    <option {% if resolution=="1920x1080" %} selected="selected"{% endif %}>1920x1080</option>
+						    <option {% if resolution=="1920x1440" %} selected="selected"{% endif %}>1920x1440</option>
+						    <option {% if resolution=="2592x1944" %} selected="selected"{% endif %}>2592x1944</option>
+						    <option {% if resolution=="3280x2464" %} selected="selected"{% endif %}>3280x2464</option>
+						</select>				
+					</div>
 				</div>
-			</div>
 
-                        <div class="row mb-3">
-                                <label for="selsettingpos_{{ item }}" class="col-sm-2 col-form-label">Position</label>
-                                <div class="col-sm-10">
-				  <input value="{{position}}" class="form-control" id="selsettingpos_{{ item }}" name="position" type="text">
-                                </div>
-                        </div>
-			<div class="row">
-				<div class="col-sm-2"></div>
-				<div class="col-sm-10">
-					<div class="alert alert-warning small d-flex align-items-center" role="alert">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
-							<path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-						</svg>
-						<div>
-							Multiple positions separated by comma (,) Values from 0 to 100</div>
+                <div class="row mb-3">
+                    <label for="selsettingpos_{{ item }}" class="col-sm-2 col-form-label">Position</label>
+                    <div class="col-sm-10">
+	  					<input value="{{position}}" class="form-control" id="selsettingpos_{{ item }}" name="position" type="text">
+                    </div>
+                </div>
+
+				<div class="row">
+					<div class="col-sm-10">
+						<div class="alert alert-warning small d-flex align-items-center" role="alert">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+								<path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+							</svg>
+							<div>
+								Multiple positions separated by comma (,) Values from 0 to 100
+							</div>
 						</div>
 					</div>
 				</div>
+
 			</div>
 
-                        <div class="row mb-3">
-                                <label for="selsettingservo_{{ item }}" class="col-sm-2 col-form-label">Servo</label>
-                                <div class="col-sm-10"> 
+            <div class="row mb-3">
+                <label for="selsettingservo_{{ item }}" class="col-sm-2 col-form-label">Servo</label>
+                <div class="col-sm-10"> 
 					<select class="form-select" id="selsettingservo_{{ item }}">
-                                        {% for servoitem in servolist %}
-                                        	<option {% if servoitem==servo %} selected="selected"{% endif %}>{{servoitem}}</option>
-                                        {% endfor %}
+                    {% for servoitem in servolist %}
+                    	<option {% if servoitem==servo %} selected="selected"{% endif %}>{{servoitem}}</option>
+                    {% endfor %}
 					</select>
-                                </div>
-                        </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="selsettingactive_{{ item }}" class="col-sm-2 col-form-label">Activate Daily Photo</label>
+                <div class="col-sm-10">
+                    {% if active=="True" %}
+                    <input class="form-check-input align-middle" id="toggle-event_{{ item }}" checked="checked" type="checkbox">
+                    <input value="True" id="selsettingactive_{{ item }}" type="hidden">
+                    {% else %}                                              
+                    <input class="form-check-input align-middle" id="toggle-event_{{ item }}" type="checkbox">
+                    <input value="False" id="selsettingactive_{{ item }}" type="hidden">
+                    {% endif %}
 
 
-                        <div class="row mb-3">
-                                <label for="selsettingactive_{{ item }}" class="col-sm-2 col-form-label">Activate Daily Photo</label>
-                                <div class="col-sm-10">
-                                        {% if active=="True" %}
-                                        <input class="form-check-input align-middle" id="toggle-event_{{ item }}" checked="checked" type="checkbox">
-                                        <input value="True" id="selsettingactive_{{ item }}" type="hidden">
-                                        {% else %}                                              
-                                        <input class="form-check-input align-middle" id="toggle-event_{{ item }}" type="checkbox">
-                                        <input value="False" id="selsettingactive_{{ item }}" type="hidden">
-                                        {% endif %}
+                    <script>
+                      $(function() {
+                            $('#toggle-event_{{ item }}').change(function() {
+                                    var togglevalue=$(this).prop('checked');
 
+                                    if (togglevalue==true) {
+                                            $("#selsettingactive_{{ item }}").val("True");                                                 $
+                                    } else {
+                                            $("#selsettingactive_{{ item }}").val("False");
+                                    }
+                            })
+                      })
+                    </script>
+                </div>
+            </div>
 
-                                        <script>
-                                          $(function() {
-                                                $('#toggle-event_{{ item }}').change(function() {
-                                                        var togglevalue=$(this).prop('checked');
-
-                                                        if (togglevalue==true) {
-                                                                $("#selsettingactive_{{ item }}").val("True");                                                 $
-                                                        } else {
-                                                                $("#selsettingactive_{{ item }}").val("False");
-                                                        }
-                                                })
-                                          })
-                                        </script>
-                                </div>
-                        </div>
-
-                        <div class="row mb-3">
-                                <label for="selsettingvflip_{{ item }}" class="col-sm-2 col-form-label">vFlip</label>
+            <div class="row mb-3">
+                <label for="selsettingvflip_{{ item }}" class="col-sm-2 col-form-label">vFlip</label>
 				<div class="col-sm-10">
 					<select class="form-select" id="selsettingvflip_{{ item }}">
 						<option {% if vflip=="pos" %} selected="selected"{% endif %}>pos</option>
@@ -1017,78 +1009,80 @@
 				</div>
 			</div>
 
-                        <div class="row mb-3">
-                                <label for="TestPhoto" class="col-sm-2 col-form-label">Test photo</label>
-                                <div class="col-sm-10">
+            <div class="row mb-3">
+                <label for="TestPhoto" class="col-sm-2 col-form-label">Test photo</label>
+                <div class="col-sm-10">
 					<button id="TestPhoto" class="startphoto btn-sm btn btn-secondary" type="button" name="photo" video="{{item}}"><i class="fa-solid fa-camera"></i> Test</button>
-                                </div>
-                        </div>
+                </div>
+            </div>
+
 	{% endfor %}		
 
-	<div class="form-group">			
-		<div class="row pb-2">
-			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-				<legend>Common:</legend>  
+			<div class="form-group">			
+				<div class="row pb-2">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<legend>Common:</legend>  
+					</div>	
+				</div>	
 			</div>	
-		</div>	
-	</div>	
 
 
-	<div class="row mb-3">
-		<label for="SelTime1" class="col-sm-2 col-form-label">Daily Photo Time</label>
-		<div class="col-sm-2">
-			<div class="input-group clockpicker pull-center" data-placement="left" data-align="top" data-autoclose="true">
-				<input readonly="readonly" type="text" class="form-control" id="SelTime1" value="{{photosetting[0]}}">
-                                <span class="input-group-addon">
-                                	<span class="fa fa-clock-o"></span>
-                                </span>
-                                <script type="text/javascript">
-                                	$('.clockpicker').clockpicker({ placement: 'top', 'default': 'now'});
-                                </script>
+			<div class="row mb-3">
+				<label for="SelTime1" class="col-sm-2 col-form-label">Daily Photo Time</label>
+				<div class="col-sm-2">
+					<div class="input-group clockpicker pull-center" data-placement="left" data-align="top" data-autoclose="true">
+						<input readonly="readonly" type="text" class="form-control" id="SelTime1" value="{{photosetting[0]}}">
+		                                <span class="input-group-addon">
+		                                	<span class="fa fa-clock-o"></span>
+		                                </span>
+		                                <script type="text/javascript">
+		                                	$('.clockpicker').clockpicker({ placement: 'top', 'default': 'now'});
+		                                </script>
+					</div>
+				</div>
+				<div class="col-sm-4">
+					<button id="savesettingphoto" class="btn btn-secondary" type="button" name="photo"><i class="fa-solid fa-floppy-disk"></i> Save config</button>
+				</div>
 			</div>
-		</div>
-		<div class="col-sm-4">
-			<button id="savesettingphoto" class="btn btn-secondary" type="button" name="photo"><i class="fa-solid fa-floppy-disk"></i> Save config</button>
-		</div>
-	</div>
 
-	<div class="row mb-3">
-		<label for="toggle-event" class="col-sm-2 col-form-label">Adapt to screen</label>
-                <div class="col-sm-10">
-			<input id="toggle-event" checked="checked" type="checkbox" class="form-check-input align-middle">
-		</div>
-		<script>
-                	$(function() {
-                        	$('#toggle-event').change(function() {
-					var togglevalue=$(this).prop('checked');
+			<div class="row mb-3">
+				<label for="toggle-event" class="col-sm-2 col-form-label">Adapt to screen</label>
+		                <div class="col-sm-10">
+					<input id="toggle-event" checked="checked" type="checkbox" class="form-check-input align-middle">
+				</div>
 
-                                        if (togglevalue==true) {
-						$("#imgtest").addClass("img-responsive");                                              
-                                        } else {
-						$("#imgtest").removeClass("img-responsive");
-                                        }
-                                 })
-			})
-		</script>
+				<script>
+		            $(function() {
+		                $('#toggle-event').change(function() {
+							var togglevalue=$(this).prop('checked');
 
-	</div>
+		                    if (togglevalue==true) {
+								$("#imgtest").addClass("img-responsive");                                              
+		                    } else {
+								$("#imgtest").removeClass("img-responsive");
+		                    }
+		                })
+					})
+				</script>
+			</div>
 
-	<div class="row mb-3">				   
-		<!--  progress bar bootstrap-->
-		<div class="progress">
-			<div id="photoprogressbar1" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-			 </div>
-		</div>
-		
-		<!-- status-->
-		<label>Status:</label>
-		<label id="phototeststatus" for="input_3">Status</label>
-			
-		<div style="width: 100%; overflow: auto;">		
-			<img id="imgtest" class="img-responsive" src="{{ url_for('static', filename='cameratest/testimage1.jpg')}}" />
-		</div>
-	</div>
-
+			<div class="row mb-3">				   
+				<!--  progress bar bootstrap-->
+				<div class="progress">
+					<div id="photoprogressbar1" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+					 </div>
+				</div>
+				
+				<!-- status-->
+				<label>Status:</label>
+				<label id="phototeststatus" for="input_3">Status</label>
+					
+				<div style="width: 100%; overflow: auto;">		
+					<img id="imgtest" class="img-responsive" src="{{ url_for('static', filename='cameratest/testimage1.jpg')}}" />
+				</div>
+			</div>
+		</div>			
+	</form>
 	<!--  end form group  -->
 	{% else %}
 			<div class="row pb-2">
@@ -1097,10 +1091,7 @@
 				</div>	
 			</div>
 
-	{% endif %}
-	
-	</div>
-	
+	{% endif %}	
 
 
 			<script type=text/javascript>
@@ -1195,8 +1186,6 @@
 
 
 			</script>
-
-		</form>
   
 		<!-- mail test and setting -->
 		
@@ -1210,17 +1199,13 @@
 			
 			
 			<div class="card card-body bg-light mb-2">
-				
-			<div class="form-group">			
+							
 			<div class="row pb-2">
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<legend>eMail item: {{mailsetting[0]}}</legend>  
 				</div>	
 			</div>	
-			</div>	
-				
-				
-			<div class="form-group">					
+								
 			<div class="row pb-2">
 				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 					<label id="label_30" for="input_3">Daily mail time:</label>
@@ -1230,9 +1215,7 @@
 					</select>		
 				</div>
 			</div>	
-			</div>	
-			
-			<div class="form-group">		
+					
 			<div class="row pb-2">
 				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 				<label>Email address to send report:
@@ -1246,9 +1229,7 @@
 
 				</div>
 			</div>				
-			</div>	
-						
-			<div class="form-group">			
+								
 			<div class="row pb-2">
 				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 					<label>Mail title:</label>
@@ -1257,10 +1238,8 @@
 					<input value="{{mailsetting[3]}}" class="form-control" id="title_{{mailsetting[0]}}" name="title" type="text">
 
 				</div>
-			</div>	
-			</div>	
+			</div>
 						
-			<div class="form-group">
 			<div class="row pb-2">
 				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 					<label>Mail type:</label>
@@ -1268,11 +1247,9 @@
 				<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 					<input value="{{mailsetting[4]}}" class="form-control" disabled>
 				</div>
-			</div>	
-			</div>	
+			</div>
 			
-			{% if (mailsetting[4]=="mail+info+link") %}
-			<div class="form-group">			
+			{% if (mailsetting[4]=="mail+info+link") %}		
 			<div class="row pb-2">
 				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 					<label>Custom URL:</label>
@@ -1281,8 +1258,7 @@
 					<input value="{{mailsetting[5]}}" class="form-control" id="url_{{mailsetting[0]}}" name="url" type="text">
 
 				</div>
-			</div>	
-			</div>				
+			</div>		
 			{% endif %}
 			
 			<!-- Mail testing buttons -->
@@ -1308,12 +1284,6 @@
 			
 			</div>
 			{% endfor %}
-
-
-
-
-
-			
 
 			<script type=text/javascript>
 			  $(function() {
@@ -1360,36 +1330,26 @@
 
 		</form> 
   
-		
 		<form novalidate="true" action="{{ url_for('systemmailsetting') }}" id="sysmail" method="post" >
 			<!--<div class="page-header">
 					  <h3>Sensor Measure</h3>   
 			</div> -->
 			<div class="row pb-2">
 				<div class="col-xs-4">
-				
 					<!-- advanced mail setting button -->
-			
 					<button id="advconfigbtn" name="button" value="show" type="submit" class="thebutton btn btn-danger btn-sm btn-warp">
 						<i class="fas fa-cog"></i> Email Settings
 					</button>
-		
 				</div>
 			</div>
 		</form>  
 		
-		
-		
-		
 		<!-- Clock test and setting -->
-		
 		<form novalidate="true" action="{{ url_for('show_Calibration') }}" id="mailset" method="post" >
 
 			<div class="pb-2 mt-4 mb-2 border-bottom">
 				<h3>Clock Setting</h3>
 			</div>
-
-
 			
 			<div class="card card-body bg-light">
 			
@@ -1397,10 +1357,7 @@
 					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 					<legend>Clock and local timezone</legend>  
 					</div>	
-				</div>	
-				
-				
-			<div class="form-group">			
+				</div>		
 
 				<div class="row pb-2">
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -1421,50 +1378,33 @@
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 						<button id="settimezone" class="timezonebutton btn btn-secondary"  type="button" name="timezone" element="settimezone">SaveTimeZone</button>
 					</div>
-				</div>			
-			</div>				
-			
-				
-	
-				
-				
-
-
-						
-			<div class="form-group">			
+				</div>		
 
 				<div class="row pb-2">
-				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-					<label>Read System Time:</label>
-				</div>
+					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+						<label>Read System Time:</label>
+					</div>
 					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 						<button id="readsystemdate" class="clockbutton btn btn-secondary" type="button" name="clock" element="system">Readsystemclock</button>
 		
 
 						<label id="clockvalue_system" for="input_3"></label>
 					</div>
-				</div>	
-			</div>	
-
-			<div class="form-group">	
-
-			<div class="row pb-2">
-				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-					<label>Read Network Time:</label>
 				</div>
 
-			
-				<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-					<button id="readnetworkclock" class="clockbutton btn btn-secondary"  type="button" name="clock" element="network">Readnetworkclock</button>
+				<div class="row pb-2">
+					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+						<label>Read Network Time:</label>
+					</div>
 
-					<label id="clockvalue_network" for="input_3"></label>
-				</div>
-			</div>	
+				
+					<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+						<button id="readnetworkclock" class="clockbutton btn btn-secondary"  type="button" name="clock" element="network">Readnetworkclock</button>
 
-			</div>				
+						<label id="clockvalue_network" for="input_3"></label>
+					</div>
+				</div>		
 
-			<div class="form-group">	
-			
 				<div class="row pb-2">
 					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 						<label>Set system time:</label>
@@ -1496,33 +1436,31 @@
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>				
+				</div>			
 			
-
-			<div class="row pb-2">
-				<div class="col-xs-4">
-					<label>Status:</label>
-				</div>
-				<div class="col-xs-8">
-					<label id="clockteststatus" for="input_3">Status</label>
-				</div>
-			</div>	
-			
-			<div class="row">			
-				<div class="alert alert-info small d-flex align-items-center" role="alert">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-info-circle-fill flex-shrink-0 me-2" viewBox="0 0 16 16">
-						<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/>
-					</svg>
-					<div>
-						Raspberry PI hardware does not include an hardware clock with battery. If the system is not connected to internet the clock will require to be set every time the system is powered on<br>
-						unless an external hardware clock is used.<br>
-						If system is connected to the internet the NTP protocol will keep the raspberry time updated.
+				<div class="row pb-2">
+					<div class="col-xs-4">
+						<label>Status:</label>
+					</div>
+					<div class="col-xs-8">
+						<label id="clockteststatus" for="input_3">Status</label>
+					</div>
+				</div>	
+				
+				<div class="row">			
+					<div class="alert alert-info small d-flex align-items-center" role="alert">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-info-circle-fill flex-shrink-0 me-2" viewBox="0 0 16 16">
+							<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/>
+						</svg>
+						<div>
+							Raspberry PI hardware does not include an hardware clock with battery. If the system is not connected to internet the clock will require to be set every time the system is powered on unless an external hardware clock is used.<br>
+							If system is connected to the internet the NTP protocol will keep the raspberry time updated.
+						</div>
 					</div>
 				</div>
-			</div>
 
-			</div> <!-- end well -->
+			</div> <!-- end card -->
+
 			<script type=text/javascript> <!-- timezone -->
 			  $(function() {
 				$(".timezonebutton").click(function() {
@@ -1607,21 +1545,18 @@
 				<h3>System Configuration Upload</h3>   
 			</div>
 
-	<!-- New filestyle plugin -->
-	<script type=text/javascript src="{{url_for('static', filename='filestyle123/bootstrap-filestyle.min.js') }}"></script>
-
 			<div class="row pb-2">
 				<div class="form-group">
 				    <input type="file" class="form-control-file" name="file" id="file">
 
 					<!-- Button HTML (to Trigger Modal) -->
-					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal2">Upload and Apply</button>
+					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#UploadModal2">Upload and Apply</button>
 				</div>			
 			</div>	
 			
 
 				<!-- Modal HTML -->
-				<div id="myModal2" class="modal fade" aria-labelledby="ModalLabelUpload" aria-hidden="true">
+				<div id="UploadModal2" class="modal fade" aria-labelledby="ModalLabelUpload" aria-hidden="true">
 					<div class="modal-dialog">
 						<div class="modal-content">
 							<div class="modal-header">
