@@ -2,10 +2,12 @@
 {% set active_page = "messagebox" %}
 {% block body %}
   {% if session.logged_in %}
-
-<div class="row top-buffer"></div>
   
-<div class="container-fluid" style="max-width: 640px;">
+<div class="container">
+
+        <div class="pb-2 mt-4 mb-2 border-bottom">
+                <h3>Notifications</h3>
+        </div>
 
    	{% if posts|length > 0 %}
 

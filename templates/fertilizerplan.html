@@ -39,19 +39,20 @@
 			
 			</script>
 
-<div class="row top-buffer"></div>
-
-<div class="container-fluid">
+<div class="container">
  
+        <div class="pb-2 mt-4 mb-2 border-bottom">
+                <h3>Fertilizer Plan</h3>
+        </div>
 
 
-		<ul class="nav nav-pills">
-			{% for name in elementlist %}
-			<li class="nav-item nav-olive">
-				<a class="nav-link {% if name == selectedelement %} active {% endif%}" href="#{{ name }}" data-bs-toggle="pill">{{ name }}</a>
-			</li>
-			{% endfor %}
-		</ul>
+	<ul class="nav nav-pills">
+		{% for name in elementlist %}
+		<li class="nav-item nav-olive">
+			<a class="nav-link {% if name == selectedelement %} active {% endif%}" href="#{{ name }}" data-bs-toggle="pill">{{ name }}</a>
+		</li>
+		{% endfor %}
+	</ul>
 			
 
 
@@ -174,13 +175,13 @@
 			<!-- autofertilizer part -->
 			<div class="card card-body bg-light">
 				
-				<div class="row mb-3">
+				<div class="row pb-2">
 					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 						<legend>Parameters Setting</legend>  
 					</div>	
 				</div>	
 							
-				<div class="row mb-3">
+				<div class="row pb-2">
 					<label for="WorkingMode" class="col-sm-2 col-form-label">Working Mode</label>	
 					<div class="col-sm-10">
 						<select class="form-select" name="{{elem}}_param1" id="WorkingMode">
@@ -194,7 +195,7 @@
 					</div>
 				</div>	
 						
-				<div class="row mb-3">
+				<div class="row pb-2">
 					<label for="ReferenceWatering" class="col-sm-2 col-form-label">Reference Watering</label>
 					<div class="col-sm-10">
 						<select class="form-select input-sm" name="{{elem}}_param2" id="ReferenceWatering">
@@ -205,7 +206,7 @@
 					</div>
 				</div>
 
-				<div class="row mb-3">
+				<div class="row pb-2">
 					<label for="MinWatering" class="col-sm-2 col-form-label">Min watering (seconds)</label>								</label>
 					<div class="col-sm-10">
 						<input id="MinWatering" type="number" min="0" step="1" value="30" class="form-control" name="{{elem}}_param3" type="text">
@@ -213,7 +214,7 @@
 					</div>
 				</div>				
 
-				<div class="row mb-3">
+				<div class="row pb-2">
 					<label for="SchedActTime" class="col-sm-2 col-form-label">Scheduled Activation Time</label>
 					<div class="col-sm-10">
 						<select class="form-select seltimeclass" valueinit="{{settingparam[4]}}" name="{{elem}}_param4" id="SchedActTime">

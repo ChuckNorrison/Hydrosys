@@ -45,12 +45,12 @@
 		<link rel="stylesheet" href="/static/bootstrap533/bootstrap-table-1.23.5/bootstrap-table.min.css">
 															
 		<div id="toolbar">
-			<button class="btn-sm btn btn-primary" type="submit" name="buttonsub" value="edit"><i class="fa-solid fa-brush"></i> Edit Table</button>
+			<button class="btn btn-primary defaultbutton" type="submit" name="buttonsub" value="edit"><i class="fa-solid fa-brush"></i> Edit Table</button>
 		</div>
 
 	    <table class="table table-striped table-sm"
-			   id="table"
-			   data-toggle="table"
+		   id="table"
+		   data-toggle="table"
 	           data-toolbar="#toolbar"
 	           data-search="true"
 	           data-show-refresh="false"
@@ -62,65 +62,25 @@
 		<script src="/static/bootstrap533/bootstrap-table-1.23.5/bootstrap-table.min.js"></script>
 
 		<script>
-		// opertation functions to be put before the table declaration
-		window.actionEvents = {
-		    'click .like': function (e, value, row, index) {
-		            $table.bootstrapTable('insertRow', {
-		                index: row.id,
-		                row: row
-		            });
-		        alert('You click edit icon, row: ' + JSON.stringify(row));
-		        console.log(value, row, index);
+			/* Create the table contents here */
+			var titlelist={{ tablehead|safe }};
 
-		    },
-		    'click .edit': function (e, value, row, index) {
-		        alert('You click edit icon, row: ' + JSON.stringify(row));
-		        console.log(value, row, index);
-		    },
-		    'click .remove': function (e, value, row, index) {
-		            $table.bootstrapTable('remove', {
-		                field: 'id',
-		                values: [row.id]
-		            });
-		    }
-		};
-
-		// opertation functions
-		function actionFormatter(value, row, index) {
-		    return [
-		        '<a class="like" href="javascript:void(0)" title="Like">',
-		        '<i class="fa fa-heart"></i>',
-		        '</a>',
-		        '<a class="edit ml10" href="javascript:void(0)" title="Edit">',
-		        '<i class="fa fa-edit"></i>',
-		        '</a>',
-		        '<a class="remove ml10" href="javascript:void(0)" title="Remove">',
-		        '<i class="fa fa-remove"></i>',
-		        '</a>'
-		    ].join('');
-		}
-
-		    var $table = $('#table'),
-		        $remove = $('#remove'),
-		        selections = [];
-		        
-		    var titlelist={{tablehead|safe}};
-		    var thecolumns = []; // create an empty array
-
-
+			// Create columns
+			var thecolumns = [];
 			for (index = titlelist.length - 1; index >= 0; --index) {
 				thecolumns.push({
 					title: titlelist[index],
 					field: titlelist[index]
 				});		
 			}
+
+			// Set data
 			var thedata=({{ hwdata|safe }});
 
-
-		        $('#table').bootstrapTable({
-		            columns: thecolumns,
-		               data: thedata
-		        });
+			('#table').bootstrapTable({
+				columns: thecolumns,
+				data: thedata
+	        });
 		</script>
 	</form>
 																																											

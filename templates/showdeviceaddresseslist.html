@@ -3,7 +3,7 @@
 {% block body %}
 	{% if session.logged_in %}
 
-<div class="container-fluid">
+<div class="container">
 
 	<form novalidate="true" action="{{ url_for('showdeviceaddresseslist') }}" id="menuForm" method="post" >
         
@@ -22,6 +22,7 @@
 					<th>Type</th>
 					<th>Name</th>
 					<th>Info</th>
+					<th>Action</th>
 				</tr>
 			</thead>
 			<tbody>

@@ -4,31 +4,31 @@
   {% if session.logged_in %}
   
    
-<div class="container-fluid">
+<div class="container">
 		
 	<div class="pb-2 mt-4 mb-2 border-bottom">
 		<h3>Weather API</h3>   
 	</div>    
 
-	<div class="row col-lg-4 col-md-4 col-sm-4 col-xs-4">
-		<div class="alert alert-warning small d-flex align-items-center" role="alert">
-			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
-				<path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
-			</svg>
-			<div>
-					WARNING: The weather forecast feature is based on the data provided by weather providers. In case the weather provider changes the interface or add some restriction to the data usage, this feature will stop working.
-					To have access to the weather data, you need to visit the provider web page in the link indicated below. Normally you will get a Key that will be used to query the provider datatbase. Hopefully we will get more providers added to the list in the future.
-			</div>
-		</div>
-	</div>		
-		
 	{% if GUIitems|length > 0 %}	
 	
 	<div class="card card-body bg-light">		
 
+		<div class="row pb-2 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div class="alert alert-warning small d-flex align-items-center" role="alert">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+					<path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
+				</svg>
+				<div>
+					WARNING: The weather forecast feature is based on the data provided by weather providers. In case the weather provider changes the interface or add some restriction to the data usage, this feature will stop working.
+					To have access to the weather data, you need to visit the provider web page in the link indicated below. Normally you will get a Key that will be used to query the provider datatbase. Hopefully we will get more providers added to the list in the future.
+				</div>
+			</div>
+		</div>
+
 		<form action="{{ url_for('weatherAPI') }}" method="post" >  
 									
-			<div class="row">
+			<div class="row pb-2">
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 					<legend>API Provider</legend>  
 				</div>	
@@ -36,14 +36,14 @@
 
 			{% for items in GUIitems %}
 									
-			<div class="row">
+			<div class="row pb-2">
 
 				{% if items.GUItype=="title" %}
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">	
 					<legend>{{items.name}}</legend>
 				</div>
 				{% else %}
-				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="text-align:right;">				
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">				
 					<div>{{items.name}}</div>
 				</div>
 				<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
@@ -68,7 +68,7 @@
 			{% endfor %}
 
 			<!-- testing buttons -->
-			<div class="row">
+			<div class="row pb-2">
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">	
 					<button class="btn-sm btn btn-success btn-block " type="submit" name="buttonsub" value="TestQuery">Query the provider API</button>
 					<div class="small">Note: If the query is successful the parameters in the above table will be populated</div>	
@@ -76,7 +76,7 @@
 			</div>		
 
 			<!-- testing buttons -->			
-			<div class="row">
+			<div class="row pb-2">
 				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">				
 					<button class="testbutton btn-sm btn btn-info btn-block" type="button" name="APItesting" element="createURL">Test URL for quesry </button>
 
@@ -86,7 +86,7 @@
 				</div>
 			</div>	
 				
-			<div class="row">
+			<div class="row pb-2">
 				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">				
 					<button class="testbutton btn-sm btn btn-info btn-block"  type="button" name="APItesting" element="parse">Test query and Rain Multiplier Calculation</button>
 				</div>
@@ -97,7 +97,7 @@
 
 			<div class="card card-body bg-light">				
 					<!-- watering actuator choice  -->		
-				<div class="row">
+				<div class="row pb-2">
 					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 					<legend>Enable Rain multiplier in Irrigation Lines</legend>  
 					</div>	
@@ -135,7 +135,7 @@
 			</div> <!-- end card -->									
 													
 			<!-- testing buttons -->
-			<div class="row">
+			<div class="row pb-2">
 				<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">				
 					<button class=" btn btn-success btn-block" type="submit" name="buttonsub" value="apply">Apply Setting & Generate counter</button>
 				</div>
@@ -151,7 +151,7 @@
 	{% else %}
 			
 			<div class="card card-body bg-light">
-				<div class="row">
+				<div class="row pb-2">
 					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 					<div>No data</div>  
 					</div>	
@@ -165,7 +165,7 @@
 		<!-- Configuration management -->
 		<form  action="{{ url_for('weatherAPI') }}" id="menuFormupload" enctype="multipart/form-data" method="post" >	
 	
-			<div class="row">
+			<div class="row pb-2">
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 					<legend>Select Preset API config</legend>  
 				</div>	
@@ -191,13 +191,13 @@
 		<!-- Configuration management -->
 		<form  action="{{ url_for('weatherAPI') }}" id="menuFormupload" enctype="multipart/form-data" method="post" >
 
-			<div class="row">
+			<div class="row pb-2">
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 					<legend>Import Configuration</legend>  
 				</div>	
 			</div>
 
-			<div class="row">
+			<div class="row pb-2">
 				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 					<label for="input_3">Import Configuration</label>
 				</div>
@@ -235,13 +235,13 @@
 
 		<form  action="{{ url_for('weatherAPI') }}" id="menuForm3" class="jotform-form" method="post" >
 
-			<div class="row">
+			<div class="row pb-2">
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 					<legend>Download Configuration</legend>  
 				</div>	
 			</div>
 
-			<div class="row">
+			<div class="row pb-2">
 				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 					<label for="input_3">Download Configuration</label>
 				</div>
@@ -250,7 +250,7 @@
 				<!-- Button HTML -->
 				
 					<!--  file 1 -->
-					<div class="row">
+					<div class="row pb-2">
 						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 							<button class="downloadbutton btn-sm btn btn-secondary"  type="button" name="weatherAPIdata">DownloadConfigFiles</button>
 						</div>
@@ -262,7 +262,7 @@
 				</div>
 			</div>	
 
-			<div class="row">
+			<div class="row pb-2">
 				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 					<label>Status:</label>
 				</div>

@@ -2,6 +2,14 @@
     min-width: 74px;
 }
 
+.container {
+    max-width: 960px;
+}
+
+.progress {
+    --bs-progress-bar-bg: #009dea;
+}
+
 .defaultbutton{
     min-width: 150px;
 }

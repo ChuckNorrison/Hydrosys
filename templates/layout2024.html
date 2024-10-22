@@ -77,24 +77,23 @@
               <span class="navbar-toggler-icon"></span>
              </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav d-flex flex-wrap">
-                	{% if session.logged_in %}
-
+               	{% if session.logged_in %}
+		<div class="navbar-nav d-flex flex-wrap me-auto">
                         {% for href, id, caption in navigation_bar %}
 
                         <a {% if id == active_page %} class="nav-link active" aria-current="page" {% else%} class="nav-link" {% endif%} href="{{ href|e }}">{{ caption|e }}</a>
                        
                         {% endfor %}
-
-						<a class="nav-link" href="{{ url_for('messagebox') }}"><i class="fa fa-bell"></i></a>
-	                	<a class="nav-link" href="{{ url_for('logout') }}"><i class="fa fa-user"></i> logout</a>
-
-                    {% else %}
-
-                    	<a class="nav-link ms-auto" href="{{ url_for('login') }}"><i class="fa fa-user" style="font-size:18px;color:white"></i> login</a>
-
-                    {% endif %}
-                </div>
+		</div>
+		<div class="navbar-nav d-flex flex-wrap ms-auto">
+			<a class="nav-link" href="{{ url_for('messagebox') }}"><i class="fa fa-bell"></i></a>
+	               	<a class="nav-link" href="{{ url_for('logout') }}"><i class="fa fa-user"></i> logout</a>
+		</div>
+		{% else %}
+		<div class="navbar-nav d-flex flex-wrap ms-auto">
+                    	<a class="nav-link ms-auto" href="{{ url_for('login') }}"><i class="fa fa-user" style="color:white"></i> login</a>
+		</div>
+		{% endif %}
 	    </div>
         </div>
       </nav>

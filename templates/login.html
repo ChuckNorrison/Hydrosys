@@ -2,9 +2,7 @@
 {% set active_page = "login" %}
 {% block body %}
 
-<div class="row top-buffer"></div>
-
-<div class="container-fluid">
+<div class="container">
 
   <div class="pb-2 mt-4 mb-2 border-bottom">
     <h3>Hydrosys4</h3>
@@ -38,8 +36,8 @@
       <fieldset>
         <legend>Login</legend>
         <div class="row mb-3">
-          <label for="inputUsername" class="col-lg-2 col-md-2 col-sm-2 col-xs-4 pb-2 col-form-label">Username</label>
-          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4">
+          <label for="inputUsername" class="col-lg-4 col-md-4 col-sm-4 col-xs-4 pb-2 col-form-label">Username</label>
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
             <input type="text" class="form-control" id="inputUsername" placeholder="Username" name="username" required>
           </div>
         </div>
@@ -47,8 +45,8 @@
 {% if not change %}
 
         <div class="row mb-3">
-          <label for="inputPassword" class="col-lg-2 col-md-2 col-sm-2 col-xs-4 pb-2 col-form-label">Password</label>
-          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4">
+          <label for="inputPassword" class="col-lg-4 col-md-4 col-sm-4 col-xs-4 pb-2 col-form-label">Password</label>
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
             <input type="password" class="form-control" id="inputPassword" placeholder="Password" name="password" required>
           </div>
         </div>
@@ -56,15 +54,15 @@
 {% else %}
 
         <div class="row mb-3">
-          <label for="inputPassword" class="col-lg-2 col-md-2 col-sm-2 col-xs-4 pb-2 col-form-label">Old Password</label>
-          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4">
+          <label for="inputPassword" class="col-lg-4 col-md-4 col-sm-4 col-xs-4 pb-2 col-form-label">Old Password</label>
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
             <input type="password" class="form-control" id="inputPassword" placeholder="Old Password" name="password" required>
         </div>
 
         </div>
         <div class="row mb-3">
-          <label for="inputPassword" class="col-lg-2 col-md-2 col-sm-2 col-xs-4 pb-2 col-form-label">New Password</label>
-          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4">
+          <label for="inputPassword" class="col-lg-4 col-md-4 col-sm-4 col-xs-4 pb-2 col-form-label">New Password</label>
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
             <input minlength="8" type="password" class="form-control" id="inputPassword" placeholder="New Password" name="newpassword" required>
           </div>
         </div>
@@ -74,26 +72,27 @@
         <div class="row mt-2">
             
 {% if not change %}
-          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 pb-2">
-      			<button name="button" type="submit" class="btn btn-success defaultbutton w-100" value="login"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
-          </div>
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 pb-2">
+			<button name="button" type="submit" class="btn btn-success defaultbutton w-100" value="login"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
+		</div>
 {% endif %}                      
 
 {% if not change %}
-          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 pb-2 text-end">
-      			<button name="button" type="submit" class="btn btn-warning defaultbutton w-100" value="change"><i class="fa-solid fa-wrench"></i> Change Password</button>
-          </div>
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 pb-2 text-end">
+			<button name="button" type="submit" class="btn btn-warning defaultbutton w-100" value="change"><i class="fa-solid fa-wrench"></i> Change Password</button>
+		</div>
 {% else %}
-          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 pb-2">
-      			<button name="button" type="submit" class="btn btn-success defaultbutton w-100" value="save"><i class="fa-solid fa-floppy-disk"></i> Save</button>
-          </div>
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 pb-2">
+			<button name="button" type="submit" class="btn btn-success defaultbutton w-100" value="save"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+		</div>
 
-          <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4 pb-2 text-end">
-            <a href="{{ url_for('login') }}"><input name="buttonsub" type="button" class="btn btn-secondary defaultbutton w-100" formnovalidate="formnovalidate" value="Back"></a>
-          </div>            
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 pb-2 text-end">
+			<a href="{{ url_for('login') }}"><input name="buttonsub" type="button" class="btn btn-secondary defaultbutton w-100" formnovalidate="formnovalidate" value="Back"></a>
+		</div>            
 {% endif %}
             
-          </div>
+	</div>
+
       </fieldset>
     </form>
   </div> 

@@ -3,7 +3,7 @@
 {% block body %}
   {% if session.logged_in %}
  
-<div class="container-fluid">
+<div class="container">
 
 	<div class="pb-2 mt-4 mb-2 border-bottom">
 		<h3>Interrupt Setting</h3>
@@ -67,7 +67,7 @@
 			 
 			<div class="card card-red">
 				<div class="card-header">
-					<div class="row">
+					<div class="row pb-2">
 						<div class="col-9">
 							<span style="font-size:1.2em;">{{ elem }}</span>
 						</div>
@@ -80,13 +80,13 @@
 
 				<div class="card card-body bg-light">
 				
-					<div class="row">
+					<div class="row pb-2">
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 							<legend>Parameters Setting</legend>  
 						</div>	
 					</div>	
 
-					<div class="row">
+					<div class="row pb-2">
 						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 							<label>Working Mode</label>
 						</div>		
@@ -96,16 +96,13 @@
 								<option {% if name==settingparam[1] %}selected="selected"{% endif %} value="{{name}}">{{name}}</option>
 							{% endfor %}											
 							</select>
-						<div class="small">Pre-emptive blocking: The Interrupt takes the priority and block all other actions happening during the pre-emptive blocking period</div>
-						<div class="small"></div>
-						<div class="small"></div>
-
+							<div class="small"><strong>Pre-emptive blocking:</strong> The Interrupt takes the priority and block all other actions happening during the pre-emptive blocking period</div>
 						</div>
 					</div>
 					
-					<div class="row">
+					<div class="row pb-2">
 						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-							<label>Reference Interrupt</label>
+							<label>Reference Input</label>
 						</div>		
 						<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 							<select class="form-select dontwantgap" name="{{elem}}_2">
@@ -118,7 +115,7 @@
 						</div>
 					</div>
 						
-					<div class="row">
+					<div class="row pb-2">
 
 						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 							<label>Activation Mode</label>
@@ -129,22 +126,22 @@
 								<option {% if name == settingparam[3] %}selected="selected"{% endif %} value="{{name}}">{{name}}</option>
 							{% endfor %}											
 							</select>
-							<div class="small">Mode of activation of the interrupt, the interrupt is triggered bu the raising edge or falling edge. </div>
-							<div class="small">If the interrupt in HardwareSetting has been configured with "pos" logic, then the fist edge is the rising edge </div>
-							<div class="small">If the interrupt in HardwareSetting has been configured with "neg" logic, then the fist edge is the falling edge </div>
+							<div class="small"><strong>Interrupt activation:</strong> Triggered by the raising edge or falling edge. </div>
+							<div class="small">If the reference input sensor has been configured with "pos" logic, then the first edge is the rising edge </div>
+							<div class="small">If the reference input sensor has been configured with "neg" logic, then the first edge is the falling edge </div>
 
 						</div>
 			
 					</div>	
 				
-					<div class="row">
+					<div class="row pb-2">
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 							<legend>Event trigger</legend>  
 						</div>	
 					</div>	
 				
 					<!-- first event -->
-					<div class="row">
+					<div class="row pb-2">
 						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 							<label>Trigger Mode</label>
 						</div>		
@@ -154,13 +151,12 @@
 								<option {% if name==settingparam[12] %}selected="selected"{% endif %} value="{{name}}">{{name}}</option>
 							{% endfor %}											
 							</select>
-							<div class="small">Counter: Trigger the interrupt on the basis of the number of interrupts in one event</div>
-							<div class="small">Frequency: Trigger the interrupt on the basis of the number of interrupts in a give period (frequency)</div>
-							<div class="small"></div>
+							<div class="small"><strong>Counter:</strong> Trigger the interrupt on the basis of the number of interrupts in one event</div>
+							<div class="small"><strong>Frequency:</strong> Trigger the interrupt on the basis of the number of interrupts in a given period (frequency)</div>
 						</div>
 					</div>
 				
-					<div class="row">
+					<div class="row pb-2">
 
 						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 							<label>Number of interrupts to trigger an event</label>
@@ -168,28 +164,28 @@
 						<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 							<input value="{{settingparam[10]}}" class="form-control input-sm" name="{{elem}}_10" type="text">
 
-							<div class="small">If Counter mode: Counts the Number of interrupts in same sequence to trigger the event on the actuator</div>
-							<div class="small">If Frequency mode:Counts the Number of interrupts  in a give interval to trigger the event on the actuator</div>
-							<div class="small">NOTE: This number should not take into account any normalization made by calibration parameters of the sensor</div>
+							<div class="small"><strong>Counter mode:</strong> Counts the Number of interrupts in same sequence to trigger the event on the actuator</div>
+							<div class="small"><strong>Frequency mode:</strong> Counts the Number of interrupts  in a given interval to trigger the event on the actuator</div>
+							<div class="small"><strong>NOTE:</strong> This number should not take any normalizations made by calibration parameters of the sensor</div>
 						</div>
 			
 					</div>	
 
-					<div class="row">
+					<div class="row pb-2">
 						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 							<label>Max Time between interrupts (sec) </label>
 						</div>
 						<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 
 							<input value="{{settingparam[11]}}" class="form-control input-sm" name="{{elem}}_11" type="text">
-							<div class="small">If Counter mode: Max Time interval between consecutive interrupts to count as a sequence, if time between two interrupts is bigger then it restart counting</div>
-							<div class="small">If Frequency mode: Time interval to count the interrupts </div>                                       
+							<div class="small"><strong>Counter mode:</strong> Max Time interval between consecutive interrupts to count as a sequence. If time between two interrupts is bigger, than it restarts counting</div>
+							<div class="small"><strong>Frequency mode:</strong> Time interval to count the interrupts </div>
 						</div>
 					</div>	
 
 
 					<!-- END first event -->
-					<div class="row">													  
+					<div class="row pb-2">													  
 						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 							<label>Actuator Output</label>
 						</div>
@@ -197,13 +193,13 @@
 						<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
 						  	<input value="{{settingparam[4]}}" class="form-control input-sm" name="{{elem}}_4" type="text">		  
 							<div class="small">- If actuator is pulse type, the unit is in seconds </div>
-							<div class="small">- If actuator is Servo type, the unit is in position percentage </div>
-							<div class="small">- If actuator is Stepper type, the unit is the number of steps </div>
+							<div class="small">- If actuator is servo type, the unit is in position percentage </div>
+							<div class="small">- If actuator is stepper type, the unit is the number of steps </div>
 						</div>	
 					</div>	
 
 
-					<div class="row">
+					<div class="row pb-2">
 						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 							<label>Duration of pre-emptive blocking status (seconds):</label>
 						</div>
@@ -214,13 +210,13 @@
 						</div>
 					</div>				
 					
-					<div class="row">
+					<div class="row pb-2">
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 						<legend>Follow up</legend>  
 						</div>	
 					</div>				
 						
-					<div class="row">
+					<div class="row pb-2">
 
 						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 							<label>Action after the first event</label>
@@ -241,7 +237,7 @@
 						</div>	
 					</div>	
 						
-					<div class="row">
+					<div class="row pb-2">
 						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 						<label>Follow-up actuator output</label>
 
@@ -258,7 +254,7 @@
 						</div>
 					</div>				
 
-					<div class="row">
+					<div class="row pb-2">
 
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
@@ -294,12 +290,17 @@
 
 								</tbody>
 							</table>
-							<div class="small">Time period when the automation is active. Set start and end to 00:00 for full day operation</div>
+							<div class="row pb-2">
+								<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12"></div>
+								<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+									<div class="small">Time period when the automation is active. Set start and end to 00:00 for full day operation</div>
+								</div>
+							</div>
 						</div>
 					</div>	
 
 
-					<div class="row">
+					<div class="row pb-2">
 						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 							<label>Alert preferences:</label>
 						</div>
@@ -309,20 +310,20 @@
 								<option {% if name==settingparam[9] %}selected="selected"{% endif %} value="{{name}}">{{name}}</option>
 								{% endfor %}
 							</select>
-							<div class="small">send by email the info plus warning or the warning only </div>
+							<div class="small">Send the info plus warning or the warning only by email </div>
 						</div>
 					</div>
 				
 
 					
 					<!---- Status section -->
-					<div class="row">
+					<div class="row pb-2">
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 							<legend>System Current Status</legend>  
 						</div>	
 					</div>	
 
-					<div class="row">
+					<div class="row pb-2">
 
 						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
@@ -365,7 +366,7 @@
 					</div>	
 
 					<!---- Reset Button -->			
-					<div class="row">
+					<div class="row pb-2">
 						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">				
 							<button id="resetbtn" name="reset" type="submit" idref="actionbtn{{elem}}" class="thebutton btn btn-secondary btn-md btn-block dontwantgap"><i class="fa-solid fa-rotate-right"></i> Reset Cycle</button>
 						</div>			
@@ -374,7 +375,7 @@
 			</div> <!---- END card body -->
 
 			<div class="card-footer">
-				<div class="row">
+				<div class="row pb-2">
 					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 						<span style="font-size:1.2em;">{{ elem }}</span>
 					</div>
@@ -393,7 +394,7 @@
 
 {% else %}
 
-	<div class="row">
+	<div class="row pb-2">
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 			<div>
 				<h4>No Sensors available</h4>

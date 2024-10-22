@@ -4,7 +4,7 @@
   {% if session.logged_in %}
  
  
-<div class="container-fluid">
+<div class="container">
 
 	<div class="pb-2 mt-4 mb-2 border-bottom">
 		<h3>Automation Setting</h3>
@@ -69,7 +69,7 @@
 				 
 				<div class="card card-purple">
 					<div class="card-header">
-						<div class="row">
+						<div class="row pb-2">
 							<div class="col-9">
 								<span style="font-size:1.2em;">{{ elem }}</span>
 							</div>
@@ -83,13 +83,13 @@
 					<!---- panel body -->			
 					<div class="card card-body bg-light">
 			
-						<div class="row">
+						<div class="row pb-2">
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 								<legend>Parameters Setting</legend>  
 							</div>	
 						</div>	
 
-						<div class="row">
+						<div class="row pb-2">
 							<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 								<label>Working Mode</label>
 							</div>		
@@ -107,7 +107,7 @@
 						</div>	
 
 
-						<div class="row">
+						<div class="row pb-2">
 							<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 								<label>Reference Sensors</label>
 							</div>		
@@ -121,7 +121,7 @@
 							</div>
 						</div>	
 					
-						<div class="row">
+						<div class="row pb-2">
 
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
@@ -170,15 +170,18 @@
 
 								</tbody>
 								</table>
-
-								<div class="small">If actuator is pulse type, the unit is in seconds </div>
-								<div class="small">If actuator is Servo type, the unit is in position percentage </div>
-								<div class="small">If actuator is Stepper type, the unit is the number of steps </div>				
-
+								<div class="row pb-2">
+									<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12"></div>
+									<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+										<div class="small">If actuator is pulse type, the unit is in seconds </div>
+										<div class="small">If actuator is Servo type, the unit is in position percentage </div>
+										<div class="small">If actuator is Stepper type, the unit is the number of steps </div>
+									</div>
+								</div>
 							</div>
 						</div>	
 
-						<div class="row">
+						<div class="row pb-2">
 							<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 							<label>Number of Steps:
 							</label>
@@ -192,7 +195,7 @@
 							</div>
 						</div>
 
-						<div class="row">
+						<div class="row pb-2">
 							<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 							<label>Pause between activation:
 							</label>
@@ -206,7 +209,7 @@
 							</div>
 						</div>				
 							
-						<div class="row">
+						<div class="row pb-2">
 							<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 							<label>Interval for Sensor Data evaluation:
 							</label>
@@ -221,7 +224,7 @@
 							</div>
 						</div>					
 
-						<div class="row">
+						<div class="row pb-2">
 							<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 								<label>Activation delay (seconds)</label>
 							</div>		
@@ -234,7 +237,7 @@
 						</div>
 
 
-						<div class="row">
+						<div class="row pb-2">
 
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
@@ -275,7 +278,7 @@
 						</div>	
 							
 
-						<div class="row">
+						<div class="row pb-2">
 							<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 								<label>Alert preferences:</label>
 							</div>
@@ -290,7 +293,7 @@
 							</div>
 						</div>				
 					
-						<div class="row">
+						<div class="row pb-2">
 							<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 								<label>Math operation on samples</label>
 							</div>		
@@ -306,13 +309,13 @@
 						</div>
 						
 						<!---- Status section -->
-						<div class="row">
+						<div class="row pb-2">
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 								<legend>System Current Status</legend>  
 							</div>	
 						</div>	
 
-						<div class="row">
+						<div class="row pb-2">
 
 							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
@@ -355,7 +358,7 @@
 						</div>
 
 						<!---- Reset Button -->
-						<div class="row">
+						<div class="row pb-2">
 							<div class=" col-xs-3">				
 								<button id="resetbtn" name="reset" type="submit" idref="actionbtn{{elem}}" class="thebutton btn btn-secondary btn-md btn-block dontwantgap"><i class="fa-solid fa-rotate-right"></i> Reset Cycle
 								</button>
@@ -365,7 +368,7 @@
 					</div> <!-- end card body -->	
 							
 					<div class="card-footer">
-						<div class="row">
+						<div class="row pb-2">
 							<div class=" col-6">
 								<span style="font-size:1.2em;">{{ elem }}</span>
 							</div>
@@ -388,7 +391,7 @@
 
 	{% else %}
 
-	<div class="row">
+	<div class="row pb-2">
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 			<div style="height:100px"><h4> Sensor not available</h4></div>				
 		</div>
