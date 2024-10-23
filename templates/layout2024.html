@@ -47,8 +47,25 @@
     
     </head>
   <body>
+                <script type="text/javascript">
+	                var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+                </script>
+
 		<script type="text/javascript">
-		var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+			$(function() {
+				$.ajax({
+					type: "GET",
+					url: $SCRIPT_ROOT + "/getunseencount",
+					contentType: "application/json; charset=utf-8",
+					data: { echoValue: "requestfordata" },
+					success: function(data) {
+						$('#navnotify').text(data);
+						$(this).blur();		
+					},
+				}).done(function(data) {
+					console.log("AJAX req navnotify: " + data);
+				});
+			});
 		</script>
 
 	{% set navigation_bar = [
@@ -86,7 +103,9 @@
                         {% endfor %}
 		</div>
 		<div class="navbar-nav d-flex flex-wrap ms-auto">
-			<a class="nav-link" href="{{ url_for('messagebox') }}"><i class="fa fa-bell"></i></a>
+			<a class="nav-link" href="{{ url_for('messagebox') }}"><i class="fa fa-bell"></i>
+				<span id="navnotify" class="badge rounded-pill badge-notification bg-danger"></span>
+			</a>
 	               	<a class="nav-link" href="{{ url_for('logout') }}"><i class="fa fa-user"></i> logout</a>
 		</div>
 		{% else %}
