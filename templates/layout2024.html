@@ -52,7 +52,7 @@
                 </script>
 
 		<script type="text/javascript">
-			$(function() {
+			function updateNotifyBadge() {
 				$.ajax({
 					type: "GET",
 					url: $SCRIPT_ROOT + "/getunseencount",
@@ -65,7 +65,9 @@
 				}).done(function(data) {
 					console.log("AJAX req navnotify: " + data);
 				});
-			});
+			}
+			updateNotifyBadge();
+			setInterval(updateNotifyBadge, 60*1000);
 		</script>
 
 	{% set navigation_bar = [
