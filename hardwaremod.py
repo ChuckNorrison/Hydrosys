@@ -416,30 +416,30 @@ def getsensordata(sensorname,attemptnumber): #needed
 				if recdata[2]>0: # this is the flag that indicates if the measurement is correct
 					#print " Sensor " , sensorname  , "reading ",recdata[1]	
 					isok=True
-									
+
 					Thereading=normalizesensordata(recdata[1],sensorname)  # output is a string
 
-					print(" Sensor " , sensorname  , "Normalized reading ",Thereading)												
+					print(" Sensor " , sensorname  , "Normalized reading ",Thereading)
 					logger.info("Sensor %s reading: %s", sensorname,Thereading)
 					if len(recdata)>3:
 						statusmessage=recdata[3]
 				else:
 					message = "Problem with sensor reading " + sensorname
 					dictitem={'title': "Sensor Message (Warning)", 'content': message, 'color': "yellow" }
-					messageboxmod.SaveMessage(dictitem)					
+					messageboxmod.SaveMessage(dictitem)
 					print(message)
 					logger.error(message)
 					statusmessage=recdata[1]
 			else:
 				message = "Problem with response consistency " + sensorname + " cmd " + cmd
 				dictitem={'title': "Sensor Message (Warning)", 'content': message, 'color': "yellow" }
-				messageboxmod.SaveMessage(dictitem)					
+				messageboxmod.SaveMessage(dictitem)
 				print(message)
 				logger.error(message)
 		else:
 			message = "no answer from Hardware control module" + sensorname
 			dictitem={'title': "Sensor Message (Warning)", 'content': message, 'color': "yellow" }
-			messageboxmod.SaveMessage(dictitem)					
+			messageboxmod.SaveMessage(dictitem)
 			print(message)
 			logger.error(message)
 	else:

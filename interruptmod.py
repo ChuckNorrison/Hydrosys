@@ -501,10 +501,11 @@ def CheckActivateNotify(element,sensor,preemptiontime,actuatoroutput,actionmodea
 				statusdataDBmod.write_status_data(AUTO_data,element,"lastactiontime",datetime.utcnow())
 				statusdataDBmod.write_status_data(AUTO_data,element,"actionvalue",value)
 
+			textmessage ="ALERT: " + sensor + " event , activating:" + element + " with Value " + str(value)
+
 			# invia mail, considered as info, not as alert
 			if mailtype!="none":
 				if mailtype!="warningonly":
-					textmessage="INFO: " + sensor + " event , activating:" + element + " with Value " + str(value)
 					#send mail using thread to avoid blocking
 					x = threading.Thread(target=emailmod.sendallmail, args=("alert", textmessage))
 					x.start()
@@ -514,8 +515,7 @@ def CheckActivateNotify(element,sensor,preemptiontime,actuatoroutput,actionmodea
 			startblockingstate(element,preemptiontime)
 
 			# Send notification
-			notifymsg = element + " was blocked cause of " + sensor
-			dictitem={'title': "Interrupt Message (Alert)", 'content': notifymsg, 'color': "red" }
+			dictitem={'title': "Interrupt Message (Alert)", 'content': textmessage, 'color': "red" }
 			messageboxmod.SaveMessage(dictitem)
 			logger.info("Save Interrupt notification %s/%s", element, sensor)
 
@@ -659,35 +659,32 @@ def checkstopcondition(element):
 	#print "actionafter " , actionmodeafterfirst
 	sensor=interruptdbmod.searchdata("element",element,"sensor")
 
-
-	
 	if actionmodeafterfirst=="Extend blocking state" or actionmodeafterfirst=="Extend and Follow-up": # extend the pre-emption blocking period
-		seonsormode=interruptdbmod.searchdata("element",element,"sensor_mode")
+		sensormode=interruptdbmod.searchdata("element",element,"sensor_mode")
 		#print "SENSORMODE" , seonsormode
 		recordkey=hardwaremod.HW_INFO_NAME
-		recordvalue=sensor	
+		recordvalue=sensor
 		keytosearch=hardwaremod.HW_CTRL_PIN
 		PIN=hardwaremod.searchdata(recordkey,recordvalue,keytosearch)
-		reading=hardwaremod.readinputpin(PIN)		
+		reading=hardwaremod.readinputpin(PIN)
 
-		if seonsormode=="First Edge + Level":	
+		if sensormode=="First Edge + Level":
 			keytosearch=hardwaremod.HW_CTRL_LOGIC
-			logic=hardwaremod.searchdata(recordkey,recordvalue,keytosearch)			
+			logic=hardwaremod.searchdata(recordkey,recordvalue,keytosearch)
 			# pin high according to the set logic
 			#print "logic:", logic , " reading:"  ,reading
 			if (logic=="pos" and reading=="1")or(logic=="neg" and reading=="0"):
 				return False
 
-		elif seonsormode=="Second Edge + Level (inv)":
+		elif sensormode=="Second Edge + Level (inv)":
 			keytosearch=hardwaremod.HW_CTRL_LOGIC
-			logic=hardwaremod.searchdata(recordkey,recordvalue,keytosearch)			
+			logic=hardwaremod.searchdata(recordkey,recordvalue,keytosearch)
 			#pin LOW according to the set logic
 			#print "logic:", logic , " reading:"  ,reading
 			if (logic=="pos" and reading=="0")or(logic=="neg" and reading=="1"):
 				return False
 
-
-	return True		
+	return True
 
 def saveblockingdiff(sensor): # this function minimize the writing over the database, keep them at 1 sec distance and provides a visual pleasant graph :) 
 	global BLOCKING_data
