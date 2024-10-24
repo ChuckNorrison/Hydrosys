@@ -10,6 +10,14 @@
     --bs-progress-bar-bg: #009dea;
 }
 
+.badge-notification {
+    font-size: 0.6rem;
+    margin-top: -0.1rem;
+    margin-left: -0.5rem;
+    position: absolute;
+    padding: 0.2em;
+}
+
 .defaultbutton{
     min-width: 150px;
 }
@@ -277,7 +285,7 @@ font-size:      1.2em;
 
 .card-blue a:hover,
 .card-primary a:hover {
-    color: #df8a13;
+    color: #0e5986;
 }
 
 .card-teal {
@@ -295,7 +303,7 @@ font-size:      1.2em;
 }
 
 .card-teal a:hover {
-    color: #df8a13;
+    color: #328484;
 }
 
 .card-olive {
@@ -313,7 +321,7 @@ font-size:      1.2em;
 }
 
 .card-olive a:hover {
-    color: #df8a13;
+    color: #2E6C51;
 }
 
 .card-lime {
