@@ -2,6 +2,7 @@ import sqlite3
 import os
 from datetime import datetime
 import basicSetting  # for the database path
+import filestoragemod
 
 
 # database class -----------
@@ -144,8 +145,8 @@ def GetMessages():
 	return _MessageBoxIst.GetMessages()
 
 def SaveMessage(dictitem):
-	DATEFORMAT="%d/%m/%Y - %H:%M:%S"
-	dictitem['created']=datetime.now().strftime(DATEFORMAT)
+	dateformat="%d/%m/%Y - %H:%M:%S"
+	dictitem['created']=datetime.now().strftime(dateformat)
 	return _MessageBoxIst.SaveMessage(dictitem)
 
 def DeleteMessage(index):
@@ -166,20 +167,61 @@ def PrintMessages():
 			rowstr=rowstr+" " +str(item)
 		print (rowstr)
 
+# LastSeen functions
+
+def SaveLastSeen():
+	dateformat = "%d/%m/%Y - %H:%M:%S"
+	timestamp = datetime.now().strftime(dateformat)
+
+	MsgLastSeen = [{'timestamp':timestamp}]
+
+	filestoragemod.savefiledata("msglastseen.txt", MsgLastSeen)
+
+	return MsgLastSeen
+
+def GetLastSeen():
+	global MsgLastSeen
+	MsgLastSeen=[]
+	if not filestoragemod.readfiledata("msglastseen.txt", MsgLastSeen):
+		MsgLastSeen = SaveLastSeen()
+	return MsgLastSeen
+
+def GetUnseenCount():
+	unseencount = 0
+	dateformat = "%d/%m/%Y - %H:%M:%S"
+
+	lastseen = GetLastSeen()
+	print(lastseen[0]['timestamp'])
+
+	messages = GetMessages()
+	for message in messages:
+		msgcreated = datetime.strptime(message['created'], dateformat)
+		msglastseen = datetime.strptime(lastseen[0]['timestamp'], dateformat)
+
+		if msgcreated > msglastseen:
+			unseencount+=1
+
+	if unseencount == 0:
+		return ""
+	else:
+		return unseencount
+
 # maintenance Function
-
-
-
 
 if __name__ == '__main__':
 
-	print(" Add two rows and delete them")
+	#print(" Add two rows and delete them")
 	PrintMessages()
-	dictitem=[]
-	dictitem.append({'title':"eccolo", 'content': " bla bla bla bla", 'created':" "})
-	dictitem.append({'title':"secondo", 'content': " bla bla bla", 'created':" "})
-	for item in dictitem:
-		SaveMessage(item)
-	PrintMessages()
+	#dictitem=[]
+	#dictitem.append({'title':"eccolo", 'content': " bla bla bla bla", 'created':" "})
+	#dictitem.append({'title':"secondo", 'content': " bla bla bla", 'created':" "})
+	#for item in dictitem:
+	#	SaveMessage(item)
+	#PrintMessages()
 	#DeleteLastNMessage(1)
 	#PrintMessages()
+
+	#lastseen=SaveLastSeen()
+	#lastseen=GetLastSeen()
+	#print(lastseen)
+	print(GetUnseenCount())

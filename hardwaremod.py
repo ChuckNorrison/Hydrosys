@@ -27,6 +27,7 @@ import cameradbmod
 import struct
 import imghdr
 import copy
+import messageboxmod
 import statusdataDBmod
 
 
@@ -423,18 +424,28 @@ def getsensordata(sensorname,attemptnumber): #needed
 					if len(recdata)>3:
 						statusmessage=recdata[3]
 				else:
-					print("Problem with sensor reading ", sensorname)
-					logger.error("Problem with sensor reading: %s", sensorname)
+					message = "Problem with sensor reading " + sensorname
+					dictitem={'title': "Sensor Message (Warning)", 'content': message, 'color': "yellow" }
+					messageboxmod.SaveMessage(dictitem)					
+					print(message)
+					logger.error(message)
 					statusmessage=recdata[1]
 			else:
-				print("Problem with response consistency ", sensorname , " cmd " , cmd)
-				logger.error("Problem with response consistency : %s", sensorname)
+				message = "Problem with response consistency " + sensorname + " cmd " + cmd
+				dictitem={'title': "Sensor Message (Warning)", 'content': message, 'color': "yellow" }
+				messageboxmod.SaveMessage(dictitem)					
+				print(message)
+				logger.error(message)
 		else:
-			print("no answer from Hardware control module", sensorname)
-			logger.error("no answer from Hardware control module: %s", sensorname)
+			message = "no answer from Hardware control module" + sensorname
+			dictitem={'title': "Sensor Message (Warning)", 'content': message, 'color': "yellow" }
+			messageboxmod.SaveMessage(dictitem)					
+			print(message)
+			logger.error(message)
 	else:
 		print("sensor name not found in list of sensors ", sensorname)
 		logger.error("sensor name not found in list of sensors : %s", sensorname)
+
 	return isok, Thereading, statusmessage
 
 def makepulse(target,duration,addtime=True, priority=0): # pulse in seconds , addtime=True extend the pulse time with new time , addtime=False let the current pulse finish , 

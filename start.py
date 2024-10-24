@@ -1137,6 +1137,13 @@ def saveit():
 	print("The actuator ", ret_data)
 	return jsonify(ret_data)
 
+
+@application.route('/getunseencount/', methods=['GET'])
+def getunseencount():
+	unseencount = messageboxmod.GetUnseenCount()
+	ret_data = {"unseencount": unseencount}
+	return jsonify(unseencount)
+
 @application.route('/downloadit/', methods=['GET'])
 def downloadit():
 	if not session.get('logged_in'):
@@ -3213,6 +3220,10 @@ def messagebox():
 
 	posts=messageboxmod.GetMessages()
 	print(posts)
+
+	# remember last seen
+	messageboxmod.SaveLastSeen()
+
 	return render_template('messagebox.html', posts=posts)
 
 def currentpath(filename):
