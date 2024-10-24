@@ -1,27 +1,24 @@
-{% extends "layout2024.html" %}
+{% extends "layout.html" %}
 {% set active_page = "showcalibration" %}
 {% block body %}
   {% if session.logged_in %}
-
-<div class="container">
+  <div class="container-fluid">
 	  
 	  
-		<!-- hbridge Actuators test -->  
-  		<form novalidate="true" action="{{ url_for('sethbridge') }}" id="menuForm" method="post" >
-			<div class="pb-2 mt-4 mb-2 border-bottom">
-					  <h3>hbridge Actuators Test</h3>   
+		<!-- Stepper Actuators test -->
+  
+  		<form novalidate="true" action="{{ url_for('setstepper') }}" id="menuForm" method="post" >
+			<div class="page-header">
+					  <h3>Stepper Actuators Test</h3>   
 			</div>
 			
-			<div class="card card-body bg-light">
+			<div class="well bs-component smallgap">
 			
-			
-
-			
-			
-			<table class="table table-condensed table-light table-sm">
+						<!--  Actuator table   -->
+			<table class="table" margin: 20px;>
 			<thead>
 				<tr>
-					<th>hbridge</th>
+					<th>Stepper</th>
 					<th>Position</th>
 					<th>Busy</th>
 					<th>SetTo</th>
@@ -33,7 +30,7 @@
 			
 			
 
-			{% for item in hbridgelist %}	
+			{% for item in stepperlist %}	
 			<tr>
 
 				<td>
@@ -41,12 +38,12 @@
 				</td>
 				
 				<td>
-						<label class="form-label-left" id="{{ item }}_hbridgestatus" >{{hbridgestatuslist[loop.index0]["position"]}}</label>
+						<label class="form-label-left" id="{{ item }}_stepperstatus" >{{stepperstatuslist[loop.index0]["position"]}}</label>
 						
 				</td>
 
 				<td>
-						<label class="form-label-left" id="{{ item }}_hbridgebusy" >{{hbridgestatuslist[loop.index0]["busy"]}}</label>
+						<label class="form-label-left" id="{{ item }}_stepperbusy" >{{stepperstatuslist[loop.index0]["busy"]}}</label>
 				</td>
 
 
@@ -57,7 +54,7 @@
 				  		
 							
 				<td>
-					<button class="hbridgebutton btn-sm btn btn-secondary btn-block" type="button" name="sethbridge" element="{{item}}">Set</button>
+					<button class="stepperbutton btn-sm btn btn-default btn-block" type="button" name="setstepper" element="{{item}}">Set</button>
 				</td>
 
 
@@ -74,7 +71,7 @@
 					<label>Status:</label>
 				</div>
 				<div class="col-xs-8">
-					<label class="form-label-left" id="hbridgestatus" for="input_3"></label>
+					<label class="form-label-left" id="stepperstatus" for="input_3"></label>
 				</div>
 			</div>	
 
@@ -84,7 +81,7 @@
 		</div>
 			 <script type=text/javascript>
 			  $(function() {
-				$(".hbridgebutton").click(function() {
+				$(".stepperbutton").click(function() {
 				
 				// send ajax interrupt to flask to initiate the actuator test
 				
@@ -97,8 +94,8 @@
 								contentType: "application/json; charset=utf-8",
 								data: { echoValue: "requestfordata" },
 								success: function(data) {
-									$('#hbridgestatus').text(data.answer);
-									$('#' + elem +'_hbridgestatus').text(data.answer);
+									$('#stepperstatus').text(data.answer);
+									$('#' + elem +'_stepperstatus').text(data.answer);
 		
 									
 									
@@ -109,7 +106,7 @@
 							});    
 				  
 					
-							$('#hbridgestatus').text("waiting ...");
+							$('#stepperstatus').text("waiting ...");
 
 					
 				});
@@ -127,7 +124,7 @@
    </div> 
   {% else %}
 
-		<h1>Please login</h1>
+		<h1>Please log in</h1>
 
   
   {% endif %}
