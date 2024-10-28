@@ -220,79 +220,77 @@
 			</div>	
 
 			</div>
-			 <script type=text/javascript>
-			  $(function() {
-				var pGress={};	
-				var pCnt = {};
-				var sec = {};				  
-				$(".thebutton").click(function() {
+
+			<script type=text/javascript>
+				$(function() {
+					var pGress = {};	
+					var pCnt = {};
+					var sec = {};
+
+					$(".thebutton").click(function() {
+						// send ajax interrupt to flask to initiate the actuator test
+						var prid=$(this).attr('name');
+						var elem=$(this).attr('element');
+						var value = $("#selseconds_" + elem).val();	
 				
-				// send ajax interrupt to flask to initiate the actuator test
-				
-					var prid=$(this).attr('name');
-					var elem=$(this).attr('element');
-					var value = $("#selseconds_" + elem).val();	
-			
-					$.ajax({
-								type: "GET",
-								url: $SCRIPT_ROOT + "/doit/?name=" + prid + "&name=" + value + "&element=" + elem,
-								contentType: "application/json; charset=utf-8",
-								data: { echoValue: "requestfordata" },
-								success: function(data) {
-									$('#actuatorstatus').text(data.answer);
-									$('#' + elem + "progress").removeClass("progress-bar-warning").addClass("progress-bar-default")
-									var answer=data.answer;
-									if (answer.includes("Started")) {
-									// Answer from server succesfull started pulse
-									// increment status bar bootstrap
-									clearInterval(pGress[elem]);
-									$('#' + elem + "progress" ).css('width', '0%').attr('aria-valuenow', 0);
-									$('#' + elem + "progress").text('0')
-									pCnt[elem] = 0;
-									sec[elem] = 0;
-								
-									pGress[elem] = setInterval(function() {
-											//var pVal = parseInt($('#' + elem + "progress").attr('aria-valuenow'));
-											sec[elem]=sec[elem]+1;
-											var maxsec = parseInt( $("#selseconds_" + elem).val());
-											pCnt[elem] = (pCnt[elem] + 100.0/maxsec);
-											if (pCnt[elem] > 100) {
-												clearInterval(pGress[elem]);
-												$('#actuatorstatus').text("Done");							
-											} else {
-												$('#' + elem + "progress").css('width', pCnt[elem]+'%').attr('aria-valuenow', pCnt[elem]);
-												$('#' + elem + "progress").text(sec[elem] + 's')
-											}
-										},1000);									
-									} else {
-									if (!answer.includes("Already ON")) {
+						$.ajax({
+							type: "GET",
+							url: $SCRIPT_ROOT + "/doit/?name=" + prid + "&name=" + value + "&element=" + elem,
+							contentType: "application/json; charset=utf-8",
+							data: { echoValue: "requestfordata" }
+						}).done(function(data) {
+							$('#actuatorstatus').text(data.answer);
+							$('#' + elem + "progress").removeClass("progress-bar-warning").addClass("progress-bar-default")
+							var answer=data.answer;
+							if (answer.includes("Started")) {
+								// Answer from server succesfull started pulse
+								// increment status bar bootstrap
+								clearInterval(pGress[elem]);
+								$('#' + elem + "progress" ).css('width', '0%').attr('aria-valuenow', 0);
+								$('#' + elem + "progress").text('0')
+								pCnt[elem] = 0;
+								sec[elem] = 0;
+							
+								pGress[elem] = setInterval(function() {
+										sec[elem]=sec[elem]+1;
+										var maxsec = parseInt( $("#selseconds_" + elem).val());
+										pCnt[elem] = (pCnt[elem] + 100.0/maxsec);
+										if (pCnt[elem] > 100) {
+											clearInterval(pGress[elem]);
+											$('#actuatorstatus').text("Done");							
+										} else {
+											$('#' + elem + "progress").css('width', pCnt[elem]+'%').attr('aria-valuenow', pCnt[elem]);
+											$('#' + elem + "progress").text(sec[elem] + 's');
+										}
+								},1000);									
+							} else {
+								if (!answer.includes("Already ON")) {
 									clearInterval(pGress[elem]);
 									if (!answer.includes("Stopped")) {
-									$('#' + elem + "progress" ).css('width', '0%').attr('aria-valuenow', 0);
-									$('#' + elem + "progress").text('0')
+										$('#' + elem + "progress" ).css('width', '0%').attr('aria-valuenow', 0);
+										$('#' + elem + "progress").text('0');
 									} 					
-									} 
-									}	
-
-									
-								},
-								//error: function(jqXHR, textStatus, errorThrown) {
-								//    alert(errorThrown); $("#thebutton").attr('name')
-								//}
-							});    
-				  
-							if (prid=="pulse") {		
+								} 
+							}			
+						})
+						.fail(function(jqXHR, errorMsg) {
+							if ( console && console.log ) {
+								$('#actuatorstatus').text(errorMsg);
+							}
+						})
+						.always(function() {
+							updateNotifyBadge();
+						})
+					  
+						if (prid=="pulse") {		
 							$('#actuatorstatus').text("waiting ...");
 							$('#' + elem + "progress").addClass("progress-bar-warning")
 							$('#' + elem + "progress").css('width','100%').attr('aria-valuenow', 100);					
-							$('#' + elem + "progress").text('wait')
-							}
-					
+							$('#' + elem + "progress").text('wait');
+						}
+						
+					});
 				});
-			  });
-			   
-			  
-			  
 			</script>
 			
 			
