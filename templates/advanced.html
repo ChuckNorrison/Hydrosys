@@ -89,7 +89,7 @@
 					{% for name in paramlist %}  <!--- List of the days -->
 					{% set col_i = loop %}
 
-					<div class="col-lg-6 col-md-6 col-sm-12 {{row_i.index0}}daypanels" id="day"{{col_i.index0}} style="display: none;">
+					<div class="col-xs-12 {{row_i.index0}}daypanels" id="day"{{col_i.index0}} style="display: none;">
 						<div class="card card-gray">
 							<div class="card-header">
 								<strong id="{{row_i.index0}}refDay" class="lead fw-bold">{{ name }}</strong>
@@ -151,7 +151,7 @@
 															<td class="col-xs-3 ">
 																<div class="form-group">
 																	<div class="controls">
-																	<table class="dontwantgap" style="width: 100%">
+																	<table class="dontwantgap hydrotable">
 																	<tr class="dontwantgap">
 																	<td>	
 																	<input style="text-align:left" type="number" class="form-control  dontwantgap input-sm" min="0" max="599"  step="1" value="0" id="{{row_i.index0}}{{ name }}_{{rowp_i.index0}}1minutes" />
