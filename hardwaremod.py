@@ -44,7 +44,7 @@ global DEFHWDATAFILENAME
 DEFHWDATAFILENAME="default/defhwdata.txt"
 
 logger = logging.getLogger("hydrosys4."+__name__)
-print("logger name ", __name__)
+modlogger = logging.getLogger("actuator")
 
 # ///////////////// -- Hawrware data structure Setting --  ///////////////////////////////
 #important this data is used almost everywhere
@@ -305,24 +305,42 @@ def sendcommand(cmd,sendstring,recdata,target="", priority=0):
 				elif cmd in GPIOEXPI2Ccontrol.HWCONTROLLIST:
 					return GPIOEXPI2Ccontrol.sendcommand(cmd,sendstring,recdata)
 				else:
+					message = "Device '" + target + "' not found. cmd: " + cmd
+					dictitem={'title': "Hardware Message (Error)", 'content': message, 'color': "red" }
+					messageboxmod.SaveMessage(dictitem)
+
+					modlogger.error(message)
+
 					successflag=0
 					recdata.append(cmd)
 					recdata.append("Device not found")
 					recdata.append(successflag)
 					return True
 			else:
+				message = "Device '" + target + "' blocked. cmd: " + cmd
+				dictitem={'title': "Hardware Message (Warning)", 'content': message, 'color': "yellow" }
+				messageboxmod.SaveMessage(dictitem)
+
+				modlogger.warning(message)
+
 				successflag=0
 				recdata.append(cmd)
 				recdata.append("blocked")
 				recdata.append(successflag)
 				return True
 		else:
+			message = "Device '" + target + "' disabled. cmd: " + cmd
+			dictitem={'title': "Hardware Message (Info)", 'content': message, 'color': "primary" }
+			messageboxmod.SaveMessage(dictitem)
+
+			modlogger.info(message)
+
 			successflag=0
 			recdata.append(cmd)
 			recdata.append("Disabled")
 			recdata.append(successflag)
 			return True
-			
+
 	else:
 		if cmd in HWcontrol.HWCONTROLLIST:
 			return HWcontrol.sendcommand(cmd,sendstring,recdata)

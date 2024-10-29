@@ -32,14 +32,17 @@ def getworkmode(element):
 	return workmode
 
 def checkactivate(elementwater,durationwater):  # requires integer input
+	result = False
 	elementlist=fertilizerdbmod.getelementlist()
 	waterok=False
+
 	for doserelement in elementlist: # provided the waterelement, search for corresponding doserelement 
 		linkedwaterelement=autofertilizerdbmod.searchdata("element",doserelement,"waterZone")
 		if linkedwaterelement==elementwater:
 			waterok=True
 			element=doserelement
 			break
+
 	if waterok: # there is a corresponding doser element
 		minwaterduration=hardwaremod.toint(autofertilizerdbmod.searchdata("element",element,"minactivationsec"),0)
 		workmode = getworkmode(element)
@@ -53,8 +56,11 @@ def checkactivate(elementwater,durationwater):  # requires integer input
 					durationfer=statusdataDBmod.read_status_data(AUTO_data,element,"duration")
 					activatedoser(element,durationfer)
 					time.sleep(durationfer) #this blocks the system (and watering activation) for n seconds ... not best practice
+					result = True
 				else:
 					print(" No pending request to activate ", element)
+
+	return result
 
 def activatedoser(element, duration):
 	print(element, " ",duration, " " , datetime.now())

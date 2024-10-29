@@ -127,9 +127,11 @@ def configfilezip():
 
 	# remove credentials from downloadfolder
 	logincredpath = os.path.join(basefolder, relativedstfolder, "logincred.txt")
-	os.unlink(logincredpath)
+	if os.path.isfile(logincredpath):
+		os.unlink(logincredpath)
 	emailcredpath = os.path.join(basefolder, relativedstfolder, "emailcred.txt")
-	os.unlink(emailcredpath)
+	if os.path.isfile(emailcredpath):
+		os.unlink(emailcredpath)
 
 	# make zip file and get link
 	zipfilename="allconfigfiles"

@@ -3,11 +3,12 @@ from __future__ import print_function
 from builtins import str
 from builtins import range
 
-Release="3.44"
+Release="3.45"
 
 #---------------------
 from loggerconfig import LOG_SETTINGS
 import logging, logging.config, logging.handlers
+import re
 import basicSetting
 
 DEBUGMODE=basicSetting.data["DEBUGMODE"]
@@ -83,6 +84,7 @@ import REGandDBmod
 # ///////////////// -- GLOBAL VARIABLES AND INIZIALIZATION --- //////////////////////////////////////////
 application = Flask(__name__)
 application.config.from_object('flasksettings') #read the configuration variables from a separate module (.py) file, this file is mandatory for Flask operations
+
 print("-----------------" , basicSetting.data["INTRO"], "--------------------")
 
 
@@ -1157,6 +1159,7 @@ def downloadit():
 
 	recdata=[]
 	ret_data={}
+	answer="None"
 
 	name=request.args['name']
 	if name=="downloadlog":
@@ -1266,6 +1269,9 @@ def downloadit():
 		dstfilenamelist=[]
 		dstfilenamelist.append("download/"+dstfilename)
 
+	if not dstfilenamelist:
+		dstfilenamelist = None
+
 	ret_data = {"answer": answer, "filename": dstfilenamelist}
 	print("The actuator ", ret_data)
 	return jsonify(ret_data)
@@ -1275,9 +1281,10 @@ def testit():
 	if not session.get('logged_in'):
 		ret_data = {"answer":"Login Needed"}
 		return jsonify(ret_data)
-   # this is used for debugging purposes, activate the functiontest from web button
+
 	recdata=[]
 	ret_data={}
+	answer="None"
 
 	name=request.args['name']
 	if name=="testing":
@@ -3595,9 +3602,12 @@ def videocontrol():
 	ret_data={}
 	cmd=""
 	sendstring=""
-	argumentlist=request.args.getlist('name')
-	name=argumentlist[0]
 
+	argumentlist=request.args.getlist('name')
+	if len(argumentlist) > 0:
+		name=argumentlist[0]
+	else:
+		return jsonify(ret_data)
 
 	if name=="testing":
 		print("testing video stop")
@@ -3636,6 +3646,50 @@ def videocontrol():
 	return jsonify(ret_data)
 
 # END ---------------------------------video part ---------------------------
+
+@application.route('/logstream/')
+def logstream():
+	lastreqtime = 0
+	data = request.args['lasttime']
+	if data and data != "0":
+		try:
+			# convert servertime to unixtime
+			data = datetime.strptime(data,"%d/%m/%Y %H:%M:%S").timestamp()
+			lastreqtime = int(float(data))
+		except Exception as e:
+			logger.error("Exception occured in logstream: ", e)
+
+	def generate(lastlogtime):
+		folderpath=os.path.join(MYPATH, "logfiles")
+		logpath=folderpath+"/actuator.log"
+		timeformat = "%Y-%m-%d %H:%M:%S"
+
+		if not os.path.isfile(logpath):
+			return False
+
+		for line in list(open(logpath, "r+")):
+			logtime = re.search(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}', line)
+			if logtime:
+				# convert logtime found to unixtime
+				logtime = datetime.strptime(str(logtime.group()), timeformat).timestamp()
+				if int(logtime) > lastlogtime:
+					yield line
+
+	return application.response_class(generate(lastreqtime), mimetype='text/plain')
+
+@application.route('/showlogs/')
+def showlogs():
+	if not session.get('logged_in'):
+		return render_template('login.html',error=None, change=False)
+
+	# check the logs destination folder exist otherwise create it
+	folderpath=os.path.join(MYPATH, "static")
+	folderpath=os.path.join(folderpath, "logs")
+	if not os.path.exists(folderpath):
+		os.makedirs(folderpath)
+
+	return render_template('showlogs.html')
+
 
 if __name__ == '__main__':
 	# start web server--------------- -------------------------

@@ -541,11 +541,17 @@ def CheckActivateNotify(element,sensor,preemptiontime,actuatoroutput,actionmodea
 			isok=CheckandFollowup(element)
 			# invia mail, considered as info, not as alert
 			if isok:
+				textmessage="INFO: " + sensor + " event , activating:" + element + " with Value " + str(value)
+
 				if mailtype!="none":
 					if mailtype!="warningonly":
-						textmessage="INFO: " + sensor + " event , activating:" + element + " with Value " + str(value)
 						x = threading.Thread(target=emailmod.sendallmail, args=("alert", textmessage))
 						x.start()
+
+				# Send notification
+				dictitem={'title': "Interrupt Message (Info)", 'content': textmessage, 'color': "primary" }
+				messageboxmod.SaveMessage(dictitem)
+				logger.info("Save Interrupt notification %s/%s", element, sensor)
 
 	return isok
 
