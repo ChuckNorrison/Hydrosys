@@ -209,7 +209,7 @@ def show_entries():
 	if not session.get('logged_in'):
 		return render_template('login.html',error=None, change=False)
 	print("preparing home page")
-	currentday=date.today()
+	currentday=datetime.today().strftime('%d/%m/%Y')
 
 	#Picture panel------------------------------------
 	#folderpath=os.path.join(MYPATH, "static")
@@ -1904,6 +1904,8 @@ def show_sensordata():
 			daysinthepast=perioddaysdict[periodtype]
 			enddate=datetime.now()
 			startdate = enddate - timedelta(days=daysinthepast)
+			startdatestr = str(startdate)
+			enddatestr = str(enddate)
 		else:
 			startdate=datetime.strptime(startdatestr, DATEFORMAT)
 			enddate=datetime.strptime(enddatestr, DATEFORMAT)
@@ -3649,6 +3651,10 @@ def videocontrol():
 
 @application.route('/logstream/')
 def logstream():
+	if not session.get('logged_in'):
+		ret_data = {"answer":"Login Needed"}
+		return jsonify(ret_data)
+
 	lastreqtime = 0
 	data = request.args['lasttime']
 	if data and data != "0":

@@ -728,8 +728,12 @@ $(function() {
 				<div class="row">
 					<div class="col-xs-12 pb-2">
 			
-				    {% for period in periodlist %}
+					{% for period in periodlist %}
+						{% if period == "Custom" %}
+						<div class="form-check" style="display:none">
+						{% else %}
 						<div class="form-check">
+						{% endif %}
 							<input class="form-check-input" onclick="this.form.submit()" type="radio" name="period" id="radio{{period}}" value="{{period}}" {% if period == periodtype %}checked{% endif %}>
 							<label class="form-check-label" for="radio{{period}}">
 								{{period}}
@@ -745,7 +749,7 @@ $(function() {
 					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-3">
 						<div class="row pb-2 smallgap">
 							<div class="input-group date" id="datepicker">
-								<input id="startdate" name="startdate" type='text' class="form-control" value="{{startdatestr}}" >
+								<input id="startdate" name="startdate" type='text' class="form-control" value="{{startdatestr}}">
 								<span class="input-group-append">
 									<span class="input-group-text bg-light d-block">
 										<i class="fa fa-calendar"></i>
@@ -758,7 +762,7 @@ $(function() {
 					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-3">
 						<div class="row pb-2 smallgap">
 							<div class="input-group date" id="datepicker">
-								<input id="enddate" name="enddate" type='text' class="form-control" value="{{enddatestr}}" >
+								<input id="enddate" name="enddate" type='text' class="form-control" value="{{enddatestr}}">
 								<span class="input-group-append">
 									<span class="input-group-text bg-light d-block">
 										<i class="fa fa-calendar"></i>
@@ -778,13 +782,15 @@ $(function() {
 						startdate = document.getElementById('startdate')
 						const datepicker1 = new Datepicker(startdate, {
 							// Datepicker options
-							format: 'mm/dd/yyyy',
+							format: 'dd/mm/yyyy',
+							todayHighlight: true,
 						}); 
 
 						enddate = document.getElementById('enddate')
 						const datepicker2 = new Datepicker(enddate, {
 							// Datepicker options
-							format: 'mm/dd/yyyy',
+							format: 'dd/mm/yyyy',
+							todayHighlight: true,
 						});
 					});
 

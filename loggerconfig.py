@@ -33,11 +33,7 @@ LOG_SETTINGS = {
             'level': 'DEBUG',
             'formatter': 'detailed',
             'filename': 'logfiles/actuator.log',
-            'backupCount': 3,
-            'encoding': 'utf8',
-            'when': 'midnight',
-            'interval': 1,
-            'delay': True
+            'encoding': 'utf8'
         },
         'exception_file_handler':{
             'class': 'logging.handlers.TimedRotatingFileHandler',
