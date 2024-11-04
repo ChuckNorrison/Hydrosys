@@ -5,7 +5,7 @@
   
 
   <!--  photoswipe -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap533/PhotoSwipe-5.4.4/photoswipe.css') }}"> 
+  <link rel="stylesheet" href="{{ url_for('static', filename='PhotoSwipe-5.4.4/photoswipe.css') }}"> 
 
   <div class="container-fluid">
 	<div class="pb-2 mt-4 mb-2 border-bottom">
@@ -14,7 +14,7 @@
 
 	<script type="module">
 		// Include Lightbox 
-		import PhotoSwipeLightbox from '{{ url_for('static', filename='bootstrap533/PhotoSwipe-5.4.4/photoswipe-lightbox.esm.js') }}';
+		import PhotoSwipeLightbox from '{{ url_for('static', filename='PhotoSwipe-5.4.4/photoswipe-lightbox.esm.js') }}';
 
 		const lightbox = new PhotoSwipeLightbox({
 			// may select multiple "galleries"
@@ -46,7 +46,7 @@
 			},
 
 			// setup PhotoSwipe Core dynamic import
-			pswpModule: () => import('{{ url_for('static', filename='bootstrap533/PhotoSwipe-5.4.4/photoswipe.esm.js') }}'),
+			pswpModule: () => import('{{ url_for('static', filename='PhotoSwipe-5.4.4/photoswipe.esm.js') }}'),
 
 		});
 

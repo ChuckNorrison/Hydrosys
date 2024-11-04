@@ -294,7 +294,6 @@
 																											
 											var isok=$("#videoimg").attr("isok");																																					
 											 if ((attempts<1) || (isok=="true")) {
-												  console.log(isok);	
 												  clearInterval(checkExist);
 												  // switch to stop button			
 													$('#'+butid).attr("name", "stop");
@@ -302,8 +301,7 @@
 													$('#'+butid).addClass('btn-danger');
 													$('#'+butid).html('<i class="fa-solid fa-stop"></i> Stop');								  
 												  
-											   };
-											 console.log(attempts);											 
+											   };											 
 											 attempts=attempts-1;
 											$("#videoimg").attr("isok", "true");
 											$("#videoimg").attr("src", linksrc +"?"+d.getTime());
