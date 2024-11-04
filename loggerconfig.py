@@ -29,11 +29,14 @@ LOG_SETTINGS = {
             'delay': True
         },
         'actuator':{
-            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'class': 'logging.handlers.RotatingFileHandler',
             'level': 'DEBUG',
             'formatter': 'detailed',
             'filename': 'logfiles/actuator.log',
-            'encoding': 'utf8'
+            'backupCount': 3,
+            'encoding': 'utf8',
+            'maxBytes': 1048576,
+            'delay': True            
         },
         'exception_file_handler':{
             'class': 'logging.handlers.TimedRotatingFileHandler',
