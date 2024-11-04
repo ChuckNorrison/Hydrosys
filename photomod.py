@@ -255,7 +255,7 @@ def takeshotandsave_fswebcam(filepath, filenamenopath, video, resolution, rotdeg
 			# create the picture files
 			isok=False
 			try:
-				myproc = subprocess.check_output("fswebcam -q -d "+ cam_list +" -r "+resolution+" --fps 15 -S 60 --rotate " + rotdeg + " -s brightness=50% -s Contrast=50% --jpeg 95 " + filename, shell=True, stderr=subprocess.STDOUT)
+				myproc = subprocess.check_output("fswebcam -q -d "+ cam_list +" -r "+resolution+" --fps 15 -S 60 --rotate " + rotdeg + " -s brightness=50% -s Contrast=50% --jpeg -1 --font luxisr:14 " + filename, shell=True, stderr=subprocess.STDOUT)
 				isok=True
 			except:
 				print("problem to execute fswebcam command")
@@ -375,7 +375,7 @@ def ExistandThumb(filepath,filenamenopath,shottaken):
 			os.makedirs(paththumb)
 		try:
 			image = Image.open(filename)
-			image.thumbnail((450, 450))
+			image.thumbnail((350, 350))
 			thumbname=os.path.join(paththumb,filenamenopath)
 			image.save(thumbname)
 		except:
@@ -415,7 +415,7 @@ def thumbconsistency(apprunningpath):
 				#create thumbnail
 				try:
 					image = Image.open(os.path.join(filepath,fileimage))
-					image.thumbnail((450, 450))
+					image.thumbnail((350, 350))
 					thumbname=os.path.join(paththumb,os.path.basename(fileimage))
 					image.save(thumbname)
 				except:

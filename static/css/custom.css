@@ -432,5 +432,22 @@ font-size:      1.2em;
     position: absolute;
 }
 
-/* Fertilizer */
+/* Image Galery */
+
+.pswp img {
+    max-width: none;
+    object-fit: contain;
+}
+
+.pswp__img {
+    cursor: pointer !important;
+}
+
+.pswp-gallery a {
+    text-decoration: none;
+}
+
+.pswp-gallery img {
+    padding-bottom: 5px;
+}
 

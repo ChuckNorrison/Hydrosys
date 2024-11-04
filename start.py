@@ -589,7 +589,7 @@ def imageshow():
 	if not session.get('logged_in'):
 		return render_template('login.html',error=None, change=False)
 
-	monthdict= {1: "jan", 10: "oct", 11: "nov", 12: "dec", 2: "feb", 3: "mar", 4: "apr", 5: "may", 6: "jun", 7: "jul", 8: "aug", 9: "sep"}
+	monthdict= {1: "jan", 10: "oct", 11: "nov", 12: "dec", 2: "feb", 3: "mar", 4: "apr", 5: "may", 6: "jun", 7: "jul", 8: "aug", 9: "sep", 13: "all"}
 	monthlist=[]
 	for i in range(12):
 		monthlist.append(monthdict[i+1])
@@ -603,36 +603,41 @@ def imageshow():
 		if actiontype=="DeleteAll":
 			# delete all files in the folder
 			print(" picture files deleted " , deletedfilenumber)
-			logger.info(' all image files deleted ')			
+			logger.info(' all image files deleted ')
 			deletedfilenumber=hardwaremod.deleteallpictures(MYPATH)
 		elif actiontype=="CreateImage":
 			print("Create image manually")
 			logger.info('Create image manually')
 			hardwaremod.takephoto()
+		elif actiontype=="all":
+			monthtoshow="all"
 		else:
 			monthtoshow=monthlist.index(actiontype)+1
 
 	sortedlist=hardwaremod.photolist(MYPATH)
 
 	filenamelist=[]
-	wlist=[]
-	hlist=[]
+	#wlist=[]
+	#hlist=[]
 	titlelist=[]
 	thumbfilenamelist=[]
 	for files in sortedlist:
 		filemonthnumber=files[2].month
 		#print filemonthnumber
-		if filemonthnumber==monthtoshow :
+		if filemonthnumber==monthtoshow or monthtoshow == "all":
 			filenamelist.append(files[0])
 			titlelist.append(files[1])
-			(w,h)=hardwaremod.get_image_size(files[0])
-			wlist.append(w)
-			hlist.append(h)
+			#(w,h)=hardwaremod.get_image_size(files[0])
+			#wlist.append(w)
+			#hlist.append(h)
 			thumbfilenamelist.append(files[3])
 
-	selectedmothname=monthdict[monthtoshow]
+	if monthtoshow == "all":
+		selectedmonthname = "all"
+	else:
+		selectedmonthname=monthdict[monthtoshow]
 
-	return render_template('showimages.html',filenamelist=filenamelist,titlelist=titlelist,wlist=wlist,hlist=hlist,monthlist=monthlist,selectedmothname=selectedmothname, thumbfilenamelist=thumbfilenamelist)
+	return render_template('showimages.html',filenamelist=filenamelist, titlelist=titlelist, monthlist=monthlist, selectedmonthname=selectedmonthname, thumbfilenamelist=thumbfilenamelist)
 
 @application.route('/echo/', methods=['GET'])
 def echo():
