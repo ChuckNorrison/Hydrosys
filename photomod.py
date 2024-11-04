@@ -133,11 +133,11 @@ def saveshot(filepath, video, realshot, resolution, positionvalue, vdirection):
 			os.rename(filename, filename + ".bak")
 
 		shottaken=False
-		w=resolution.split("x")[0]
-		h=resolution.split("x")[1]
+		#w=resolution.split("x")[0]
+		#h=resolution.split("x")[1]
 
-		filenamebase=filenamenopath.split(".")[0]
-		extension=filename.split(".")[1]
+		#filenamebase=filenamenopath.split(".")[0]
+		#extension=filename.split(".")[1]
 
 		# capture image using V4l2
 		# http://www.geeetech.com/wiki/index.php/Raspberry_Pi_Camera_Module
@@ -158,12 +158,12 @@ def saveshot(filepath, video, realshot, resolution, positionvalue, vdirection):
 
 		if checkPIcam(video):
 			print("The video device should be PI camera")
-			shottaken=takeshotandsave_raspistill(filepath,filenamenopath3, video, resolution,rotdeg)
+			shottaken=takeshotandsave_raspistill(filepath, filenamenopath3, video, resolution, rotdeg)
 			if not shottaken: # gives it a second chance :)
-				shottaken=takeshotandsave_fswebcam(filepath,filenamenopath2, video, resolution,rotdeg)
+				shottaken=takeshotandsave_fswebcam(filepath, filenamenopath2, video, resolution, rotdeg)
 		else:
 			print(" The video device should be USB camera")
-			shottaken=takeshotandsave_fswebcam(filepath,filenamenopath2, video, resolution,rotdeg)
+			shottaken=takeshotandsave_fswebcam(filepath, filenamenopath2, video, resolution, rotdeg)
 
 		#shottaken=takeshotandsave_mjpg_streamer(filepath,filenamenopath, video, resolution)
 
