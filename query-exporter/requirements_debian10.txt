@@ -1,0 +1,3 @@
+sqlalchemy-aio==0.16.0
+aiohttp==3.7.4.post0
+query-exporter==2.7.0

@@ -1,0 +1,39 @@
+databases:
+  db1:
+    dsn: sqlite:////home/pi/env/autonom/database/Sensordb.db
+
+metrics:
+  hydro_soilmoist1:
+    type: gauge
+    description: A sample gauge
+  hydro_Soil0:
+    type: gauge
+    description: A sample gauge
+  hydro_humid2:
+    type: gauge
+    description: A sample gauge
+  hydro_temp2:
+    type: gauge
+    description: A sample gauge
+
+queries:
+  query1:
+    interval: 5
+    databases: [db1]
+    metrics: [hydro_soilmoist1]
+    sql: SELECT data1 AS hydro_soilmoist1 FROM soilmoist1 WHERE readtime >= DATE('now')
+  query2:
+    interval: 5
+    databases: [db1]
+    metrics: [hydro_Soil0]
+    sql: SELECT data1 AS hydro_Soil0 FROM Soil0 WHERE readtime >= DATE('now')
+  query3:
+    interval: 5
+    databases: [db1]
+    metrics: [hydro_humid2]
+    sql: SELECT data1 AS hydro_humid2 FROM humid2 WHERE readtime >= DATE('now')
+  query4:
+    interval: 5
+    databases: [db1]
+    metrics: [hydro_temp2]
+    sql: SELECT data1 AS hydro_temp2 FROM temp2 WHERE readtime >= DATE('now')

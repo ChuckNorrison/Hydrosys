@@ -1,0 +1,14 @@
+[Unit]
+Description=query-exporter
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/env/query-exporter/
+ExecStart=/home/pi/env/query-exporter/bin/query-exporter /home/pi/env/query-exporter/config.yaml
+Restart=always
+RestartSec=120
+
+[Install]
+WantedBy=multi-user.target
