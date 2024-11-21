@@ -1933,25 +1933,46 @@ def show_sensordata():
 		actuatordatafull,usedactuatorlistfull =actuatordbmod.getAllActuatorDataPeriodv2(enddate,daysinthepast)
 
 		# Modify usedsensorlist and usedactuatorlist and remove the item that should be not visible
+		chartjscombdata = []
 		usedsensorlist=[]
-		sensordata=[]
+		#sensordata=[]
+		chartjssensordata = []
 		for inde in range(len(usedsensorlistfull)):
 			item=usedsensorlistfull[inde]
 			print ("item ", item , " visible ", hardwaremod.ReadVisibleStatus(item))
 			if hardwaremod.ReadVisibleStatus(item)=="True":
 				usedsensorlist.append(item)
-				sensordata.append(sensordatafull[inde])
+				#sensordata.append(sensordatafull[inde])
+
+				data = []
+				for sd in sensordatafull[inde]:
+					timestamp = datetime.strptime(sd[0], '%Y-%m-%d %H:%M:%S').timestamp() * 1000
+					data.append({'x':timestamp, 'y':sd[1]})
+
+				data.sort(key=lambda k: k['x'])
+				chartjssensordata.append({'label':item, 'data':data})
+
+		logger.info(chartjssensordata)
 
 		print("SENSOR LIST USED ", usedsensorlist )
 
 		usedactuatorlist=[]
-		actuatordata=[]
+		#actuatordata=[]
+		chartjsactuatordata = []
 		for inde in range(len(usedactuatorlistfull)):
 			item=usedactuatorlistfull[inde]
 			print ("item ", item , " visible ", hardwaremod.ReadVisibleStatus(item))
 			if hardwaremod.ReadVisibleStatus(item)=="True":
 				usedactuatorlist.append(item)
-				actuatordata.append(actuatordatafull[inde])
+				#actuatordata.append(actuatordatafull[inde])
+
+				data = []
+				for sd in actuatordatafull[inde]:
+					timestamp = datetime.strptime(sd[0], '%Y-%m-%d %H:%M:%S').timestamp() * 1000
+					data.append({'x':timestamp, 'y':sd[1]})
+
+				data.sort(key=lambda k: k['x'])
+				chartjsactuatordata.append({'label':item, 'data':data})
 
 		actuatorlist=actuatordbmod.gettablelist()
 		# associate same number to coupled actuators and sensors
@@ -2007,7 +2028,26 @@ def show_sensordata():
 
 	#print "date periods " , startdatestr , " " , enddatestr , " days ", daysinthepast
 
-	return render_template('showsensordata.html',actiontype=actiontype,periodtype=periodtype,periodlist=periodlist,startdatestr=startdatestr, enddatestr=enddatestr,usedsensorlist=usedsensorlist,sensordata=json.dumps(sensordata),usedactuatorlist=usedactuatorlist,actuatordata=json.dumps(actuatordata), hygrosensornumlist=hygrosensornumlist, hygroactuatornumlist=hygroactuatornumlist, hygrosensornumlistwithout=hygrosensornumlistwithout , actuatornumlistwithout=actuatornumlistwithout, hygrosensornumlistwithoutactive=hygrosensornumlistwithoutactive)
+	return render_template(
+		'showsensordata.html',
+		actiontype=actiontype,
+		periodtype=periodtype,
+		periodlist=periodlist,
+		startdatestr=startdatestr,
+		enddatestr=enddatestr,
+		usedsensorlist=usedsensorlist,
+		#sensordata=json.dumps(sensordata),
+		usedactuatorlist=usedactuatorlist,
+		#actuatordata=json.dumps(actuatordata),
+		hygrosensornumlist=hygrosensornumlist,
+		hygroactuatornumlist=hygroactuatornumlist,
+		hygrosensornumlistwithout=hygrosensornumlistwithout,
+		actuatornumlistwithout=actuatornumlistwithout,
+		hygrosensornumlistwithoutactive=hygrosensornumlistwithoutactive,
+		chartjssensordata=chartjssensordata,
+		chartjsactuatordata=chartjsactuatordata
+	)
+
 
 @application.route('/wateringplan/' , methods=['GET', 'POST'])
 def wateringplan():
