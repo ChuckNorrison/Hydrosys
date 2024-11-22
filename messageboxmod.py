@@ -109,12 +109,15 @@ class _MessageBox:
 		#self.database.add_row(dictitem)
 		self.RemoveExceeding()
 
+	def DeleteLastNMessage(self,number):
+		return self.database.delete_last_Nrows(number)
+
 	def RemoveExceeding(self):
 		msglist = self.database.get_allrows()
 		totalnum=len(msglist)
 		toremove= totalnum - self.maxitems
 		if toremove>0:
-			DeleteLastNMessage(toremove)
+			self.DeleteLastNMessage(toremove)
 
 	def GetMessages(self):
 		return self.database.get_allrows()
@@ -126,9 +129,6 @@ class _MessageBox:
 
 	def DeleteMessage(self,index):
 		return self.database.delete_row(index)
-
-	def DeleteLastNMessage(self,number):
-		return self.database.delete_last_Nrows(number)
 
 	def DeleteAllMessages(self):
 		return self.database.delete_all_messages()
