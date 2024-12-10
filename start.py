@@ -1883,15 +1883,17 @@ def show_sensordata():
 			actiontype="show"
 			periodtype=periodlist[0]
 
-	sensordata=[]
 	usedsensorlist=[]
 	usedactuatorlist=[]
-	actuatordata=[]
+
 	hygroactuatornumlist=[]
 	hygrosensornumlist=[]
 	hygrosensornumlistwithout=[]
 	actuatornumlistwithout=[]
 	hygrosensornumlistwithoutactive=[]
+
+	chartjssensordata = []
+	chartjsactuatordata = []
 
 	if actiontype=="delete":
 		print("delete all records")
@@ -1928,51 +1930,62 @@ def show_sensordata():
 			#startdate = startdate.replace(hour=0, minute=1)
 			enddate = enddate.replace(hour=23, minute=59)
 
-		sensordatafull, usedsensorlistfull = sensordbmod.getAllSensorsDataPeriodv2(enddate,daysinthepast)
+		logger.info("Start collect data...")
 
-		actuatordatafull,usedactuatorlistfull =actuatordbmod.getAllActuatorDataPeriodv2(enddate,daysinthepast)
+		sensordatafull, usedsensorlistfull = sensordbmod.getAllSensorsDataPeriodv2(enddate, daysinthepast)
+		actuatordatafull,usedactuatorlistfull = actuatordbmod.getAllActuatorDataPeriodv2(enddate, daysinthepast)
+
+		logger.info("Data collected for %d sensors and %d actuators",
+			len(usedsensorlistfull),
+			len(usedactuatorlistfull)
+		)
 
 		# Modify usedsensorlist and usedactuatorlist and remove the item that should be not visible
-		chartjscombdata = []
 		usedsensorlist=[]
-		#sensordata=[]
-		chartjssensordata = []
 		for inde in range(len(usedsensorlistfull)):
 			item=usedsensorlistfull[inde]
-			print ("item ", item , " visible ", hardwaremod.ReadVisibleStatus(item))
-			if hardwaremod.ReadVisibleStatus(item)=="True":
+			visible = hardwaremod.ReadVisibleStatus(item)
+			print ("item ", item , " visible ", visible)
+			if visible == "True":
 				usedsensorlist.append(item)
-				#sensordata.append(sensordatafull[inde])
 
 				data = []
+				i = 0
+				lastvalue = -10001
 				for sd in sensordatafull[inde]:
-					timestamp = datetime.strptime(sd[0], '%Y-%m-%d %H:%M:%S').timestamp() * 1000
-					data.append({'x':timestamp, 'y':sd[1]})
+					if sd[1] != lastvalue: # only add data if lastvalue hast changed (improve js performance)
+						timestamp = datetime.strptime(sd[0], '%Y-%m-%d %H:%M:%S').timestamp() * 1000
+						data.append({'x':timestamp, 'y':sd[1]})
+						lastvalue = sd[1]
+						i += 1
 
 				data.sort(key=lambda k: k['x'])
 				chartjssensordata.append({'label':item, 'data':data})
 
-		logger.info(chartjssensordata)
+		logger.info("sensor data converted (%d)", i)
 
 		print("SENSOR LIST USED ", usedsensorlist )
 
 		usedactuatorlist=[]
-		#actuatordata=[]
-		chartjsactuatordata = []
 		for inde in range(len(usedactuatorlistfull)):
 			item=usedactuatorlistfull[inde]
-			print ("item ", item , " visible ", hardwaremod.ReadVisibleStatus(item))
-			if hardwaremod.ReadVisibleStatus(item)=="True":
+			visible = hardwaremod.ReadVisibleStatus(item)
+			print ("item ", item , " visible ", visible)
+			if visible == "True":
 				usedactuatorlist.append(item)
 				#actuatordata.append(actuatordatafull[inde])
 
 				data = []
+				i= 0
 				for sd in actuatordatafull[inde]:
 					timestamp = datetime.strptime(sd[0], '%Y-%m-%d %H:%M:%S').timestamp() * 1000
 					data.append({'x':timestamp, 'y':sd[1]})
+					i += 1
 
 				data.sort(key=lambda k: k['x'])
 				chartjsactuatordata.append({'label':item, 'data':data})
+
+		logger.info("actuator data converted (%d)", i)
 
 		actuatorlist=actuatordbmod.gettablelist()
 		# associate same number to coupled actuators and sensors
@@ -2014,6 +2027,8 @@ def show_sensordata():
 				if not usedactuatorlist.index(actuator) in hygroactuatornumlist:
 					actuatornumlistwithout.append(usedactuatorlist.index(actuator))
 
+		logger.info("showsensordata finished")
+
 		#print "Sensors"
 		#print "hygrosensornumlist " , hygrosensornumlist
 		#print "hygrosensornumlistwithoutactive " , hygrosensornumlistwithoutactive
@@ -2036,9 +2051,7 @@ def show_sensordata():
 		startdatestr=startdatestr,
 		enddatestr=enddatestr,
 		usedsensorlist=usedsensorlist,
-		#sensordata=json.dumps(sensordata),
 		usedactuatorlist=usedactuatorlist,
-		#actuatordata=json.dumps(actuatordata),
 		hygrosensornumlist=hygrosensornumlist,
 		hygroactuatornumlist=hygroactuatornumlist,
 		hygrosensornumlistwithout=hygrosensornumlistwithout,

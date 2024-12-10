@@ -19,25 +19,55 @@
 		<script type="text/javascript">
 			document.addEventListener('DOMContentLoaded', function() {
 
-				console.log("hygrosensornumlist:");
-				console.log("{{hygrosensornumlist}}");
+				// setup dataset colors
+				const labels = [];
 
-				console.log("hygroactuatornumlist:");
-				console.log("{{hygroactuatornumlist}}");
+				{% for l in usedsensorlist %}
+					labels.push("{{ l|safe }}");				
+				{% endfor %}
 
-				console.log("hygrosensornumlistwithout:");
-				console.log("{{hygrosensornumlistwithout}}");
+				{% for l in usedactuatorlist %}
+					labels.push("{{ l|safe }}");
+				{% endfor %}
 
-				console.log("hygrosensornumlistwithoutactive");
-				console.log("{{hygrosensornumlistwithoutactive}}");
+				const backgroundColors = [
+					'rgba(54, 162, 235, 0.5)',	// blue
+					'rgba(255, 99, 132, 0.5)',	// red
+					'rgba(255, 159, 64, 0.5)',	// orange
+					'rgba(255, 205, 86, 0.5)',	// yellow
+					'rgba(75, 192, 192, 0.5)',	// green
+					'rgba(153, 102, 255, 0.5)',	// purple
+					'rgba(201, 203, 207, 0.5)',	// grey
+					'rgba(102, 226, 255, 0.5)',	// turquoise
+					'rgba(255, 102, 217, 0.5)',	// pink
+					'rgba(157, 255, 102, 0.5)'	// limegreen	
+				];
 
-				console.log("actuatornumlistwithout:");
-				console.log("{{actuatornumlistwithout}}");
+				const borderColors = [
+				    'rgba(54, 162, 235)',
+				    'rgba(255, 99, 132)',
+				    'rgba(255, 159, 64)',
+				    'rgba(255, 205, 86)',
+				    'rgba(75, 192, 192)',
+				    'rgba(153, 102, 255)',
+				    'rgba(201, 203, 207)',
+				    'rgba(102, 226, 255)',
+				    'rgba(255, 102, 217)',
+				    'rgba(157, 255, 102)'
+				];
+
+				function getColorForDataset(label) {
+					const labelIndex = labels.indexOf(label);
+					return {
+						backgroundColor: backgroundColors[labelIndex] || backgroundColors[colors.length - 1],
+						borderColor: borderColors[labelIndex] || borderColors[borderColors.length - 1]
+					};
+				}
 
 				// setup sensor chart data				
 				const sensordata = [];
 
-			{% for d in chartjssensordata %}
+				{% for d in chartjssensordata %}
 
 				sensordata.push(
 					{
@@ -45,17 +75,20 @@
 						data: {{ d.data|safe }},
 						fill: false,
 						tension: 0.1,
-						showLine: true
+						showLine: true,
+						pointRadius: 5,
+						borderDash: [],
+						...getColorForDataset("{{ d.label|safe }}")
 					}
 				);
 
-			{% endfor %}
+				{% endfor %}
 
 				// setup actuator and combined chart data				
 				const combdata = structuredClone(sensordata);
 				const actuatordata = [];
 
-			{% for d in chartjsactuatordata %}
+				{% for d in chartjsactuatordata %}
 
 				dataset = {
 					label: "{{ d.label|safe }}",
@@ -64,12 +97,14 @@
 					pointStyle: 'rectRot',
 					pointRadius: 10,
 					pointHoverRadius: 15,
-					showLine: false
+					showLine: false,
+					borderDash: [],
+					...getColorForDataset("{{ d.label|safe }}")
 				};	
 				combdata.push(dataset);
 				actuatordata.push(dataset);
 
-			{% endfor %}
+				{% endfor %}
 
 				// default options
 				var config = {
@@ -111,35 +146,78 @@
 							}
 						},					  	
 					    y: {
-					      beginAtZero: true
+					      beginAtZero: false
 					    }
 					  }
 					}
 				};
 
-				// create the charts
-				if (sensordata.length > 1) {
-					const ctx1 = document.getElementById('chartjs1');
-					let config_chart1 = structuredClone(config);
-					config_chart1.data.datasets = sensordata;
-					new Chart(ctx1, config_chart1);
+				//Setup auto watering control chart
+				var hygrosensornumlist={{hygrosensornumlist}};
+				var hygroactuatornumlist={{hygroactuatornumlist}};
+				var hygrosensornumlistwithout={{hygrosensornumlistwithout}};
+				var actuatornumlistwithout={{actuatornumlistwithout}};
+				var hygrosensornumlistwithoutactive={{hygrosensornumlistwithoutactive}};
+
+				var fLen, i;
+				const combdatahygro=[];
+				const sensordatahygro=structuredClone(sensordata);
+				const actuatordatahygro=structuredClone(actuatordata);
+
+				fLen = hygrosensornumlist.length;
+				for (i = 0; i < fLen; i++) {
+					combdatahygro.push(sensordatahygro[hygrosensornumlist[i]]);
 				}
 
-				if (actuatordata.length > 0 && combdata.length > 0) {
-					const ctx2 = document.getElementById('chartjs2');
-					let config_chart2 = structuredClone(config);
-					config_chart2.data.datasets = combdata;
-					new Chart(ctx2, config_chart2);
+				fLen = hygrosensornumlistwithout.length;
+				for (i = 0; i < fLen; i++) {
+					combdatahygro.push(sensordatahygro[hygrosensornumlistwithout[i]]);
 				}
 
+				fLen = hygrosensornumlistwithoutactive.length;
+				for (i = 0; i < fLen; i++) {
+					combdatahygro.push(sensordatahygro[hygrosensornumlistwithoutactive[i]]);
+				}
+
+				fLen = hygroactuatornumlist.length;
+				for (i = 0; i < fLen; i++) {
+					combdatahygro.push(actuatordatahygro[hygroactuatornumlist[i]]);
+				}
+
+				fLen = actuatornumlistwithout.length;
+				for (i = 0; i < fLen; i++) {
+					combdatahygro.push(actuatordatahygro[actuatornumlistwithout[i]]);
+				}
+
+				// show auto watering chart with dashed lines
+				for (const d in combdatahygro) {
+					combdatahygro[d]["borderDash"] = [5, 5];
+				}
+
+				// create sensor & actuator chart
+				if (combdata.length > 0) {
+					let ctx = document.getElementById('chartjs1');
+					let config_chart = structuredClone(config);
+					config_chart.data.datasets = combdata;
+					new Chart(ctx, config_chart);
+				}
+
+				// create actuator chart
 				if (actuatordata.length > 0) {
-					const ctx3 = document.getElementById('chartjs3');
-					let config_chart3 = structuredClone(config);
-					config_chart3.data.datasets = actuatordata;
-					new Chart(ctx3, config_chart3);
+					let ctx = document.getElementById('chartjs2');
+					let config_chart = structuredClone(config);
+					config_chart.data.datasets = actuatordata;
+					new Chart(ctx, config_chart);
 				}
 
-				//TODO auto watering control chart
+				// create auto watering chart
+				if (combdatahygro.length > 0) {
+					let ctx = document.getElementById('chartjs3');
+					let config_chart = structuredClone(config);
+					config_chart.data.datasets = combdatahygro;
+					new Chart(ctx, config_chart);					
+				}
+				
 			});
 		</script>
 
@@ -259,35 +337,14 @@
 			</div>
 
 			<div class="card card-body bg-light mt-4 mb-4">
-			        {% if (usedsensorlist|length)>0 %}
+			        {% if (usedsensorlist|length + usedactuatorlist|length)>0 %}
 
 			        <div class="row">
-			        	<div style="font-size:20px;font-weight: bold;opacity: 0.5;">Sensor Chart</div>
+			        	<div style="font-size:20px;font-weight: bold;opacity: 0.5;">Sensor & Actuator Chart</div>
 			        </div>
 
 			        <div class="container-fluid" style="min-height:450px;">
 			        	<canvas id="chartjs1"></canvas>
-			        </div>
-
-			        {% else %}
-
-			        <div class="row">
-			        	<div style="height:100px"><h4>Sensor data empty</h4></div>
-			        </div>
-
-			        {% endif %}
-
-			</div>
-
-			<div class="card card-body bg-light mt-4 mb-4">
-			        {% if (usedactuatorlist|length)>0 %}
-
-			        <div class="row">
-			        	<div style="font-size:20px;font-weight: bold;opacity: 0.5;">Combined Chart</div>
-			        </div>
-
-			        <div class="container-fluid" style="min-height:450px;">
-			        	<canvas id="chartjs2"></canvas>
 			        </div>
 
 			        {% else %}
@@ -308,7 +365,7 @@
 				</div>						
 
 				<div class="container-fluid" style="min-height:450px;">
-					<canvas id="chartjs3"></canvas>
+					<canvas id="chartjs2"></canvas>
 				</div>
 
 				{% else %}
@@ -325,17 +382,17 @@
 				{% if (hygrosensornumlist|length + hygroactuatornumlist|length + hygrosensornumlistwithout|length + hygrosensornumlistwithoutactive|length + actuatornumlistwithout|length)>0 %}
 
 				<div  class="row">
-					<div style="font-size:20px;font-weight: bold;opacity: 0.5;">Auto water Control Chart</div>
+					<div style="font-size:20px;font-weight: bold;opacity: 0.5;">Auto Watering Control Chart</div>
 				</div>	
 
 				<div class="container-fluid" style="min-height:450px;">
-					<canvas id="chartjs4"></canvas>
+					<canvas id="chartjs3"></canvas>
 				</div>
 					
 				{% else %}
 
 				<div class="row">
-						<div style="height:100px"><h4>Hygrometer data not available</h4></div>
+						<div style="height:100px"><h4>Auto watering data empty</h4></div>
 				</div>
 
 				{% endif %}		
