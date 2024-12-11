@@ -1905,8 +1905,6 @@ def show_sensordata():
 		enddate=datetime.now()
 		startdate = enddate - timedelta(days=daysinthepast)
 	else:
-		sensorlist=sensordbmod.gettablelist()
-
 		if periodtype!="Custom":
 			daysinthepast=perioddaysdict[periodtype]
 			enddate=datetime.now()
@@ -1927,7 +1925,6 @@ def show_sensordata():
 				startdate = enddate - timedelta(days=daysinthepast)
 
 			daysinthepast=daysinthepast+1
-			#startdate = startdate.replace(hour=0, minute=1)
 			enddate = enddate.replace(hour=23, minute=59)
 
 		logger.info("Start collect data...")
@@ -1953,7 +1950,7 @@ def show_sensordata():
 				i = 0
 				lastvalue = -10001
 				for sd in sensordatafull[inde]:
-					if sd[1] != lastvalue: # only add data if lastvalue hast changed (improve js performance)
+					if sd[1] != lastvalue or len(data) <= 1: # only add data if lastvalue hast changed (improve js performance)
 						timestamp = datetime.strptime(sd[0], '%Y-%m-%d %H:%M:%S').timestamp() * 1000
 						data.append({'x':timestamp, 'y':sd[1]})
 						lastvalue = sd[1]
@@ -1973,7 +1970,6 @@ def show_sensordata():
 			print ("item ", item , " visible ", visible)
 			if visible == "True":
 				usedactuatorlist.append(item)
-				#actuatordata.append(actuatordatafull[inde])
 
 				data = []
 				i= 0
@@ -1999,7 +1995,7 @@ def show_sensordata():
 					hygrosensornumlist.append(usedsensorlist.index(linkedsensor)) # create list with index of the matching sensros
 
 		# select hygrometers in usedsensorlist with associated actuator where the actuator is not in the usedactuatorlist
-		# this sensor would be solid line but not associated because the actuator is not used then not in the graph 
+		# this sensor would be solid line but not associated because the actuator is not used then not in the graph
 		for inde in range(len(usedsensorlist)):
 			element=usedsensorlist[inde]
 			if not inde in hygrosensornumlist:
@@ -2008,8 +2004,7 @@ def show_sensordata():
 					#print "sensor element active=", element
 					hygrosensornumlistwithoutactive.append(inde) # create list with index number of the actuator
 
-		# select hygrometers without associated actuator, 
-		#sensorlist=hardwaremod.searchdatalist(hardwaremod.HW_INFO_MEASURE,"Moisture",hardwaremod.HW_INFO_NAME)
+		# select hygrometers without associated actuator,
 		sensorlist=autowateringdbmod.getsensorlist()
 		for hygro in sensorlist:
 			if hygro in usedsensorlist:
@@ -2129,7 +2124,17 @@ def wateringplan():
 			print("select sensor for wateringplan")
 			return wateringplansensorselect()
 
-	return render_template("wateringplan.html", title=title,paramlist=paramlist,elementlist=elementlist,schemaementlist=schemaementlist,table=table,table1=table1,table2=table2,selectedelement=selectedelement)
+	return render_template(
+		"wateringplan.html",
+		title=title,
+		paramlist=paramlist,
+		elementlist=elementlist,
+		schemaementlist=schemaementlist,
+		table=table,
+		table1=table1,
+		table2=table2,
+		selectedelement=selectedelement
+	)
 
 @application.route('/autowatering/' , methods=['GET', 'POST'])
 def autowatering():
@@ -2212,7 +2217,16 @@ def autowatering():
 		#{"cyclestartdate":datetime.utcnow(),"lastwateringtime":datetime.utcnow(),"cyclestatus":"done", "checkcounter":0, "alertcounter":0, "watercounter":0}
 		cyclestatuslist.append(cyclestatus)
 
-	return render_template("autowatering.html", title=title,selectedelement=selectedelement,modelist=modelist,sensorlist=sensorlist,watersettinglist=watersettinglist, cyclestatuslist=cyclestatuslist, alertlist=alertlist)
+	return render_template(
+		"autowatering.html",
+		title=title,
+		selectedelement=selectedelement,
+		modelist=modelist,
+		sensorlist=sensorlist,
+		watersettinglist=watersettinglist,
+		cyclestatuslist=cyclestatuslist,
+		alertlist=alertlist
+	)
 
 @application.route('/automation/' , methods=['GET', 'POST'])
 def automation():
@@ -2294,7 +2308,18 @@ def automation():
 		#{"cyclestartdate":datetime.utcnow(),"lastwateringtime":datetime.utcnow(),"cyclestatus":"done", "checkcounter":0, "alertcounter":0, "watercounter":0}
 		cyclestatuslist.append(cyclestatus)
 
-	return render_template("automation.html", title=title,selectedelement=selectedelement,modelist=modelist,sensorlist=sensorlist,watersettinglist=watersettinglist, cyclestatuslist=cyclestatuslist, operationlist=operationlist , alertlist=alertlist, timetriggerlist=timetriggerlist)
+	return render_template(
+		"automation.html",
+		title=title,
+		selectedelement=selectedelement,
+		modelist=modelist,
+		sensorlist=sensorlist,
+		watersettinglist=watersettinglist,
+		cyclestatuslist=cyclestatuslist,
+		operationlist=operationlist,
+		alertlist=alertlist,
+		timetriggerlist=timetriggerlist
+	)
 
 @application.route('/interrupt/' , methods=['GET', 'POST'])
 def interrupt():
@@ -2379,7 +2404,20 @@ def interrupt():
 
 	print("ready to go to html")
 
-	return render_template("interrupt.html", title=title,selectedelement=selectedelement,modelist=modelist,sensormodelist=sensormodelist,followupactionlist=followupactionlist,sensorlist=sensorlist,watersettinglist=watersettinglist, cyclestatuslist=cyclestatuslist, alertlist=alertlist, timetriggerlist=timetriggerlist, triggermode=triggermode)
+	return render_template(
+		"interrupt.html",
+		title=title,
+		selectedelement=selectedelement,
+		modelist=modelist,
+		sensormodelist=sensormodelist,
+		followupactionlist=followupactionlist,
+		sensorlist=sensorlist,
+		watersettinglist=watersettinglist,
+		cyclestatuslist=cyclestatuslist,
+		alertlist=alertlist,
+		timetriggerlist=timetriggerlist,
+		triggermode=triggermode
+	)
 
 @application.route('/fertilizerplan/' , methods=['GET', 'POST'])
 def fertilizerplan():
@@ -2454,7 +2492,19 @@ def fertilizerplan():
 
 		fertilizersettinglist.append(fertilizersetting)
 
-	return render_template("fertilizerplan.html", title=title,paramlist=paramlist,elementlist=elementlist,table=table,table1=table1, selectedelement=selectedelement, formlist=formlist , fertilizersettinglist=fertilizersettinglist , linkemelementlist=linkemelementlist, modelist=modelist)
+	return render_template(
+		"fertilizerplan.html",
+		title=title,
+		paramlist=paramlist,
+		elementlist=elementlist,
+		table=table,
+		table1=table1,
+		selectedelement=selectedelement,
+		formlist=formlist,
+		fertilizersettinglist=fertilizersettinglist,
+		linkemelementlist=linkemelementlist,
+		modelist=modelist
+	)
 
 @application.route('/Advanced/', methods=['GET', 'POST'])
 def advanced():
@@ -2549,7 +2599,19 @@ def advanced():
 	print("********* ----" , selCycleOption)
 	print(selDayCycle)
 
-	return render_template("advanced.html", title=title,cycleOptionList=cycleOptionList,dayCycleList=dayCycleList,selCycleOption=selCycleOption,selDayCycle=selDayCycle,paramlist=paramlist,elementlist=elementlist,table=table,tablehead=tablehead,selectedelement=selectedelement)
+	return render_template(
+		"advanced.html",
+		title=title,
+		cycleOptionList=cycleOptionList,
+		dayCycleList=dayCycleList,
+		selCycleOption=selCycleOption,
+		selDayCycle=selDayCycle,
+		paramlist=paramlist,
+		elementlist=elementlist,
+		table=table,
+		tablehead=tablehead,
+		selectedelement=selectedelement
+	)
 
 @application.route('/login', methods=['GET', 'POST'])
 def login():
@@ -2712,7 +2774,14 @@ def hardwaresetting():
 			initallGPIOpins()
 			flash('Hardware configuration has been Reset ')
 
-	return render_template('hardwaresetting.html',fields=fields, hwdata=json.dumps(hwdata), tablehead=tablehead , presetfilenamelist=presetfilenamelist, debugmode=debugmode)
+	return render_template(
+		'hardwaresetting.html',
+		fields=fields,
+		hwdata=json.dumps(hwdata),
+		tablehead=tablehead,
+		presetfilenamelist=presetfilenamelist,
+		debugmode=debugmode
+	)
 
 @application.route('/HardwareSettingedit/', methods=['GET', 'POST'])
 def hardwaresettingedit():
@@ -2860,7 +2929,14 @@ def hardwaresettingeditfield():
 
 	ajaxurl="HWsettingEditAjax"
 
-	return render_template('hardwaresettingeditfield.html',returnfunction=returnfunction, ajaxurl=ajaxurl ,fields=fields, hwdata=hwdata, tablehead=tablehead )
+	return render_template(
+		'hardwaresettingeditfield.html',
+		returnfunction=returnfunction,
+		ajaxurl=ajaxurl,
+		fields=fields,
+		hwdata=hwdata,
+		tablehead=tablehead
+	)
 
 @application.route('/hardwaresettingeditfieldschemaname/', methods=['GET', 'POST'])
 def hardwaresettingeditfieldschemaname():
@@ -2914,7 +2990,14 @@ def hardwaresettingeditfieldschemaname():
 
 	ajaxurl="SchemaNameEditAjax"
 
-	return render_template('hardwaresettingeditfield.html',returnfunction=returnfunction , ajaxurl=ajaxurl ,fields=fields, hwdata=hwdata, tablehead=tablehead )
+	return render_template(
+		'hardwaresettingeditfield.html',
+		returnfunction=returnfunction,
+		ajaxurl=ajaxurl,
+		fields=fields,
+		hwdata=hwdata,
+		tablehead=tablehead
+	)
 
 @application.route('/HWsettingEditAjax/', methods=['GET','POST'])
 def HWsettingEditAjax():
@@ -3079,7 +3162,14 @@ def wateringplansensorselect():
 	durationlist=["60","120","360","720","1440"]
 	conditionlist=["AND","OR"]
 
-	return render_template('waterinplansensorselect.html', selcondition=selcondition, conditionlist=conditionlist, selduration=selduration, durationlist=durationlist, selsensorlistGUI=selsensorlistGUI)
+	return render_template(
+		'waterinplansensorselect.html',
+		selcondition=selcondition,
+		conditionlist=conditionlist,
+		selduration=selduration,
+		durationlist=durationlist,
+		selsensorlistGUI=selsensorlistGUI
+	)
 
 @application.route('/weatherAPI/', methods=['GET', 'POST'])
 def weatherAPI():
@@ -3649,7 +3739,16 @@ def videostream():
 		rotdeg="180"
 	else:
 		rotdeg="0"
-	return render_template('videostream.html',initposition=initposition, itemlist=itemlist, ipaddress=ipaddress, videolist=videolist, servolist=servolist, rotdeg=rotdeg)
+
+	return render_template(
+		'videostream.html',
+		initposition=initposition,
+		itemlist=itemlist,
+		ipaddress=ipaddress,
+		videolist=videolist,
+		servolist=servolist,
+		rotdeg=rotdeg
+	)
 
 
 @application.route('/videocontrol/', methods=['GET'])

@@ -18,6 +18,7 @@
 
 		<script type="text/javascript">
 			document.addEventListener('DOMContentLoaded', function() {
+				console.log("Start building charts...");
 
 				// setup dataset colors
 				const labels = [];
@@ -64,12 +65,13 @@
 					};
 				}
 
-				// setup sensor chart data				
-				const sensordata = [];
+				// setup sensor and actuator chart data
+				const combdata = [];
+				const actuatordata = [];
 
 				{% for d in chartjssensordata %}
 
-				sensordata.push(
+				combdata.push(
 					{
 						label: "{{ d.label|safe }}",
 						data: {{ d.data|safe }},
@@ -84,9 +86,13 @@
 
 				{% endfor %}
 
-				// setup actuator and combined chart data				
-				const combdata = structuredClone(sensordata);
-				const actuatordata = [];
+				console.log("Sensor data ok (" + combdata.length + ")");
+
+				// Clone the actual sensor data to use in auto watering chart
+				// Object gets modified by chartjs
+                                const sensordatahygro = structuredClone(combdata);
+
+				console.log("Sensor data clone ok");
 
 				{% for d in chartjsactuatordata %}
 
@@ -105,6 +111,8 @@
 				actuatordata.push(dataset);
 
 				{% endfor %}
+
+				console.log("Actuator data ok (" + actuatordata.length + ")");
 
 				// default options
 				var config = {
@@ -161,7 +169,6 @@
 
 				var fLen, i;
 				const combdatahygro=[];
-				const sensordatahygro=structuredClone(sensordata);
 				const actuatordatahygro=structuredClone(actuatordata);
 
 				fLen = hygrosensornumlist.length;
@@ -189,10 +196,12 @@
 					combdatahygro.push(actuatordatahygro[actuatornumlistwithout[i]]);
 				}
 
-				// show auto watering chart with dashed lines
+				// Modify dataset to show auto watering chart with dashed lines
 				for (const d in combdatahygro) {
 					combdatahygro[d]["borderDash"] = [5, 5];
 				}
+
+				console.log("Autowatering data ok");
 
 				// create sensor & actuator chart
 				if (combdata.length > 0) {
@@ -217,25 +226,15 @@
 					config_chart.data.datasets = combdatahygro;
 					new Chart(ctx, config_chart);					
 				}
-				
-			});
-		</script>
 
-
-		<script type="text/javascript">
-			// download data to file txt	
-	
-			$(function() {
+				console.log("Charts done!");
 
 				$(".downloadbutton").click(function() {
 					var selvalue=$(this).attr('name');
 					$('#postsensor').attr("value", selvalue);
 
-					var sensorchartdata={{chartjssensordata|safe}};
-					var actuatorchartdata={{chartjsactuatordata|safe}};
-
 					// export sensor and actuator data as JSON format
-					var datatext=JSON.stringify(sensorchartdata)+JSON.stringify(actuatorchartdata);
+					var datatext=JSON.stringify(combdata);
 
 				  var textDoc = document.createElement('a');			  
 				  textDoc.href = 'data:attachment/text,' + datatext;
@@ -243,13 +242,9 @@
 				  textDoc.download = 'SensorData.txt';
 				  textDoc.click();
 
-				});  
-
-		  });
-
-		
+				});
+			});
 		</script>
-		<!-- The contents of myscript.js will be loaded inside the script tag -->
 
 		<div class="pb-2 mt-4 mb-2 border-bottom">
 			<h3>Data Trend</h3>
