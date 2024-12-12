@@ -3,9 +3,9 @@
 {% block body %}
   {% if session.logged_in %}
 
-	<script type=text/javascript src="{{url_for('static', filename='chartjs-4.4.6/chart.umd.js') }}"></script>
-	<script type=text/javascript src="{{url_for('static', filename='chartjs-4.4.6/chartjs-adapter-date-fns.bundle.min.js') }}"></script>
-  
+	<script type=text/javascript src="{{url_for('static', filename='chartjs/chartjs-4.4.7/chart.umd.js') }}"></script>
+	<script type=text/javascript src="{{url_for('static', filename='chartjs/chartjs-adapter-date-fns.bundle.min.js') }}"></script>
+	<script type=text/javascript src="{{url_for('static', filename='chartjs/chartjs-plugin-annotation.min.js') }}"></script>
   <div class="container-fluid">
 		<script type="text/javascript">
 
@@ -124,6 +124,9 @@
 						  decimation: {
 						    enabled: true,
 						    algorithm: 'lttb' // LTTB (Largest Triangle Three Buckets) Algorithmus
+						  },
+						  annotation: {
+						    annotations: {}
 						  }
 						},
 						maintainAspectRatio: false,
@@ -201,6 +204,16 @@
 					combdatahygro[d]["borderDash"] = [5, 5];
 				}
 
+				annotation = { 
+					line1: {
+						type: 'line',
+						yMin: 30,
+						yMax: 30,
+						borderColor: 'rgb(255, 99, 132)',
+						borderWidth: 2,
+					}
+				};
+
 				console.log("Autowatering data ok");
 
 				// create sensor & actuator chart
@@ -224,6 +237,7 @@
 					let ctx = document.getElementById('chartjs3');
 					let config_chart = structuredClone(config);
 					config_chart.data.datasets = combdatahygro;
+					//config_chart.options.plugins.annotation.annotations = annotation; // experimental threshold lines
 					new Chart(ctx, config_chart);					
 				}
 
