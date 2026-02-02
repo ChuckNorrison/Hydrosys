@@ -129,7 +129,7 @@ function install_dependencies() {
         if python3 -c "import sys, pkgutil; sys.exit(not pkgutil.find_loader('$pkg'))"; then
             echo "-->  *---------------- $pkg already installed ----------------*"
         else
-            pip3 install $pkg || { echo "-->  PIP3 ERROR: $pkg ---------------- Installation failed ----------------" && exit ;}
+            pip3 install $pkg --break-system-packages || { echo "-->  PIP3 ERROR: $pkg ---------------- Installation failed ----------------" && exit ;}
         fi
     done
 }
@@ -179,7 +179,7 @@ function uninstall() {
                 ;;
             [Nn]* )
                 echo "-->  Removing ALL packages, both APT and PIP3 including all configurations"
-                pip3 uninstall $REMOVE_PIP || { echo "-->  PIP3 ERROR: ---------------- Uninstallation failed ----------------" && exit ;}
+                pip3 uninstall $REMOVE_PIP --break-system-packages || { echo "-->  PIP3 ERROR: ---------------- Uninstallation failed ----------------" && exit ;}
                 apt -y remove --purge $REMOVE_APT || { echo "-->  APT ERROR: ---------------- Uninstallation failed ----------------" && exit ;}
                 apt autoremove
                 echo "-->  Uninstalling and reverting Hydrosys4. Changes made to files will be reverted to version backed up when installing Hydrosys4."
@@ -239,8 +239,8 @@ function install_hydrosys4() {
     else
         mkdir -p /usr/local/share/hydrosys4/env # --- INSTALL Hydrosys4 software
         cd /usr/local/share/hydrosys4/env
-        git clone https://github.com/Hydrosys4/Master.git
-        mv Master autonom
+        git clone https://github.com/ChuckNorrison/Hydrosys.git
+        mv Hydrosys autonom
     fi
 }
 
