@@ -12,6 +12,11 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 # ------ End root/sudo check
 
+if ! command -v nmcli >/dev/null 2>&1; then
+    echo "ERROR: nmcli (NetworkManager) not found – is this Bookworm or Trixie?"
+    exit 1
+fi
+
 function input_UI() {
     IP="0"
     PORT=""
@@ -114,7 +119,7 @@ function system_uninstall_pkgs() {
 
 function install_dependencies() {
     echo "-->  Installing dependencies, APT packages" #--- start installing dependencies
-    INSTALL_APT="python3-dev python3-pip python3-smbus git build-essential python3-setuptools i2c-tools fswebcam libjpeg-dev libopenjp2-7 dnsutils dnsmasq hostapd cmake nginx iptables"
+    INSTALL_APT="python3-dev python3-pip python3-smbus git build-essential python3-setuptools i2c-tools fswebcam libjpeg-dev libopenjp2-7 cmake nginx iptables"
     for pkg in $INSTALL_APT; do
         if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null; then
             echo "-->  ---------------- $pkg already installed ----------------"
@@ -161,15 +166,6 @@ function uninstall() {
                 echo "-->  Reverting changes made to /boot/firmware/config.txt. Moving backed up config file to /boot/firmware/config.txt. Saving running file to ~/boot_config_hydrosys.backup"
                 mv /boot/firmware/config.txt ~/boot_config_hydrosys.backup
                 mv /usr/local/share/hydrosys4/boot_config_hydrosys.backup /boot/firmware/config.txt
-                echo "-->  Reverting changes made to hostapd.conf. Moving backed up config file to /etc/hostapd/hostapd.conf. Saving running file to ~/hostapd_hydrosys.backup"
-                mv /etc/hostapd/hostapd.conf ~/hostapd_hydrosys.backup
-                mv /usr/local/share/hydrosys4/hostapd_hydrosys.backup /etc/hostapd/hostapd.conf
-                echo "-->  Reverting changes made to dnsmasq.conf. Moving backed up config file to /etc/dnsmasq.conf. Saving running file to ~/dnsmasq_hydrosys.backup"
-                mv /etc/dnsmasq.conf ~/dnsmasq_hydrosys.backup
-                mv /usr/local/share/hydrosys4/dnsmasq_hydrosys.backup /etc/dnsmasq.conf
-                echo "-->  Reverting changes made to dhcpcd.conf. Moving backed up config file to /etc/dhcpcd.conf. Saving running file to ~/dhcpcd_hydrosys.backup"
-                mv /etc/dhcpcd.conf ~/dhcpcd_hydrosys.backup
-                mv /usr/local/share/hydrosys4/dhcpcd_hydrosys.backup /etc/dhcpcd.conf
                 echo "-->  Removing Hydrosys4 installation folder and configuration files."
                 rm -rf /usr/local/share/hydrosys4
                 ask_reboot
@@ -194,15 +190,6 @@ function uninstall() {
                 echo "-->  Reverting changes made to /boot/firmware/config.txt. Moving backed up config file to /boot/firmware/config.txt. Saving running file to ~/boot_config_hydrosys.backup"
                 mv /boot/firmware/config.txt ~/boot_config_hydrosys.backup
                 mv /usr/local/share/hydrosys4/boot_config_hydrosys.backup /boot/firmware/config.txt
-                echo "-->  Reverting changes made to hostapd.conf. Moving backed up config file to /etc/hostapd/hostapd.conf. Saving running file to ~/hostapd_hydrosys.backup"
-                mv /etc/hostapd/hostapd.conf ~/hostapd_hydrosys.backup
-                mv /usr/local/share/hydrosys4/hostapd_hydrosys.backup /etc/hostapd/hostapd.conf
-                echo "-->  Reverting changes made to dnsmasq.conf. Moving backed up config file to /etc/dnsmasq.conf. Saving running file to ~/dnsmasq_hydrosys.backup"
-                mv /etc/dnsmasq.conf ~/dnsmasq_hydrosys.backup
-                mv /usr/local/share/hydrosys4/dnsmasq_hydrosys.backup /etc/dnsmasq.conf
-                echo "-->  Reverting changes made to dhcpcd.conf. Moving backed up config file to /etc/dhcpcd.conf. Saving running file to ~/dhcpcd_hydrosys.backup"
-                mv /etc/dhcpcd.conf ~/dhcpcd_hydrosys.backup
-                mv /usr/local/share/hydrosys4/dhcpcd_hydrosys.backup /etc/dhcpcd.conf
                 echo "-->  Removing Hydrosys4 installation folder and configuration files."
                 rm -rf /usr/local/share/hydrosys4
                 break
@@ -216,7 +203,7 @@ function uninstall() {
 }
 
 function install_mjpegstr() {
-    aconf="/usr/local/share/hydrosys4/mjpg-streamer" # create hostapd.conf file
+    aconf="/usr/local/share/hydrosys4/mjpg-streamer"
     if [ -f $aconf ]; then
        rm -rf /usr/local/share/hydrosys4/mjpg-streamer
     fi
@@ -351,100 +338,76 @@ EOF
     echo "  journalctl -u hydrosys4-autostart -f"
 }
 
-function config_hostapd() {
-    echo "--> Adding network configuration for $WiFiAPname"
+# Configures the Raspberry Pi as a WiFi Access Point (Hotspot) using NetworkManager
+# Clients connect to the SSID with the given password and get IPs via built-in DHCP
+# The Pi gets IP 192.168.4.1/24 on wlan0 by default (shared method)
+# Internet sharing works automatically if eth0 or another interface is online
+function config_wifi_hotspot() {
+    echo "--> Configuring WiFi Access Point (Hotspot) using NetworkManager"
 
-    # No need to unmask generic service anymore - leave masked
-    # systemctl unmask hostapd.service  # ← COMMENT OUT or remove
-    systemctl daemon-reload
+    # Use variables from user input (adjust names if different in your script)
+    local ssid="Hydrosys4"               # e.g. "Hydrosys4-AP"
+    local password="hydrosys"       # WPA2 passphrase (min 8 chars)
+    local hotspot_ip="${IP:-192.168.4.1}"  # Pi's IP on the hotspot network
 
-    local aconf="/etc/hostapd/hostapd.conf"
-    if [ -f "$aconf" ]; then
-        cp "$aconf" /usr/local/share/hydrosys4/hostapd_hydrosys.backup
-        echo "--> Backed up /etc/hostapd/hostapd.conf"
+    if [ -z "$ssid" ] || [ -z "$password" ]; then
+        echo "ERROR: SSID or Password not set! (WIFI_AP_NAME / WIFI_AP_PASSWORD)"
+        return 1
     fi
 
-    cat > "$aconf" <<-EOF
-# HERE-> {"name": "IPsetting", "LocalIPaddress": "$IP", "LocalPORT": "$PORT", "LocalAPSSID" : "$WiFiAPname"}
-interface=wlan0
-driver=nl80211
-ssid=$WiFiAPname
-hw_mode=g
-channel=6
-macaddr_acl=0
-auth_algs=1
-ignore_broadcast_ssid=0
-wpa=2
-wpa_passphrase=$WiFiAPpsw
-wpa_key_mgmt=WPA-PSK
-# wpa_pairwise=TKIP             # removed - deprecated & problematic
-rsn_pairwise=CCMP
-ieee80211n=1
-country_code=US                 # ← ADD THIS (change to your country!)
-EOF
-
-    # Optional: Ensure /etc/default/hostapd points to it (transitional, still works)
-    local defconf="/etc/default/hostapd"
-    if [ -f "$defconf" ]; then
-        sed -i 's/^#*DAEMON_CONF=.*/DAEMON_CONF="'"$aconf"'"/' "$defconf" 2>/dev/null || true
-        grep -q '^DAEMON_CONF=' "$defconf" || echo "DAEMON_CONF=\"$aconf\"" >> "$defconf"
+    if [ ${#password} -lt 8 ]; then
+        echo "ERROR: Password must be at least 8 characters for WPA2!"
+        return 1
     fi
 
-    # Modern way: Enable per-interface template (this is the key change!)
-    systemctl enable --now hostapd@wlan0.service
-
-    echo "--> hostapd enabled for wlan0 via template unit"
-}
-
-function config_dnsmasq() {
-    echo "-->  Configuring DNS parameters"
-    aconf="/etc/dnsmasq.conf" # edit /etc/dnsmasq.conf file
-    if [ -f $aconf ]; then
-        cp $aconf /usr/local/share/hydrosys4/dnsmasq_hydrosys.backup
+    # Optional: Make sure no conflicting connection is active on wlan0
+    local old_con
+    old_con=$(nmcli -t -f NAME,DEVICE connection show | grep :wlan0 | cut -d: -f1 | head -n1)
+    if [ -n "$old_con" ]; then
+        echo "  → Deactivating previous wlan0 connection: $old_con"
+        sudo nmcli connection down "$old_con" 2>/dev/null || true
     fi
-    sed -i '/^#START HYDROSYS4 SECTION/,/^#END HYDROSYS4 SECTION/{/^#START HYDROSYS4 SECTION/!{/^#END HYDROSYS4 SECTION/!d}}' $aconf # delete rows between #START and #END
-    sed -i '/#START HYDROSYS4 SECTION/d' $aconf
-    sed -i '/#END HYDROSYS4 SECTION/d' $aconf
-    IFS="." read -a a <<< $IP # calculation of the range starting from assigned IP address
-    IFS="." read -a b <<< 0.0.0.1
-    IFS="." read -a c <<< 0.0.0.9
-    IPSTART="$[a[0]].$[a[1]].$[a[2]].$[a[3]+b[3]]"
-    IPEND="$[a[0]].$[a[1]].$[a[2]].$[a[3]+c[3]]"
-    if [[ a[3] -gt 244 ]]; then
-        IPSTART="$[a[0]].$[a[1]].$[a[2]].$[a[3]-c[3]]"
-        IPEND="$[a[0]].$[a[1]].$[a[2]].$[a[3]-b[3]]"
-    fi
-    echo $IPSTART $IPEND
-    bash -c "cat >> $aconf" <<-EOF
-#START HYDROSYS4 SECTION
-interface=wlan0
-dhcp-range=$IPSTART,$IPEND,12h
-#no-resolv
-#END HYDROSYS4 SECTION
-EOF
-    systemctl enable dnsmasq.service
- }
 
-function config_dhcpcd() {
-    echo "-->  Configuring DHCP parameters"
-    aconf="/etc/dhcpcd.conf" # edit /etc/dnsmasq.conf file
-    if [ -f $aconf ]; then
-        cp $aconf /usr/local/share/hydrosys4/dhcpcd_hydrosys.backup
+    # Remove any existing hotspot connection with the same SSID to avoid conflicts
+    sudo nmcli connection delete "$ssid" 2>/dev/null || true
+
+    # Create the hotspot connection
+    sudo nmcli connection add \
+        type wifi \
+        ifname wlan0 \
+        con-name "$ssid" \
+        autoconnect yes \
+        ssid "$ssid" \
+        802-11-wireless.mode ap \
+        802-11-wireless.band bg \
+        ipv4.method shared \
+        ipv4.addresses "${hotspot_ip}/24" \
+        ipv6.method ignore
+
+    # Set WPA2-PSK security (most compatible and secure option)
+    sudo nmcli connection modify "$ssid" \
+        wifi-sec.key-mgmt wpa-psk \
+        wifi-sec.psk "$password"
+
+    # Optional: Fix a channel to reduce interference (1,6,11 are good choices)
+    # sudo nmcli connection modify "$ssid" 802-11-wireless.channel 6
+
+    # Optional: Stronger security (WPA3/WPA2 mixed mode, if clients support it)
+    # sudo nmcli connection modify "$ssid" wifi-sec.proto rsn wifi-sec.pairwise ccmp
+
+    # Activate the hotspot
+    sudo nmcli connection up "$ssid"
+
+    if [ $? -eq 0 ]; then
+        echo "  → SUCCESS: Hotspot '$ssid' is now active!"
+        echo "  → Pi IP on hotspot network: $hotspot_ip"
+        echo "  → Clients connect to SSID '$ssid' with password '$password'"
+        echo "  → DHCP range: usually 192.168.4.100 – 192.168.4.200"
+        echo "  → Check status: nmcli device show wlan0"
+        echo "  → Or: nmcli connection show --active"
+    else
+        echo "ERROR: Failed to activate hotspot. Check logs: journalctl -u NetworkManager"
     fi
-    sed -i '/^#START HYDROSYS4 SECTION/,/^#END HYDROSYS4 SECTION/{/^#START HYDROSYS4 SECTION/!{/^#END HYDROSYS4 SECTION/!d}}' $aconf # delete rows between #START and #END
-    sed -i '/#START HYDROSYS4 SECTION/d' $aconf
-    sed -i '/#END HYDROSYS4 SECTION/d' $aconf
-    bash -c "cat >> $aconf" <<-EOF
-#START HYDROSYS4 SECTION
-profile static_wlan0
-static ip_address=$IP/24
-#static routers=192.168.1.1
-#static domain_name_servers=192.169.1.1
-# fallback to static profile on wlan0
-interface wlan0
-fallback static_wlan0
-#END HYDROSYS4 SECTION
-EOF
 }
 
 function config_ifnames() {
@@ -555,9 +518,7 @@ while :; do
             install_DHT22lib
             config_I2C
             config_systemd_hydrosys
-            config_hostapd
-            config_dnsmasq
-            config_dhcpcd
+            config_wifi_hotspot
             config_ifnames
             config_nginx
             config_defaultnetworkdb
