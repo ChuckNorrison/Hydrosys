@@ -124,7 +124,7 @@ function install_dependencies() {
     done
 
     echo "-->  Installing dependencies, PIP3 packages"  
-    INSTALL_PIP="flask apscheduler pyserial pillow pbkdf2 tornado RPi.GPIO spidev"
+    INSTALL_PIP="flask apscheduler pyserial pillow pbkdf2 tornado rpi-lgpio spidev"
     for pkg in $INSTALL_PIP; do
         if python3 -c "import sys, pkgutil; sys.exit(not pkgutil.find_loader('$pkg'))"; then
             echo "-->  *---------------- $pkg already installed ----------------*"
