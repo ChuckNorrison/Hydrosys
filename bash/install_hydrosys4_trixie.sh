@@ -187,9 +187,10 @@ function uninstall() {
                 echo "-->  Reverting changes made to default zone file. Moving backed up file to /etc/nginx/sites-enabled/default. Saving running file to ~/nginx_hydrosys.backup"
                 mv /etc/nginx/sites-enabled/default ~/nginx_hydrosys.backup
                 mv /usr/local/share/hydrosys4/nginx.default /etc/nginx/sites-enabled/default
-                echo "-->  Reverting changes made to rc.local. Moving backed up config file to /etc/rc.local. Saving running file to ~/rc_hydrosys.backup"
-                mv /etc/rc.local ~/rc_hydrosys.backup
-                mv /usr/local/share/hydrosys4/rc_hydrosys.backup /ect/rc.local
+                echo "-->  Cleanup hydrosys4 autostart service"
+                systemctl stop hydrosys4-autostart.service
+                systemctl disable hydrosys4-autostart.service
+                rm -f /etc/systemd/system/hydrosys4-autostart.service
                 echo "-->  Reverting changes made to /boot/firmware/config.txt. Moving backed up config file to /boot/firmware/config.txt. Saving running file to ~/boot_config_hydrosys.backup"
                 mv /boot/firmware/config.txt ~/boot_config_hydrosys.backup
                 mv /usr/local/share/hydrosys4/boot_config_hydrosys.backup /boot/firmware/config.txt
