@@ -154,12 +154,13 @@ function uninstall() {
                 echo "-->  Reverting changes made to default zone file. Moving backed up file to /etc/nginx/sites-enabled/default. Saving running file to ~/nginx_hydrosys.backup"
                 mv /etc/nginx/sites-enabled/default ~/nginx_hydrosys.backup
                 mv /usr/local/share/hydrosys4/nginx_hydrosys.backup /etc/nginx/sites-enabled/default
-                echo "-->  Reverting changes made to rc.local. Moving backed up config file to /etc/rc.local. Saving running file to ~/rc_hydrosys.backup"
-                mv /etc/rc.local ~/rc_hydrosys.backup
-                mv /usr/local/share/hydrosys4/rc_hydrosys.backup /ect/rc.local
-                echo "-->  Reverting changes made to /boot/config.txt. Moving backed up config file to /boot/config.txt. Saving running file to ~/boot_config_hydrosys.backup"
-                mv /boot/config.txt ~/boot_config_hydrosys.backup
-                mv /usr/local/share/hydrosys4/boot_config_hydrosys.backup /boot/config.txt
+                echo "-->  Cleanup hydrosys4 autostart service"
+                systemctl stop hydrosys4-autostart.service
+                systemctl disable hydrosys4-autostart.service
+                rm -f /etc/systemd/system/hydrosys4-autostart.service
+                echo "-->  Reverting changes made to /boot/firmware/config.txt. Moving backed up config file to /boot/firmware/config.txt. Saving running file to ~/boot_config_hydrosys.backup"
+                mv /boot/firmware/config.txt ~/boot_config_hydrosys.backup
+                mv /usr/local/share/hydrosys4/boot_config_hydrosys.backup /boot/firmware/config.txt
                 echo "-->  Reverting changes made to /etc/modules. Moving backed up config file to /etc/modules. Saving running file to ~/etc_modules_hydrosys.backup"
                 mv /etc/modules ~/etc_modules_hydrosys.backup
                 mv /usr/local/share/hydrosys4/etc_modules_hydrosys.backup /etc/modules
@@ -189,12 +190,13 @@ function uninstall() {
                 echo "-->  Reverting changes made to default zone file. Moving backed up file to /etc/nginx/sites-enabled/default. Saving running file to ~/nginx_hydrosys.backup"
                 mv /etc/nginx/sites-enabled/default ~/nginx_hydrosys.backup
                 mv /usr/local/share/hydrosys4/nginx.default /etc/nginx/sites-enabled/default
-                echo "-->  Reverting changes made to rc.local. Moving backed up config file to /etc/rc.local. Saving running file to ~/rc_hydrosys.backup"
-                mv /etc/rc.local ~/rc_hydrosys.backup
-                mv /usr/local/share/hydrosys4/rc_hydrosys.backup /ect/rc.local
-                echo "-->  Reverting changes made to /boot/config.txt. Moving backed up config file to /boot/config.txt. Saving running file to ~/boot_config_hydrosys.backup"
-                mv /boot/config.txt ~/boot_config_hydrosys.backup
-                mv /usr/local/share/hydrosys4/boot_config_hydrosys.backup /boot/config.txt
+                echo "-->  Cleanup hydrosys4 autostart service"
+                systemctl stop hydrosys4-autostart.service
+                systemctl disable hydrosys4-autostart.service
+                rm -f /etc/systemd/system/hydrosys4-autostart.service
+                echo "-->  Reverting changes made to /boot/firmware/config.txt. Moving backed up config file to /boot/firmware/config.txt. Saving running file to ~/boot_config_hydrosys.backup"
+                mv /boot/firmware/config.txt ~/boot_config_hydrosys.backup
+                mv /usr/local/share/hydrosys4/boot_config_hydrosys.backup /boot/firmware/config.txt
                 echo "-->  Reverting changes made to /etc/modules. Moving backed up config file to /etc/modules. Saving running file to ~/etc_modules_hydrosys.backup"
                 mv /etc/modules ~/etc_modules_hydrosys.backup
                 mv /usr/local/share/hydrosys4/etc_modules_hydrosys.backup /etc/modules
@@ -256,7 +258,7 @@ function install_DHT22lib() {
 
 function config_I2C() {
     echo "-->  Enabling I2C and SPI and adding modules"
-    aconf="/boot/config.txt" # --- Enable I2C and Spi: /boot/config.txt
+    aconf="/boot/firmware/config.txt" # --- Enable I2C and Spi: /boot/firmware/config.txt
     if [ -f $aconf ]; then
         cp $aconf /usr/local/share/hydrosys4/boot_config_hydrosys.backup
     fi
@@ -280,43 +282,46 @@ function config_I2C() {
     sed -i -e "\$abcm2835-v4l2" $aconf
 }
 
-function config_RClocal() {
-    echo "-->  Modifying rc.local for autostart actions"
-    aconf="/etc/rc.local"
-    if [ -f $aconf ]; then
-        cp $aconf /usr/local/share/hydrosys4/rc_hydrosys.backup
+function config_systemd_hydrosys() {
+    echo "--> Configuring systemd service for Hydrosys4 autostart"
+
+    local service_file="/etc/systemd/system/hydrosys4-autostart.service"
+
+    if [ -f "$service_file" ]; then
+        echo "Service file already exists → backing up"
+        cp "$service_file" /usr/local/share/hydrosys4/hydrosys4-autostart.service.backup
     fi
-    autostart="yes"
-    tmpfile=$(mktemp)
-    sed '/#START/,/#END/d' /etc/rc.local > "$tmpfile" && mv "$tmpfile" /etc/rc.local # copy the below lines between #START and #END to rc.local
-    awk '!NF {if (++n <= 1) print; next}; {n=0;print}' /etc/rc.local > "$tmpfile" && mv "$tmpfile" /etc/rc.local # Remove to growing plank lines.
-    if [ "$autostart" == "yes" ]; then
-        if ! grep -Fq '#START HYDROSYS4 SECTION' /etc/rc.local; then # --- Real Time Clock (RTC) /etc/rc.local
-            sed -i '/exit 0/d' /etc/rc.local
-            bash -c "cat >> /etc/rc.local" <<-EOF
-#START HYDROSYS4 SECTION
-# iptables
-sudo iptables-restore < /usr/local/share/hydrosys4/iptables.rules
 
-# clock
-echo "HYDROSYS4-set HW clock ****************************************"
-echo ds3231 0x68 > /sys/class/i2c-adapter/i2c-1/new_device || true
-hwclock -s || true
+    cat > "$service_file" << 'EOF'
+[Unit]
+Description=Hydrosys4 Autostart (iptables + RTC + main application)
+After=network-online.target
+Wants=network-online.target
 
-echo "HYDROSYS4-start system ****************************************"
-cd /usr/local/share/hydrosys4/env/autonom/
-sudo python3 /usr/local/share/hydrosys4/env/autonom/bentornado.py &
-#END HYDROSYS4 SECTION
-exit 0
+[Service]
+Type=simple
+WorkingDirectory=/usr/local/share/hydrosys4/env/autonom
+ExecStartPre=/usr/sbin/iptables-restore < /usr/local/share/hydrosys4/iptables.rules
+ExecStartPre=/bin/sh -c 'echo "ds3231 0x68" > /sys/class/i2c-adapter/i2c-1/new_device || true'
+ExecStartPre=/usr/sbin/hwclock -s || true
+ExecStart=/usr/bin/python3 /usr/local/share/hydrosys4/env/autonom/bentornado.py
+Restart=always
+RestartSec=5
+User=root
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
 EOF
-        else
-            tmpfile=$(mktemp)
-            sed '/#START/,/#END/d' /etc/rc.local > "$tmpfile" && mv "$tmpfile" /etc/rc.local
-            awk '!NF {if (++n <= 1) print; next}; {n=0;print}' /etc/rc.local > "$tmpfile" && mv "$tmpfile" /etc/rc.local # Remove to growing plank lines.
-        fi
-    fi
-    sudo chown root:root /etc/rc.local
-    sudo chmod 755 /etc/rc.local
+
+    chmod 644 "$service_file"
+    systemctl daemon-reload
+    systemctl enable hydrosys4-autostart.service
+
+    echo "Service installed and enabled. You can check status with:"
+    echo "  systemctl status hydrosys4-autostart.service"
+    echo "  journalctl -u hydrosys4-autostart -f"
 }
 
 function config_hostapd() {
@@ -522,7 +527,7 @@ while :; do
             install_mjpegstr
             install_DHT22lib
             config_I2C
-            config_RClocal
+            config_systemd_hydrosys
             config_hostapd
             config_dnsmasq
             config_dhcpcd
