@@ -136,7 +136,7 @@ function install_dependencies() {
 
 function uninstall() {
     REMOVE_APT="python3-dev python3-pip python3-smbus git build-essential python3-setuptools i2c-tools fswebcam libjpeg-dev libopenjp2-7 dnsutils dnsmasq hostapd cmake nginx"
-    REMOVE_PIP="flask apscheduler pyserial pillow pbkdf2 tornado RPi.GPIO spidev"
+    REMOVE_PIP="flask apscheduler pyserial pillow pbkdf2 tornado RPi.GPIO rpi-lgpio spidev"
     echo "-->  Uninstalling APT and PIP3 packages"
     echo "-->  This will uninstall Hydrosys4 and all packages installed during installation including Nginx, Python 3 and Tornado, Flask aso."
     while true; do
