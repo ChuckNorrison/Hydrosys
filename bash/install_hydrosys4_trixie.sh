@@ -269,6 +269,42 @@ function config_I2C() {
     echo "Skipping /etc/modules edits (handled automatically via Device Tree in modern Pi OS)."
 }
 
+function config_iptables_ports() {
+    # Switch to legacy iptables to ensure compatibility with old-style rules
+    # (nftables is default in Debian 13 / Raspberry Pi OS Trixie)
+    if command -v update-alternatives >/dev/null 2>&1; then
+        sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
+        sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+        sudo update-alternatives --set arptables /usr/sbin/arptables-legacy
+        sudo update-alternatives --set ebtables /usr/sbin/ebtables-legacy
+        echo "--> Switched to legacy iptables for compatibility"
+    else
+        echo "WARNING: update-alternatives not found – assuming legacy iptables is already in use"
+    fi
+
+    echo "--> Configuring firewall rules for ports 5020 and 5022 (localhost only)"
+
+    # Flush existing INPUT chain to avoid duplicate rules on re-run
+    iptables -F INPUT
+
+    # Allow TCP 5020 only from localhost
+    iptables -A INPUT -p tcp -s 127.0.0.1 --dport 5020 -j ACCEPT
+
+    # Block TCP 5020 from everywhere else
+    iptables -A INPUT -p tcp --dport 5020 -j DROP
+
+    # Block TCP 5022 completely (including localhost)
+    iptables -A INPUT -p tcp --dport 5022 -j DROP
+
+    # Good practice: Allow established/related connections (prevents blocking return traffic)
+    iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+    # Save rules for boot (used by ExecStartPre in service)
+    iptables-save > /usr/local/share/hydrosys4/iptables.rules
+
+    echo "--> Firewall rules for ports 5020/5022 applied and saved"
+}
+
 function config_systemd_hydrosys() {
     echo "--> Configuring systemd service for Hydrosys4 autostart"
 
@@ -281,14 +317,14 @@ function config_systemd_hydrosys() {
 
     cat > "$service_file" << 'EOF'
 [Unit]
-Description=Hydrosys4 Autostart (iptables + RTC + main application)
+Description=Hydrosys4 Autostart (RTC + main application)
 After=network-online.target
 Wants=network-online.target
 
 [Service]
 Type=simple
 WorkingDirectory=/usr/local/share/hydrosys4/env/autonom
-ExecStartPre=/usr/sbin/iptables-restore < /usr/local/share/hydrosys4/iptables.rules
+ExecStartPre=/usr/sbin/iptables-restore /usr/local/share/hydrosys4/iptables.rules
 ExecStartPre=/bin/sh -c 'echo "ds3231 0x68" > /sys/class/i2c-adapter/i2c-1/new_device || true'
 ExecStartPre=/usr/sbin/hwclock -s || true
 ExecStart=/usr/bin/python3 /usr/local/share/hydrosys4/env/autonom/bentornado.py
@@ -440,15 +476,6 @@ function config_defaultnetworkdb() {
 {"name": "IPsetting", "LocalIPaddress": "192.168.0.172", "LocalPORT": "5012" , "LocalAPSSID" : "Hydrosys4"}
 EOF
     fi
-}
-
-function config_iptables_ports() {
-    iptables -A INPUT -p tcp -s localhost --dport 5020 -j ACCEPT
-    iptables -A INPUT -p tcp -s localhost --dport 5022 -j ACCEPT
-    iptables -A INPUT -p tcp --dport 5020 -j DROP
-    iptables -A INPUT -p tcp --dport 5022 -j DROP
-    iptables-save > /usr/local/share/hydrosys4/iptables.rules
-    echo "-->  installation finished!!!"
 }
 
 function ask_reboot() {
