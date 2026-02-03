@@ -319,8 +319,8 @@ function config_wifi_hotspot() {
     echo "--> Configuring WiFi Access Point (Hotspot) using NetworkManager"
 
     # Use variables from user input (adjust names if different in your script)
-    local ssid="Hydrosys4"               # e.g. "Hydrosys4-AP"
-    local password="hydrosys"       # WPA2 passphrase (min 8 chars)
+    local ssid="$WiFiAPname"               # e.g. "Hydrosys4-AP"
+    local password="$WiFiAPpsw"       # WPA2 passphrase (min 8 chars)
     local hotspot_ip="${IP:-192.168.4.1}"  # Pi's IP on the hotspot network
 
     if [ -z "$ssid" ] || [ -z "$password" ]; then
