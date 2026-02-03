@@ -161,9 +161,6 @@ function uninstall() {
                 echo "-->  Reverting changes made to /boot/firmware/config.txt. Moving backed up config file to /boot/firmware/config.txt. Saving running file to ~/boot_config_hydrosys.backup"
                 mv /boot/firmware/config.txt ~/boot_config_hydrosys.backup
                 mv /usr/local/share/hydrosys4/boot_config_hydrosys.backup /boot/firmware/config.txt
-                echo "-->  Reverting changes made to /etc/modules. Moving backed up config file to /etc/modules. Saving running file to ~/etc_modules_hydrosys.backup"
-                mv /etc/modules ~/etc_modules_hydrosys.backup
-                mv /usr/local/share/hydrosys4/etc_modules_hydrosys.backup /etc/modules
                 echo "-->  Reverting changes made to hostapd.conf. Moving backed up config file to /etc/hostapd/hostapd.conf. Saving running file to ~/hostapd_hydrosys.backup"
                 mv /etc/hostapd/hostapd.conf ~/hostapd_hydrosys.backup
                 mv /usr/local/share/hydrosys4/hostapd_hydrosys.backup /etc/hostapd/hostapd.conf
@@ -190,16 +187,12 @@ function uninstall() {
                 echo "-->  Reverting changes made to default zone file. Moving backed up file to /etc/nginx/sites-enabled/default. Saving running file to ~/nginx_hydrosys.backup"
                 mv /etc/nginx/sites-enabled/default ~/nginx_hydrosys.backup
                 mv /usr/local/share/hydrosys4/nginx.default /etc/nginx/sites-enabled/default
-                echo "-->  Cleanup hydrosys4 autostart service"
-                systemctl stop hydrosys4-autostart.service
-                systemctl disable hydrosys4-autostart.service
-                rm -f /etc/systemd/system/hydrosys4-autostart.service
+                echo "-->  Reverting changes made to rc.local. Moving backed up config file to /etc/rc.local. Saving running file to ~/rc_hydrosys.backup"
+                mv /etc/rc.local ~/rc_hydrosys.backup
+                mv /usr/local/share/hydrosys4/rc_hydrosys.backup /ect/rc.local
                 echo "-->  Reverting changes made to /boot/firmware/config.txt. Moving backed up config file to /boot/firmware/config.txt. Saving running file to ~/boot_config_hydrosys.backup"
                 mv /boot/firmware/config.txt ~/boot_config_hydrosys.backup
                 mv /usr/local/share/hydrosys4/boot_config_hydrosys.backup /boot/firmware/config.txt
-                echo "-->  Reverting changes made to /etc/modules. Moving backed up config file to /etc/modules. Saving running file to ~/etc_modules_hydrosys.backup"
-                mv /etc/modules ~/etc_modules_hydrosys.backup
-                mv /usr/local/share/hydrosys4/etc_modules_hydrosys.backup /etc/modules
                 echo "-->  Reverting changes made to hostapd.conf. Moving backed up config file to /etc/hostapd/hostapd.conf. Saving running file to ~/hostapd_hydrosys.backup"
                 mv /etc/hostapd/hostapd.conf ~/hostapd_hydrosys.backup
                 mv /usr/local/share/hydrosys4/hostapd_hydrosys.backup /etc/hostapd/hostapd.conf
@@ -257,29 +250,62 @@ function install_DHT22lib() {
 }
 
 function config_I2C() {
-    echo "-->  Enabling I2C and SPI and adding modules"
-    aconf="/boot/firmware/config.txt" # --- Enable I2C and Spi: /boot/firmware/config.txt
-    if [ -f $aconf ]; then
-        cp $aconf /usr/local/share/hydrosys4/boot_config_hydrosys.backup
-    fi
-    sed -i 's/\(^.*#dtparam=i2c_arm=on.*$\)/dtparam=i2c_arm=on/' $aconf
-    sed -i 's/\(^.*#dtparam=spi=on.*$\)/dtparam=spi=on/' $aconf
-    sed -i 's/\(^.*#dtparam=i2s=on.*$\)/dtparam=i2s=on/' $aconf
+    echo "--> Enabling I2C, SPI (and optional I2S) via config.txt"
 
-    aconf="/etc/modules" # --- Add modules: /etc/modules
-    if [ -f $aconf ]; then
-        cp $aconf /usr/local/share/hydrosys4/etc_modules_hydrosys.backup
+    local config_file="/boot/firmware/config.txt"
+    local backup_file="/usr/local/share/hydrosys4/boot_config_hydrosys.backup"
+
+    if [ ! -f "$config_file" ]; then
+        echo "ERROR: $config_file not found. Is this a Raspberry Pi OS install?"
+        return 1
     fi
-    sed -i '/i2c-bcm2708/d' $aconf
-    sed -i -e "\$ai2c-bcm2708" $aconf
-    sed -i '/i2c-dev/d' $aconf
-    sed -i -e "\$ai2c-dev" $aconf
-    sed -i '/i2c-bcm2835/d' $aconf
-    sed -i -e "\$ai2c-bcm2835" $aconf
-    sed -i '/rtc-ds1307/d' $aconf
-    sed -i -e "\$artc-ds1307" $aconf
-    sed -i '/bcm2835-v4l2/d' $aconf
-    sed -i -e "\$abcm2835-v4l2" $aconf
+
+    # Backup if not already done
+    if [ ! -f "$backup_file" ]; then
+        cp "$config_file" "$backup_file"
+        echo "Backed up original config.txt"
+    fi
+
+    local changes_made=0
+
+    # Helper to add line if missing
+    add_if_missing() {
+        local pattern="$1"
+        local line="$2"
+        if ! grep -qE "^${pattern}(=.*)?$" "$config_file"; then
+            echo "$line" | sudo tee -a "$config_file" >/dev/null
+            echo "Added: $line"
+            changes_made=1
+        else
+            echo "Already present: $line"
+        fi
+    }
+
+    # Enable I2C (standard for main bus on GPIO 2/3)
+    add_if_missing "dtparam=i2c_arm=on" "dtparam=i2c_arm=on"
+
+    # Enable SPI (main bus)
+    add_if_missing "dtparam=spi=on" "dtparam=spi=on"
+
+    # Optional: If you need user-space SPI devices (/dev/spidev*), add overlay
+    # (common requirement for many sensors/scripts; safe to include)
+    add_if_missing "dtoverlay=spi-spidev" "dtoverlay=spi-spidev"
+
+    # Optional I2S – only if your project uses it
+    # add_if_missing "dtparam=i2s=on" "dtparam=i2s=on"
+
+    if [ $changes_made -eq 1 ]; then
+        echo "Changes made to config.txt → reboot required for I2C/SPI to activate."
+        echo "After reboot, verify with:"
+        echo "  ls /dev/i2c*   # should show /dev/i2c-1 etc."
+        echo "  ls /dev/spi*   # should show /dev/spidev* if overlay added"
+        echo "  i2cdetect -y 1"
+    else
+        echo "No changes needed – I2C/SPI already configured."
+    fi
+
+    # Skip /etc/modules entirely – deprecated and unnecessary
+    echo "Skipping /etc/modules edits (handled automatically via Device Tree in modern Pi OS)."
 }
 
 function config_systemd_hydrosys() {
