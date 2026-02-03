@@ -83,38 +83,11 @@ function system_update_UI() {
 }
 
 function system_update() {
-    while true; do
-        read -p "-->  Do you want to uninstall LibreOffice and Wolfram Engine (if installed) as they are not necessary (y/n)? " yn
-        case $yn in
-            [Yy]* ) system_uninstall_pkgs; break;;
-            [Nn]* ) break;;
-            * ) "-->  Please answer y or n.";;
-        esac
-    done
     apt update && apt -y upgrade
 }
 
 function system_update_light() {
-    while true; do
-        read -p "-->  Do you want to uninstall LibreOffice and Wolfram Engine (if installed) as they are not necessary (y/n)? " yn
-        case $yn in
-            [Yy]* ) system_uninstall_pkgs; break;;
-            [Nn]* ) break;;
-            * ) "-->  Please answer y or n.";;
-        esac
-    done
     apt -y update # ---- system_update only
-}
-
-function system_uninstall_pkgs() {
-    UNWANTED="libreoffice-* wolfram-engine" # ---- remove unnecessary packages
-    for pkg in $UNWANTED; do
-        if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null; then
-            apt remove --purge $pkg
-        else
-            echo "-->   ---------------- Unnecessary package $pkg not installed ----------------"
-        fi
-    done
 }
 
 function install_dependencies() {
