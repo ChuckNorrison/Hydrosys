@@ -320,17 +320,22 @@ EOF
 }
 
 function config_hostapd() {
-    echo "-->  Adding network configuration for $WiFiAPname"
-    systemctl unmask hostapd.service # unmask the service
-    aconf="/etc/hostapd/hostapd.conf" # create hostapd.conf file
-    if [ -f $aconf ]; then
-       cp $aconf /usr/local/share/hydrosys4/hostapd_hydrosys.backup
-       echo "-->  Backed up /etc/hostapd/hostapd.conf to /usr/local/share/hydrosys4/hostapd_hydrosys.backup"
+    echo "--> Adding network configuration for $WiFiAPname"
+
+    # No need to unmask generic service anymore - leave masked
+    # systemctl unmask hostapd.service  # ← COMMENT OUT or remove
+    systemctl daemon-reload
+
+    local aconf="/etc/hostapd/hostapd.conf"
+    if [ -f "$aconf" ]; then
+        cp "$aconf" /usr/local/share/hydrosys4/hostapd_hydrosys.backup
+        echo "--> Backed up /etc/hostapd/hostapd.conf"
     fi
-    bash -c "cat >> $aconf" <<-EOF
+
+    cat > "$aconf" <<-EOF
 # HERE-> {"name": "IPsetting", "LocalIPaddress": "$IP", "LocalPORT": "$PORT", "LocalAPSSID" : "$WiFiAPname"}
-ieee80211n=1
 interface=wlan0
+driver=nl80211
 ssid=$WiFiAPname
 hw_mode=g
 channel=6
@@ -340,14 +345,23 @@ ignore_broadcast_ssid=0
 wpa=2
 wpa_passphrase=$WiFiAPpsw
 wpa_key_mgmt=WPA-PSK
-wpa_pairwise=TKIP
+# wpa_pairwise=TKIP             # removed - deprecated & problematic
 rsn_pairwise=CCMP
+ieee80211n=1
+country_code=US                 # ← ADD THIS (change to your country!)
 EOF
-    aconf="/etc/init.d/hostapd" # Update hostapd main config file
-    sed -i "s/\(^.*DAEMON_CONF=.*$\)/DAEMON_CONF=\/etc\/hostapd\/hostapd.conf/" $aconf
-    aconf="/etc/default/hostapd" # Update hostapd main config file
-    sed -i "s/\(^.*DAEMON_CONF=.*$\)/DAEMON_CONF=\/etc\/hostapd\/hostapd.conf/" $aconf
-    systemctl enable hostapd.service 
+
+    # Optional: Ensure /etc/default/hostapd points to it (transitional, still works)
+    local defconf="/etc/default/hostapd"
+    if [ -f "$defconf" ]; then
+        sed -i 's/^#*DAEMON_CONF=.*/DAEMON_CONF="'"$aconf"'"/' "$defconf" 2>/dev/null || true
+        grep -q '^DAEMON_CONF=' "$defconf" || echo "DAEMON_CONF=\"$aconf\"" >> "$defconf"
+    fi
+
+    # Modern way: Enable per-interface template (this is the key change!)
+    systemctl enable --now hostapd@wlan0.service
+
+    echo "--> hostapd enabled for wlan0 via template unit"
 }
 
 function config_dnsmasq() {
