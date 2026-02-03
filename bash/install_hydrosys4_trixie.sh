@@ -92,7 +92,7 @@ function system_update_light() {
 
 function install_dependencies() {
     echo "-->  Installing dependencies, APT packages" #--- start installing dependencies
-    INSTALL_APT="python3-dev python3-pip python3-smbus git build-essential python3-setuptools i2c-tools fswebcam libjpeg-dev libopenjp2-7 cmake nginx iptables python3-rpi-lgpio liblgpio-dev"
+    INSTALL_APT="python3-dev python3-pip python3-smbus git build-essential python3-setuptools i2c-tools fswebcam libjpeg-dev libopenjp2-7 cmake nginx iptables python3-rpi-lgpio liblgpio-dev util-linux-extra"
     for pkg in $INSTALL_APT; do
         if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null; then
             echo "-->  ---------------- $pkg already installed ----------------"
@@ -113,7 +113,7 @@ function install_dependencies() {
 }
 
 function uninstall() {
-    REMOVE_APT="python3-dev python3-pip python3-smbus git build-essential python3-setuptools i2c-tools fswebcam libjpeg-dev libopenjp2-7 dnsutils dnsmasq hostapd cmake nginx python3-rpi-lgpio liblgpio-dev"
+    REMOVE_APT="python3-dev python3-pip python3-smbus git build-essential python3-setuptools i2c-tools fswebcam libjpeg-dev libopenjp2-7 dnsutils dnsmasq hostapd cmake nginx python3-rpi-lgpio liblgpio-dev util-linux-extra"
     REMOVE_PIP="flask apscheduler pyserial pillow pbkdf2 tornado RPi.GPIO rpi-lgpio spidev"
     echo "-->  Uninstalling APT and PIP3 packages"
     echo "-->  This will uninstall Hydrosys4 and all packages installed during installation including Nginx, Python 3 and Tornado, Flask aso."
@@ -325,7 +325,8 @@ Wants=network-online.target
 Type=simple
 WorkingDirectory=/usr/local/share/hydrosys4/env/autonom
 ExecStartPre=/usr/sbin/iptables-restore /usr/local/share/hydrosys4/iptables.rules
-ExecStartPre=/bin/sh -c 'echo "ds3231 0x68" > /sys/class/i2c-adapter/i2c-1/new_device || true'
+ExecStartPre=/bin/bash -c 'I2CBUS=$(ls /dev/i2c-* 2>/dev/null | head -n1 | grep -o "[0-9]*$"); \
+    [ -n "$I2CBUS" ] && echo "ds3231 0x68" > /sys/bus/i2c/devices/i2c-$I2CBUS/new_device || true'
 ExecStartPre=/usr/sbin/hwclock -s || true
 ExecStart=/usr/bin/python3 /usr/local/share/hydrosys4/env/autonom/bentornado.py
 Restart=always
