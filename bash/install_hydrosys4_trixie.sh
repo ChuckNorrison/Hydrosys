@@ -119,7 +119,7 @@ function system_uninstall_pkgs() {
 
 function install_dependencies() {
     echo "-->  Installing dependencies, APT packages" #--- start installing dependencies
-    INSTALL_APT="python3-dev python3-pip python3-smbus git build-essential python3-setuptools i2c-tools fswebcam libjpeg-dev libopenjp2-7 cmake nginx iptables"
+    INSTALL_APT="python3-dev python3-pip python3-smbus git build-essential python3-setuptools i2c-tools fswebcam libjpeg-dev libopenjp2-7 cmake nginx iptables python3-rpi-lgpio liblgpio-dev"
     for pkg in $INSTALL_APT; do
         if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null; then
             echo "-->  ---------------- $pkg already installed ----------------"
@@ -129,7 +129,7 @@ function install_dependencies() {
     done
 
     echo "-->  Installing dependencies, PIP3 packages"  
-    INSTALL_PIP="flask apscheduler pyserial pillow pbkdf2 tornado rpi-lgpio spidev"
+    INSTALL_PIP="flask apscheduler pyserial pillow pbkdf2 tornado spidev"
     for pkg in $INSTALL_PIP; do
         if python3 -c "import sys, pkgutil; sys.exit(not pkgutil.find_loader('$pkg'))"; then
             echo "-->  *---------------- $pkg already installed ----------------*"
@@ -140,7 +140,7 @@ function install_dependencies() {
 }
 
 function uninstall() {
-    REMOVE_APT="python3-dev python3-pip python3-smbus git build-essential python3-setuptools i2c-tools fswebcam libjpeg-dev libopenjp2-7 dnsutils dnsmasq hostapd cmake nginx"
+    REMOVE_APT="python3-dev python3-pip python3-smbus git build-essential python3-setuptools i2c-tools fswebcam libjpeg-dev libopenjp2-7 dnsutils dnsmasq hostapd cmake nginx python3-rpi-lgpio liblgpio-dev"
     REMOVE_PIP="flask apscheduler pyserial pillow pbkdf2 tornado RPi.GPIO rpi-lgpio spidev"
     echo "-->  Uninstalling APT and PIP3 packages"
     echo "-->  This will uninstall Hydrosys4 and all packages installed during installation including Nginx, Python 3 and Tornado, Flask aso."
