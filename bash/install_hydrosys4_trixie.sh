@@ -328,7 +328,7 @@ ExecStartPre=/usr/sbin/iptables-restore /usr/local/share/hydrosys4/iptables.rule
 ExecStartPre=/bin/bash -c ' \
     I2CBUS=$(ls /dev/i2c-* 2>/dev/null | grep -o "[0-9]*$" | head -n1); \
     [ -n "$I2CBUS" ] && echo "ds3231 0x68" > /sys/bus/i2c/devices/i2c-$I2CBUS/new_device || true'
-ExecStartPre=/usr/sbin/hwclock --rtc=/dev/rtc0 --hctosys || true
+ExecStartPre=/usr/sbin/hwclock -s || true
 ExecStart=/usr/bin/python3 /usr/local/share/hydrosys4/env/autonom/bentornado.py
 Restart=always
 RestartSec=5
