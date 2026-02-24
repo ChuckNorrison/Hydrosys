@@ -92,7 +92,27 @@ function system_update_light() {
 
 function install_dependencies() {
     echo "-->  Installing dependencies, APT packages" #--- start installing dependencies
-    INSTALL_APT="python3-dev python3-pip python3-smbus git build-essential python3-setuptools i2c-tools fswebcam libjpeg-dev libopenjp2-7 cmake nginx iptables python3-rpi-lgpio liblgpio-dev util-linux-extra"
+    INSTALL_APT="\
+        python3-dev \
+        python3-pip \
+        python3-smbus \
+        git \
+        build-essential \
+        python3-setuptools \
+        i2c-tools \
+        fswebcam \
+        libjpeg-dev \
+        libopenjp2-7 \
+        cmake \
+        nginx \
+        iptables \
+        python3-rpi-lgpio \
+        liblgpio-dev \
+        util-linux-extra \
+        libopencv-dev \
+        libgphoto2-dev \
+        protobuf-c-compiler \
+        libsdl2-dev"
     for pkg in $INSTALL_APT; do
         if dpkg --get-selections | grep -q "^$pkg[[:space:]]*install$" >/dev/null; then
             echo "-->  ---------------- $pkg already installed ----------------"
